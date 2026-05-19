@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+title: "ges-uves-mk-audit: interventional masked-line ablation audit of a tree-based MK classifier on Gaia-ESO UVES spectra"
+message: "If you use this software, please cite both the software and the accompanying paper."
+type: software
+authors:
+  - family-names: "Jani"
+    given-names: "Tirthesh"
+    orcid: "https://orcid.org/0009-0005-5965-4409"
+    email: "tirtheshjani@gmail.com"
+    affiliation: "Independent researcher, Barrie, Ontario, Canada"
+keywords:
+  - "stellar classification"
+  - "machine learning interpretability"
+  - "causal feature ablation"
+  - "Gaia-ESO Survey"
+  - "UVES"
+  - "LightGBM"
+  - "MK spectral classification"
+license: MIT
+repository-code: "https://github.com/TirtheshJani/ges-uves-mk-audit"
+url: "https://github.com/TirtheshJani/ges-uves-mk-audit"
+preferred-citation:
+  type: article
+  title: "Interventional masked-line ablation reveals partial shortcut learning in a LightGBM MK classifier of Gaia-ESO UVES spectra"
+  authors:
+    - family-names: "Jani"
+      given-names: "Tirthesh"
+      orcid: "https://orcid.org/0009-0005-5965-4409"
+  year: 2026
+  journal: "arXiv preprint"
+  identifiers:
+    - type: other
+      value: "arXiv:[arxiv-id-post-submission]"
+      description: "arXiv preprint id, to be filled after submission"
+    - type: doi
+      value: "[zenodo-doi-post-mint]"
+      description: "Zenodo DOI for code and data, to be filled after Zenodo upload"

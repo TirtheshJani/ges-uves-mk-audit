@@ -1,0 +1,23 @@
+{
+  "step": "8a",
+  "description": "uniform-weights retest (class_weight=None)",
+  "continuum_fill": 0.9157990217208862,
+  "seed": 42,
+  "n_bootstrap": 500,
+  "n_random_controls": 500,
+  "hparam_overrides": {
+    "class_weight": null
+  },
+  "fit_seconds": 11.014824390411377,
+  "test_macro_f1": 0.9249486353021327,
+  "test_accuracy": 0.9342105263157895,
+  "mg_b_k": {
+    "n_test": 145,
+    "baseline_acc": 0.9310344827586207,
+    "masked_acc_mean": 0.9448275862068966,
+    "delta_acc_mean": 0.01379310344827589,
+    "delta_acc_ci_low": 0.0,
+    "delta_acc_ci_high": 0.03390444070100784,
+    "p_value_vs_random": 1.0
+  }
+}

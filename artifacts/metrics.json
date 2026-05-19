@@ -1,0 +1,404 @@
+{
+  "accuracy": 0.9342105263157895,
+  "macro_f1": 0.926209019232275,
+  "per_class_precision": {
+    "F": 0.9444444444444444,
+    "G": 0.9135802469135802,
+    "K": 0.9645390070921985
+  },
+  "per_class_recall": {
+    "F": 0.8395061728395061,
+    "G": 0.9652173913043478,
+    "K": 0.9379310344827586
+  },
+  "per_class_f1": {
+    "F": 0.8888888888888888,
+    "G": 0.9386892177589852,
+    "K": 0.951048951048951
+  },
+  "confusion_matrix": [
+    [
+      68,
+      13,
+      0
+    ],
+    [
+      3,
+      222,
+      5
+    ],
+    [
+      1,
+      8,
+      136
+    ]
+  ],
+  "class_labels": [
+    "F",
+    "G",
+    "K"
+  ],
+  "n_train": 2122,
+  "n_val": 454,
+  "n_test": 456,
+  "cv_macro_f1_mean": 0.9126175833076251,
+  "cv_macro_f1_std": 0.011825736965888662,
+  "cv_fallback_triggered": false,
+  "cv_fallback_reason": "n_unique_groups=1 < n_splits=5; group-aware CV degenerates to single fold; using StratifiedKFold",
+  "cv_splitter": "StratifiedKFold",
+  "cv_n_splits": 5,
+  "cv_total_runtime_s": 48.159138199989684,
+  "cv_per_fold": [
+    {
+      "fold": 0,
+      "n_train": 2060,
+      "n_val": 516,
+      "macro_f1": 0.9264158132355022,
+      "accuracy": 0.9341085271317829,
+      "per_class_recall": {
+        "F": 0.8901098901098901,
+        "G": 0.9272030651340997,
+        "K": 0.9695121951219512
+      },
+      "confusion_matrix": [
+        [
+          81,
+          9,
+          1
+        ],
+        [
+          11,
+          242,
+          8
+        ],
+        [
+          0,
+          5,
+          159
+        ]
+      ],
+      "runtime_s": 11.41534929999034,
+      "best_iteration": 135
+    },
+    {
+      "fold": 1,
+      "n_train": 2061,
+      "n_val": 515,
+      "macro_f1": 0.895526090075386,
+      "accuracy": 0.9048543689320389,
+      "per_class_recall": {
+        "F": 0.8021978021978022,
+        "G": 0.9003831417624522,
+        "K": 0.9693251533742331
+      },
+      "confusion_matrix": [
+        [
+          73,
+          18,
+          0
+        ],
+        [
+          8,
+          235,
+          18
+        ],
+        [
+          0,
+          5,
+          158
+        ]
+      ],
+      "runtime_s": 9.987266200012527,
+      "best_iteration": 107
+    },
+    {
+      "fold": 2,
+      "n_train": 2061,
+      "n_val": 515,
+      "macro_f1": 0.9022490485089211,
+      "accuracy": 0.916504854368932,
+      "per_class_recall": {
+        "F": 0.7802197802197802,
+        "G": 0.9348659003831418,
+        "K": 0.9631901840490797
+      },
+      "confusion_matrix": [
+        [
+          71,
+          20,
+          0
+        ],
+        [
+          9,
+          244,
+          8
+        ],
+        [
+          0,
+          6,
+          157
+        ]
+      ],
+      "runtime_s": 7.995563400007086,
+      "best_iteration": 102
+    },
+    {
+      "fold": 3,
+      "n_train": 2061,
+      "n_val": 515,
+      "macro_f1": 0.9222681548849386,
+      "accuracy": 0.9320388349514563,
+      "per_class_recall": {
+        "F": 0.8461538461538461,
+        "G": 0.9386973180076629,
+        "K": 0.9693251533742331
+      },
+      "confusion_matrix": [
+        [
+          77,
+          14,
+          0
+        ],
+        [
+          9,
+          245,
+          7
+        ],
+        [
+          0,
+          5,
+          158
+        ]
+      ],
+      "runtime_s": 10.043968999991193,
+      "best_iteration": 148
+    },
+    {
+      "fold": 4,
+      "n_train": 2061,
+      "n_val": 515,
+      "macro_f1": 0.9166288098333778,
+      "accuracy": 0.9242718446601942,
+      "per_class_recall": {
+        "F": 0.8351648351648352,
+        "G": 0.95,
+        "K": 0.9329268292682927
+      },
+      "confusion_matrix": [
+        [
+          76,
+          15,
+          0
+        ],
+        [
+          6,
+          247,
+          7
+        ],
+        [
+          0,
+          11,
+          153
+        ]
+      ],
+      "runtime_s": 8.716990299988538,
+      "best_iteration": 137
+    }
+  ],
+  "boundary_filtered_accuracy": {
+    "full_test_acc": 0.9342105263157895,
+    "boundary_filtered_acc": 0.9928571428571429,
+    "delta_acc": 0.05864661654135339,
+    "delta_acc_ci_low": 0.038631792262387846,
+    "delta_acc_ci_high": 0.0822618772212981,
+    "threshold_k": 200.0,
+    "n_filtered": 280.0,
+    "n_test": 456.0
+  },
+  "cv_spatial_macro_f1_mean": 0.9028285873560392,
+  "cv_spatial_macro_f1_std": 0.015848630135419452,
+  "cv_spatial_per_fold_macro_f1": [
+    0.8885545032479724,
+    0.9135698494578377,
+    0.8799998972703963,
+    0.9101716449569475,
+    0.9218470418470419
+  ],
+  "cv_spatial_n_unique_groups": 1926,
+  "cv_spatial_splitter": "StratifiedGroupKFold",
+  "cv_spatial_fallback_triggered": false,
+  "cv_spatial_fallback_reason": "",
+  "cv_spatial_per_fold": [
+    {
+      "fold": 0,
+      "n_train": 2060,
+      "n_val": 516,
+      "macro_f1": 0.8885545032479724,
+      "accuracy": 0.9031007751937985,
+      "per_class_recall": {
+        "F": 0.7362637362637363,
+        "G": 0.9386973180076629,
+        "K": 0.9390243902439024
+      },
+      "confusion_matrix": [
+        [
+          67,
+          24,
+          0
+        ],
+        [
+          5,
+          245,
+          11
+        ],
+        [
+          0,
+          10,
+          154
+        ]
+      ],
+      "runtime_s": 7.459064599999692,
+      "best_iteration": 105
+    },
+    {
+      "fold": 1,
+      "n_train": 2061,
+      "n_val": 515,
+      "macro_f1": 0.9135698494578377,
+      "accuracy": 0.9223300970873787,
+      "per_class_recall": {
+        "F": 0.8461538461538461,
+        "G": 0.9425287356321839,
+        "K": 0.9325153374233128
+      },
+      "confusion_matrix": [
+        [
+          77,
+          14,
+          0
+        ],
+        [
+          8,
+          246,
+          7
+        ],
+        [
+          1,
+          10,
+          152
+        ]
+      ],
+      "runtime_s": 7.763865699991584,
+      "best_iteration": 125
+    },
+    {
+      "fold": 2,
+      "n_train": 2061,
+      "n_val": 515,
+      "macro_f1": 0.8799998972703963,
+      "accuracy": 0.887378640776699,
+      "per_class_recall": {
+        "F": 0.8351648351648352,
+        "G": 0.9348659003831418,
+        "K": 0.8404907975460123
+      },
+      "confusion_matrix": [
+        [
+          76,
+          14,
+          1
+        ],
+        [
+          12,
+          244,
+          5
+        ],
+        [
+          0,
+          26,
+          137
+        ]
+      ],
+      "runtime_s": 5.7980982000008225,
+      "best_iteration": 85
+    },
+    {
+      "fold": 3,
+      "n_train": 2061,
+      "n_val": 515,
+      "macro_f1": 0.9101716449569475,
+      "accuracy": 0.9184466019417475,
+      "per_class_recall": {
+        "F": 0.8681318681318682,
+        "G": 0.9348659003831418,
+        "K": 0.9202453987730062
+      },
+      "confusion_matrix": [
+        [
+          79,
+          12,
+          0
+        ],
+        [
+          13,
+          244,
+          4
+        ],
+        [
+          0,
+          13,
+          150
+        ]
+      ],
+      "runtime_s": 9.134200000000419,
+      "best_iteration": 147
+    },
+    {
+      "fold": 4,
+      "n_train": 2061,
+      "n_val": 515,
+      "macro_f1": 0.9218470418470419,
+      "accuracy": 0.9320388349514563,
+      "per_class_recall": {
+        "F": 0.8351648351648352,
+        "G": 0.9423076923076923,
+        "K": 0.9695121951219512
+      },
+      "confusion_matrix": [
+        [
+          76,
+          15,
+          0
+        ],
+        [
+          8,
+          245,
+          7
+        ],
+        [
+          0,
+          5,
+          159
+        ]
+      ],
+      "runtime_s": 10.589201900002081,
+      "best_iteration": 140
+    }
+  ],
+  "cv_spatial_singleton_stats": {
+    "partition": "trainval",
+    "eps_deg": 0.1,
+    "min_samples": 5,
+    "n_total_rows": 2576,
+    "n_unique_groups": 1966,
+    "n_singleton_groups": 1898,
+    "n_rows_in_singleton_groups": 1898,
+    "singleton_group_fraction": 0.965412004069176,
+    "singleton_row_fraction": 0.7368012422360248,
+    "n_dbscan_noise_rows": 1898,
+    "n_non_singleton_clusters": 68,
+    "non_singleton_cluster_size_min": 5,
+    "non_singleton_cluster_size_median": 7,
+    "non_singleton_cluster_size_max": 54
+  }
+}

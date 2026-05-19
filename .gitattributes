@@ -1,0 +1,7 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Manuscript sources are LF-only so Overleaf round-trips preserve line numbers.
+*.tex text eol=lf
+*.bib text eol=lf
+*.md text eol=lf

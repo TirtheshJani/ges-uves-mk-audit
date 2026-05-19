@@ -1,0 +1,626 @@
+{
+  "top_k": 20,
+  "class_labels": [
+    "F",
+    "G",
+    "K"
+  ],
+  "line_sets": [
+    "H_balmer",
+    "Mg_b",
+    "Na_D",
+    "Ca_I"
+  ],
+  "runtimes_s": {
+    "perm_importance_s": 31.140029500005767,
+    "shap_s": 17.3323945000011,
+    "occlusion_s": 0.23223960000905208
+  },
+  "gap_mask_n_bins_true": 22,
+  "gap_mask_wavelength_range_aa": [
+    5771.1015625,
+    5832.017578125
+  ],
+  "pairwise_jaccard": {
+    "perm_vs_shap": 0.48148148148148145,
+    "perm_vs_occlusion": 0.1111111111111111,
+    "shap_vs_occlusion": 0.1111111111111111
+  },
+  "three_way_intersection_size": 4,
+  "three_way_intersection_bins": [
+    {
+      "bin": 624,
+      "wavelength_aa": 6559.16259765625
+    },
+    {
+      "bin": 625,
+      "wavelength_aa": 6562.443359375
+    },
+    {
+      "bin": 626,
+      "wavelength_aa": 6565.72509765625
+    },
+    {
+      "bin": 627,
+      "wavelength_aa": 6569.0087890625
+    }
+  ],
+  "per_class_top_k": {
+    "perm": {
+      "F": [
+        {
+          "bin": 23,
+          "wavelength_aa": 4856.71826171875
+        },
+        {
+          "bin": 24,
+          "wavelength_aa": 4859.1474609375
+        },
+        {
+          "bin": 25,
+          "wavelength_aa": 4861.57763671875
+        },
+        {
+          "bin": 26,
+          "wavelength_aa": 4864.0087890625
+        },
+        {
+          "bin": 33,
+          "wavelength_aa": 4881.06298828125
+        },
+        {
+          "bin": 149,
+          "wavelength_aa": 5172.53564453125
+        },
+        {
+          "bin": 153,
+          "wavelength_aa": 5182.890625
+        },
+        {
+          "bin": 154,
+          "wavelength_aa": 5185.48291015625
+        },
+        {
+          "bin": 163,
+          "wavelength_aa": 5208.8701171875
+        },
+        {
+          "bin": 182,
+          "wavelength_aa": 5258.59033203125
+        },
+        {
+          "bin": 186,
+          "wavelength_aa": 5269.1181640625
+        },
+        {
+          "bin": 252,
+          "wavelength_aa": 5445.89990234375
+        },
+        {
+          "bin": 308,
+          "wavelength_aa": 5600.53955078125
+        },
+        {
+          "bin": 512,
+          "wavelength_aa": 6201.9453125
+        },
+        {
+          "bin": 515,
+          "wavelength_aa": 6211.2548828125
+        },
+        {
+          "bin": 624,
+          "wavelength_aa": 6559.16259765625
+        },
+        {
+          "bin": 625,
+          "wavelength_aa": 6562.443359375
+        },
+        {
+          "bin": 626,
+          "wavelength_aa": 6565.72509765625
+        },
+        {
+          "bin": 627,
+          "wavelength_aa": 6569.0087890625
+        },
+        {
+          "bin": 637,
+          "wavelength_aa": 6601.93603515625
+        }
+      ],
+      "G": [
+        {
+          "bin": 23,
+          "wavelength_aa": 4856.71826171875
+        },
+        {
+          "bin": 24,
+          "wavelength_aa": 4859.1474609375
+        },
+        {
+          "bin": 25,
+          "wavelength_aa": 4861.57763671875
+        },
+        {
+          "bin": 26,
+          "wavelength_aa": 4864.0087890625
+        },
+        {
+          "bin": 33,
+          "wavelength_aa": 4881.06298828125
+        },
+        {
+          "bin": 149,
+          "wavelength_aa": 5172.53564453125
+        },
+        {
+          "bin": 153,
+          "wavelength_aa": 5182.890625
+        },
+        {
+          "bin": 154,
+          "wavelength_aa": 5185.48291015625
+        },
+        {
+          "bin": 163,
+          "wavelength_aa": 5208.8701171875
+        },
+        {
+          "bin": 182,
+          "wavelength_aa": 5258.59033203125
+        },
+        {
+          "bin": 186,
+          "wavelength_aa": 5269.1181640625
+        },
+        {
+          "bin": 252,
+          "wavelength_aa": 5445.89990234375
+        },
+        {
+          "bin": 308,
+          "wavelength_aa": 5600.53955078125
+        },
+        {
+          "bin": 512,
+          "wavelength_aa": 6201.9453125
+        },
+        {
+          "bin": 515,
+          "wavelength_aa": 6211.2548828125
+        },
+        {
+          "bin": 624,
+          "wavelength_aa": 6559.16259765625
+        },
+        {
+          "bin": 625,
+          "wavelength_aa": 6562.443359375
+        },
+        {
+          "bin": 626,
+          "wavelength_aa": 6565.72509765625
+        },
+        {
+          "bin": 627,
+          "wavelength_aa": 6569.0087890625
+        },
+        {
+          "bin": 637,
+          "wavelength_aa": 6601.93603515625
+        }
+      ],
+      "K": [
+        {
+          "bin": 23,
+          "wavelength_aa": 4856.71826171875
+        },
+        {
+          "bin": 24,
+          "wavelength_aa": 4859.1474609375
+        },
+        {
+          "bin": 25,
+          "wavelength_aa": 4861.57763671875
+        },
+        {
+          "bin": 26,
+          "wavelength_aa": 4864.0087890625
+        },
+        {
+          "bin": 33,
+          "wavelength_aa": 4881.06298828125
+        },
+        {
+          "bin": 149,
+          "wavelength_aa": 5172.53564453125
+        },
+        {
+          "bin": 153,
+          "wavelength_aa": 5182.890625
+        },
+        {
+          "bin": 154,
+          "wavelength_aa": 5185.48291015625
+        },
+        {
+          "bin": 163,
+          "wavelength_aa": 5208.8701171875
+        },
+        {
+          "bin": 182,
+          "wavelength_aa": 5258.59033203125
+        },
+        {
+          "bin": 186,
+          "wavelength_aa": 5269.1181640625
+        },
+        {
+          "bin": 252,
+          "wavelength_aa": 5445.89990234375
+        },
+        {
+          "bin": 308,
+          "wavelength_aa": 5600.53955078125
+        },
+        {
+          "bin": 512,
+          "wavelength_aa": 6201.9453125
+        },
+        {
+          "bin": 515,
+          "wavelength_aa": 6211.2548828125
+        },
+        {
+          "bin": 624,
+          "wavelength_aa": 6559.16259765625
+        },
+        {
+          "bin": 625,
+          "wavelength_aa": 6562.443359375
+        },
+        {
+          "bin": 626,
+          "wavelength_aa": 6565.72509765625
+        },
+        {
+          "bin": 627,
+          "wavelength_aa": 6569.0087890625
+        },
+        {
+          "bin": 637,
+          "wavelength_aa": 6601.93603515625
+        }
+      ]
+    },
+    "shap": {
+      "F": [
+        {
+          "bin": 6,
+          "wavelength_aa": 4815.611328125
+        },
+        {
+          "bin": 8,
+          "wavelength_aa": 4820.42919921875
+        },
+        {
+          "bin": 22,
+          "wavelength_aa": 4854.29052734375
+        },
+        {
+          "bin": 23,
+          "wavelength_aa": 4856.71826171875
+        },
+        {
+          "bin": 24,
+          "wavelength_aa": 4859.1474609375
+        },
+        {
+          "bin": 25,
+          "wavelength_aa": 4861.57763671875
+        },
+        {
+          "bin": 26,
+          "wavelength_aa": 4864.0087890625
+        },
+        {
+          "bin": 27,
+          "wavelength_aa": 4866.44140625
+        },
+        {
+          "bin": 147,
+          "wavelength_aa": 5167.365234375
+        },
+        {
+          "bin": 149,
+          "wavelength_aa": 5172.53564453125
+        },
+        {
+          "bin": 153,
+          "wavelength_aa": 5182.890625
+        },
+        {
+          "bin": 154,
+          "wavelength_aa": 5185.48291015625
+        },
+        {
+          "bin": 163,
+          "wavelength_aa": 5208.8701171875
+        },
+        {
+          "bin": 186,
+          "wavelength_aa": 5269.1181640625
+        },
+        {
+          "bin": 530,
+          "wavelength_aa": 6258.0146484375
+        },
+        {
+          "bin": 623,
+          "wavelength_aa": 6555.88427734375
+        },
+        {
+          "bin": 624,
+          "wavelength_aa": 6559.16259765625
+        },
+        {
+          "bin": 625,
+          "wavelength_aa": 6562.443359375
+        },
+        {
+          "bin": 626,
+          "wavelength_aa": 6565.72509765625
+        },
+        {
+          "bin": 627,
+          "wavelength_aa": 6569.0087890625
+        }
+      ],
+      "G": [
+        {
+          "bin": 22,
+          "wavelength_aa": 4854.29052734375
+        },
+        {
+          "bin": 23,
+          "wavelength_aa": 4856.71826171875
+        },
+        {
+          "bin": 24,
+          "wavelength_aa": 4859.1474609375
+        },
+        {
+          "bin": 25,
+          "wavelength_aa": 4861.57763671875
+        },
+        {
+          "bin": 34,
+          "wavelength_aa": 4883.50390625
+        },
+        {
+          "bin": 64,
+          "wavelength_aa": 4957.30859375
+        },
+        {
+          "bin": 133,
+          "wavelength_aa": 5131.3203125
+        },
+        {
+          "bin": 147,
+          "wavelength_aa": 5167.365234375
+        },
+        {
+          "bin": 149,
+          "wavelength_aa": 5172.53564453125
+        },
+        {
+          "bin": 151,
+          "wavelength_aa": 5177.71044921875
+        },
+        {
+          "bin": 153,
+          "wavelength_aa": 5182.890625
+        },
+        {
+          "bin": 154,
+          "wavelength_aa": 5185.48291015625
+        },
+        {
+          "bin": 163,
+          "wavelength_aa": 5208.8701171875
+        },
+        {
+          "bin": 181,
+          "wavelength_aa": 5255.96142578125
+        },
+        {
+          "bin": 538,
+          "wavelength_aa": 6283.0966796875
+        },
+        {
+          "bin": 539,
+          "wavelength_aa": 6286.2392578125
+        },
+        {
+          "bin": 624,
+          "wavelength_aa": 6559.16259765625
+        },
+        {
+          "bin": 625,
+          "wavelength_aa": 6562.443359375
+        },
+        {
+          "bin": 626,
+          "wavelength_aa": 6565.72509765625
+        },
+        {
+          "bin": 627,
+          "wavelength_aa": 6569.0087890625
+        }
+      ],
+      "K": [
+        {
+          "bin": 24,
+          "wavelength_aa": 4859.1474609375
+        },
+        {
+          "bin": 25,
+          "wavelength_aa": 4861.57763671875
+        },
+        {
+          "bin": 26,
+          "wavelength_aa": 4864.0087890625
+        },
+        {
+          "bin": 123,
+          "wavelength_aa": 5105.7275390625
+        },
+        {
+          "bin": 126,
+          "wavelength_aa": 5113.39208984375
+        },
+        {
+          "bin": 132,
+          "wavelength_aa": 5128.75537109375
+        },
+        {
+          "bin": 151,
+          "wavelength_aa": 5177.71044921875
+        },
+        {
+          "bin": 163,
+          "wavelength_aa": 5208.8701171875
+        },
+        {
+          "bin": 164,
+          "wavelength_aa": 5211.47509765625
+        },
+        {
+          "bin": 180,
+          "wavelength_aa": 5253.33447265625
+        },
+        {
+          "bin": 181,
+          "wavelength_aa": 5255.96142578125
+        },
+        {
+          "bin": 186,
+          "wavelength_aa": 5269.1181640625
+        },
+        {
+          "bin": 188,
+          "wavelength_aa": 5274.3896484375
+        },
+        {
+          "bin": 198,
+          "wavelength_aa": 5300.82763671875
+        },
+        {
+          "bin": 210,
+          "wavelength_aa": 5332.728515625
+        },
+        {
+          "bin": 274,
+          "wavelength_aa": 5506.13525390625
+        },
+        {
+          "bin": 624,
+          "wavelength_aa": 6559.16259765625
+        },
+        {
+          "bin": 625,
+          "wavelength_aa": 6562.443359375
+        },
+        {
+          "bin": 626,
+          "wavelength_aa": 6565.72509765625
+        },
+        {
+          "bin": 627,
+          "wavelength_aa": 6569.0087890625
+        }
+      ]
+    }
+  },
+  "pre_mask_topk_diagnostic": {
+    "perm_topk_pre_mask": [
+      23,
+      24,
+      25,
+      26,
+      33,
+      149,
+      153,
+      154,
+      163,
+      182,
+      186,
+      252,
+      308,
+      512,
+      515,
+      624,
+      625,
+      626,
+      627,
+      637
+    ],
+    "perm_topk_pre_mask_in_gap": [],
+    "shap_topk_pre_mask": [
+      23,
+      24,
+      25,
+      26,
+      147,
+      149,
+      151,
+      153,
+      154,
+      163,
+      164,
+      180,
+      181,
+      186,
+      198,
+      538,
+      624,
+      625,
+      626,
+      627
+    ],
+    "shap_topk_pre_mask_in_gap": [],
+    "occlusion_topk_pre_mask": [
+      30,
+      31,
+      617,
+      618,
+      619,
+      620,
+      621,
+      622,
+      623,
+      624,
+      625,
+      626,
+      627,
+      628,
+      629,
+      630,
+      631,
+      632,
+      633,
+      634
+    ],
+    "occlusion_topk_pre_mask_in_gap": []
+  },
+  "shap_stability_per_class": {
+    "0": 0.9562097162097163,
+    "1": 0.9611736411736413,
+    "2": 0.9347955747955748
+  },
+  "red_flags": [
+    "perm_vs_shap_below_0.5",
+    "shortcut_learning_signal"
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "investigation": "continuum-level shortcut diagnostic",
+  "context": "Step 8c at n=145 rejected the (Mg b, K) null under polynomial_n5 re-derivation (dA=-0.034, CI=[-0.069, 0.000], p=0.002). This investigation probes the mechanism.",
+  "finding_1_per_class_continuum_levels": {
+    "train": {
+      "F": {
+        "n": 375,
+        "median_of_row_medians": 0.9289730787277222,
+        "mean_of_row_medians": 0.9290904998779297,
+        "p10_of_row_medians": 0.9029852747917175,
+        "p90_of_row_medians": 0.9521814584732056
+      },
+      "G": {
+        "n": 1074,
+        "median_of_row_medians": 0.918992280960083,
+        "mean_of_row_medians": 0.9191558361053467,
+        "p10_of_row_medians": 0.8936230540275574,
+        "p90_of_row_medians": 0.9437229633331299
+      },
+      "K": {
+        "n": 673,
+        "median_of_row_medians": 0.8989779949188232,
+        "mean_of_row_medians": 0.8964829444885254,
+        "p10_of_row_medians": 0.8569684028625488,
+        "p90_of_row_medians": 0.9312273263931274
+      }
+    },
+    "val": {
+      "F": {
+        "n": 80,
+        "median_of_row_medians": 0.9349806308746338,
+        "mean_of_row_medians": 0.9314950108528137,
+        "p10_of_row_medians": 0.9057610630989075,
+        "p90_of_row_medians": 0.9514617919921875
+      },
+      "G": {
+        "n": 230,
+        "median_of_row_medians": 0.9198805093765259,
+        "mean_of_row_medians": 0.9197092056274414,
+        "p10_of_row_medians": 0.8920390605926514,
+        "p90_of_row_medians": 0.9431312084197998
+      },
+      "K": {
+        "n": 144,
+        "median_of_row_medians": 0.9051023721694946,
+        "mean_of_row_medians": 0.9019802808761597,
+        "p10_of_row_medians": 0.8637861609458923,
+        "p90_of_row_medians": 0.940446138381958
+      }
+    },
+    "test": {
+      "F": {
+        "n": 81,
+        "median_of_row_medians": 0.9287251830101013,
+        "mean_of_row_medians": 0.9278358221054077,
+        "p10_of_row_medians": 0.9025420546531677,
+        "p90_of_row_medians": 0.9503991603851318
+      },
+      "G": {
+        "n": 230,
+        "median_of_row_medians": 0.9178592562675476,
+        "mean_of_row_medians": 0.9168678522109985,
+        "p10_of_row_medians": 0.8922780156135559,
+        "p90_of_row_medians": 0.9411739706993103
+      },
+      "K": {
+        "n": 145,
+        "median_of_row_medians": 0.9023829698562622,
+        "mean_of_row_medians": 0.8970822095870972,
+        "p10_of_row_medians": 0.8568475246429443,
+        "p90_of_row_medians": 0.9405663013458252
+      }
+    }
+  },
+  "finding_1_interpretation": "Per-class median-of-row-medians is monotonically class-dependent in the production feature matrix: F=0.929, G=0.919, K=0.902 (test set). The Gaia-ESO continuum convention leaves K-class spectra at a depressed normalisation level relative to F/G, a 2.7%-point spread that is class-discriminative information.",
+  "finding_2_per_class_baseline_under_polynomial": {
+    "F": {
+      "n_test": 81,
+      "production_baseline_acc": 0.8395061728395061,
+      "polynomial_n5_baseline_acc": 0.7283950617283951,
+      "production_renorm_row_median_med": 0.9287251830101013,
+      "polynomial_n5_row_median_med": 1.0012516975402832
+    },
+    "G": {
+      "n_test": 230,
+      "production_baseline_acc": 0.9652173913043478,
+      "polynomial_n5_baseline_acc": 0.14782608695652175,
+      "production_renorm_row_median_med": 0.9178592562675476,
+      "polynomial_n5_row_median_med": 1.0034258365631104
+    },
+    "K": {
+      "n_test": 145,
+      "production_baseline_acc": 0.9379310344827586,
+      "polynomial_n5_baseline_acc": 0.9241379310344827,
+      "production_renorm_row_median_med": 0.9023829698562622,
+      "polynomial_n5_row_median_med": 1.0062541961669922
+    }
+  },
+  "finding_2_interpretation": "Under polynomial_n5 re-derivation: F baseline acc drops from 0.84 to 0.73 (-0.11); G baseline acc COLLAPSES from 0.97 to 0.15 (-0.82); K baseline acc barely changes from 0.94 to 0.92 (-0.01). The model lost the continuum-level shortcut for G classification almost entirely. K still classifies because it has compensating signals (FeI/CrI multiplets and now Mg b).",
+  "finding_3_mg_b_ablation_per_class_under_polynomial": {
+    "F": {
+      "n_test": 81,
+      "baseline_acc": 0.7283950617283951,
+      "masked_acc_mean": 0.7407407407407407,
+      "delta_acc_mean": 0.012345679012345623,
+      "delta_acc_ci_low": 0.0,
+      "delta_acc_ci_high": 0.04170364513993263,
+      "p_value_vs_random": 1.0
+    },
+    "G": {
+      "n_test": 230,
+      "baseline_acc": 0.14782608695652175,
+      "masked_acc_mean": 0.09130434782608696,
+      "delta_acc_mean": -0.05652173913043479,
+      "delta_acc_ci_low": -0.08502111583948135,
+      "delta_acc_ci_high": -0.026250718161463737,
+      "p_value_vs_random": 0.013972055888223553
+    },
+    "K": {
+      "n_test": 145,
+      "baseline_acc": 0.9241379310344827,
+      "masked_acc_mean": 0.8896551724137931,
+      "delta_acc_mean": -0.03448275862068961,
+      "delta_acc_ci_low": -0.06985282152891159,
+      "delta_acc_ci_high": 0.0,
+      "p_value_vs_random": 0.01996007984031936
+    }
+  },
+  "finding_3_interpretation": "Under polynomial_n5: (Mg b, F) dA=+0.012 (still null, p=1.0); (Mg b, G) dA=-0.057, p=0.014 (still negative, attenuated from -0.21); (Mg b, K) dA=-0.035, p=0.020 (now negative, was null under production). The K-class effect emerges precisely because the continuum-level shortcut was removed.",
+  "overall_interpretation": "The K-class shortcut composition is multi-leg. Under the production Gaia-ESO continuum: continuum level + FeI/CrI multiplets carry K-classification; Mg b is functionally redundant; (Mg b, K) returns null. Under polynomial_n5 re-derivation: continuum-level leg is destroyed; model leans on Mg b and FeI/CrI; (Mg b, K) recovers a measurable -0.034. Both results are evidence of shortcut learning; the audit detects the active leg under each continuum convention.",
+  "sample_polynomial_renormalisation_per_K_row_first_10": [
+    {
+      "row_in_test_idx": 6,
+      "production_row_median": 0.870076596736908,
+      "polynomial_renorm_row_median": 1.0060067176818848,
+      "max_polynomial_deviation_from_unity": 0.2419463222017365
+    },
+    {
+      "row_in_test_idx": 10,
+      "production_row_median": 0.9461484551429749,
+      "polynomial_renorm_row_median": 1.0060725212097168,
+      "max_polynomial_deviation_from_unity": 0.12205851177819205
+    },
+    {
+      "row_in_test_idx": 12,
+      "production_row_median": 0.9597227573394775,
+      "polynomial_renorm_row_median": 1.0014445781707764,
+      "max_polynomial_deviation_from_unity": 0.10963756699862925
+    },
+    {
+      "row_in_test_idx": 17,
+      "production_row_median": 0.9023829400539398,
+      "polynomial_renorm_row_median": 1.0062224864959717,
+      "max_polynomial_deviation_from_unity": 0.21196352081178615
+    },
+    {
+      "row_in_test_idx": 20,
+      "production_row_median": 0.8929580450057983,
+      "polynomial_renorm_row_median": 0.9877804517745972,
+      "max_polynomial_deviation_from_unity": 0.21261664447267747
+    },
+    {
+      "row_in_test_idx": 23,
+      "production_row_median": 0.9016740024089813,
+      "polynomial_renorm_row_median": 1.0017536878585815,
+      "max_polynomial_deviation_from_unity": 0.1686207379742305
+    },
+    {
+      "row_in_test_idx": 24,
+      "production_row_median": 0.906256377696991,
+      "polynomial_renorm_row_median": 1.0124616622924805,
+      "max_polynomial_deviation_from_unity": 0.21592829430882776
+    },
+    {
+      "row_in_test_idx": 25,
+      "production_row_median": 0.9269960820674896,
+      "polynomial_renorm_row_median": 1.007537841796875,
+      "max_polynomial_deviation_from_unity": 0.14799666823288193
+    },
+    {
+      "row_in_test_idx": 28,
+      "production_row_median": 0.8708670437335968,
+      "polynomial_renorm_row_median": 1.0069043636322021,
+      "max_polynomial_deviation_from_unity": 0.26009080560848397
+    },
+    {
+      "row_in_test_idx": 37,
+      "production_row_median": 0.9237429201602936,
+      "polynomial_renorm_row_median": 1.0001182556152344,
+      "max_polynomial_deviation_from_unity": 0.11372621212195466
+    }
+  ]
+}

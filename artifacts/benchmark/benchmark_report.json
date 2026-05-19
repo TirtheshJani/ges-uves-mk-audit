@@ -1,0 +1,70 @@
+{
+  "labels": [
+    "F",
+    "G",
+    "K",
+    "OTHER"
+  ],
+  "confusion_matrix": [
+    [
+      35,
+      6,
+      0,
+      0
+    ],
+    [
+      0,
+      4,
+      1,
+      0
+    ],
+    [
+      1,
+      5,
+      8,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "per_class_precision": {
+    "F": 0.7954545454545454,
+    "G": 0.26666666666666666,
+    "K": 0.8,
+    "OTHER": 0.0
+  },
+  "per_class_recall": {
+    "F": 0.8536585365853658,
+    "G": 0.8,
+    "K": 0.5714285714285714,
+    "OTHER": 0.0
+  },
+  "per_class_f1": {
+    "F": 0.8235294117647058,
+    "G": 0.4,
+    "K": 0.6666666666666666,
+    "OTHER": 0.0
+  },
+  "macro_f1_fgk": 0.6300653594771242,
+  "agreement_rate": 0.6811594202898551,
+  "n_compared": 69,
+  "n_dropped_other": 387,
+  "restrict_fgk": true,
+  "pickles_loader_stats": {
+    "n_files_seen": 131,
+    "n_loaded": 108,
+    "n_unmapped_skipped": 23,
+    "n_invalid_filename": 0
+  },
+  "decision_33_gate": {
+    "required": 0.55,
+    "observed": 0.6811594202898551,
+    "n_compared": 69,
+    "min_n_compared": 100,
+    "status": "FAIL"
+  }
+}

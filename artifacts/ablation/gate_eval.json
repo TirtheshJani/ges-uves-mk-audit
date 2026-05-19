@@ -1,0 +1,241 @@
+{
+  "n_pairs_passed": 2,
+  "n_pairs_required": 2,
+  "n_pairs_total": 3,
+  "pairs_evaluated": [
+    {
+      "line_set": "H_balmer",
+      "mk_class": "F",
+      "found": true,
+      "n_test": 81,
+      "baseline_acc": 0.8395061728395061,
+      "masked_acc_mean": 0.0,
+      "delta_acc_mean": -0.8395061728395061,
+      "delta_acc_ci_low": -0.9134374856948853,
+      "delta_acc_ci_high": -0.7654321193695068,
+      "p_value_vs_random": 0.001996007984031936,
+      "passed": true
+    },
+    {
+      "line_set": "Mg_b",
+      "mk_class": "G",
+      "found": true,
+      "n_test": 230,
+      "baseline_acc": 0.9652173913043478,
+      "masked_acc_mean": 0.7521739130434782,
+      "delta_acc_mean": -0.21304347826086956,
+      "delta_acc_ci_low": -0.26213905215263367,
+      "delta_acc_ci_high": -0.15904098749160767,
+      "p_value_vs_random": 0.001996007984031936,
+      "passed": true
+    },
+    {
+      "line_set": "Mg_b",
+      "mk_class": "K",
+      "found": true,
+      "n_test": 145,
+      "baseline_acc": 0.9379310344827586,
+      "masked_acc_mean": 0.9379310344827586,
+      "delta_acc_mean": 0.0,
+      "delta_acc_ci_low": -0.020481549203395844,
+      "delta_acc_ci_high": 0.01994546875357628,
+      "p_value_vs_random": 0.8662674650698603,
+      "passed": false
+    }
+  ],
+  "pivot_confirmed": [
+    {
+      "line_set": "Na_D",
+      "mk_class": "K",
+      "found": true,
+      "n_test": 145,
+      "delta_acc_mean": -0.006896551724137945,
+      "delta_acc_ci_low": -0.022843630984425545,
+      "delta_acc_ci_high": 0.0,
+      "p_value_vs_random": 0.007984031936127744,
+      "decision_30_prediction": "near_zero_delta",
+      "ci_straddles_zero": true
+    },
+    {
+      "line_set": "Ca_I",
+      "mk_class": "K",
+      "found": true,
+      "n_test": 145,
+      "delta_acc_mean": 0.0,
+      "delta_acc_ci_low": 0.0,
+      "delta_acc_ci_high": 0.0,
+      "p_value_vs_random": 0.8782435129740519,
+      "decision_30_prediction": "near_zero_delta",
+      "ci_straddles_zero": true
+    }
+  ],
+  "gate_status": "PASS",
+  "draw_success_rates": {
+    "H_balmer": {
+      "requested": 500,
+      "succeeded": 500,
+      "rate": 1.0,
+      "above_floor": true
+    },
+    "Mg_b": {
+      "requested": 500,
+      "succeeded": 500,
+      "rate": 1.0,
+      "above_floor": true
+    },
+    "Na_D": {
+      "requested": 500,
+      "succeeded": 500,
+      "rate": 1.0,
+      "above_floor": true
+    },
+    "Ca_I": {
+      "requested": 500,
+      "succeeded": 500,
+      "rate": 1.0,
+      "above_floor": true
+    }
+  },
+  "continuum_fill_sensitivity": {
+    "continuum_fill_locked": 1.0,
+    "continuum_fill_empirical_median": 0.9157990217208862,
+    "shift_threshold": 0.02,
+    "max_shift": 0.03913043478260869,
+    "continuum_fill_status": "REQUIRES_RERUN_WITH_EMPIRICAL_MEDIAN",
+    "production_continuum_fill": 0.9157990217208862,
+    "pairs": [
+      {
+        "line_set": "H_balmer",
+        "mk_class": "F",
+        "delta_at_fill_1.0": -0.8395061728395061,
+        "delta_at_empirical_median": -0.8395061728395061,
+        "shift": 0.0
+      },
+      {
+        "line_set": "Mg_b",
+        "mk_class": "G",
+        "delta_at_fill_1.0": -0.25217391304347825,
+        "delta_at_empirical_median": -0.21304347826086956,
+        "shift": 0.03913043478260869
+      },
+      {
+        "line_set": "Mg_b",
+        "mk_class": "K",
+        "delta_at_fill_1.0": 0.01379310344827589,
+        "delta_at_empirical_median": 0.0,
+        "shift": 0.01379310344827589
+      }
+    ]
+  },
+  "fill_mode_sensitivity": {
+    "production_fill_mode": "constant",
+    "production_continuum_fill": 0.9157990217208862,
+    "shift_threshold": 0.02,
+    "max_shift": 0.04347826086956519,
+    "status": "FILL_MODE_DEPENDENT",
+    "pairs": [
+      {
+        "line_set": "H_balmer",
+        "mk_class": "F",
+        "delta_at_constant": -0.8395061728395061,
+        "delta_at_noise": -0.8148148148148148,
+        "delta_at_gp_interp": -0.8395061728395061,
+        "shift_max_minus_min": 0.024691358024691357
+      },
+      {
+        "line_set": "Mg_b",
+        "mk_class": "G",
+        "delta_at_constant": -0.21304347826086956,
+        "delta_at_noise": -0.22173913043478255,
+        "delta_at_gp_interp": -0.25652173913043474,
+        "shift_max_minus_min": 0.04347826086956519
+      },
+      {
+        "line_set": "Mg_b",
+        "mk_class": "K",
+        "delta_at_constant": 0.0,
+        "delta_at_noise": 0.006896551724137945,
+        "delta_at_gp_interp": 0.01379310344827589,
+        "shift_max_minus_min": 0.01379310344827589
+      },
+      {
+        "line_set": "Na_D",
+        "mk_class": "K",
+        "delta_at_constant": -0.006896551724137945,
+        "delta_at_noise": -0.006896551724137945,
+        "delta_at_gp_interp": -0.006896551724137945,
+        "shift_max_minus_min": 0.0
+      },
+      {
+        "line_set": "Ca_I",
+        "mk_class": "K",
+        "delta_at_constant": 0.0,
+        "delta_at_noise": 0.0,
+        "delta_at_gp_interp": 0.0,
+        "shift_max_minus_min": 0.0
+      }
+    ]
+  },
+  "line_match": {
+    "precision_at_5_aa": 0.06666666666666667,
+    "summary": {
+      "available": true,
+      "path": "artifacts\\interpret\\perm_importance.npz",
+      "tolerances_aa": [
+        1.0,
+        2.0,
+        5.0,
+        10.0
+      ],
+      "precision": {
+        "1.0": 0.05,
+        "2.0": 0.05,
+        "5.0": 0.06666666666666667,
+        "10.0": 0.075
+      },
+      "recall": {
+        "1.0": 0.6666666666666666,
+        "2.0": 0.6666666666666666,
+        "5.0": 0.8888888888888888,
+        "10.0": 1.0
+      },
+      "jaccard": {
+        "1.0": 0.04878048780487805,
+        "2.0": 0.04878048780487805,
+        "5.0": 0.06611570247933884,
+        "10.0": 0.075
+      }
+    }
+  },
+  "headline_pairs": [
+    {
+      "line_set": "H_balmer",
+      "mk_class": "F"
+    },
+    {
+      "line_set": "Mg_b",
+      "mk_class": "G"
+    },
+    {
+      "line_set": "Mg_b",
+      "mk_class": "K"
+    }
+  ],
+  "pivot_pairs": [
+    {
+      "line_set": "Na_D",
+      "mk_class": "K"
+    },
+    {
+      "line_set": "Ca_I",
+      "mk_class": "K"
+    }
+  ],
+  "seed": 42,
+  "n_bootstrap": 500,
+  "n_random_controls": 500,
+  "gate_threshold_per_pair": 0.0033333333333333335,
+  "gate_threshold_familywise_alpha": 0.01,
+  "gate_correction": "bonferroni",
+  "gate_p_value_convention": "phipson_smyth_2010_b_plus_one"
+}

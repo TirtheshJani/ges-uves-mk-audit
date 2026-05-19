@@ -1,0 +1,17 @@
+{
+  "line_set": "Mg_b",
+  "class_a": "G",
+  "class_b": "K",
+  "indifference_zone_decision_39": 0.025,
+  "n_a": 230,
+  "n_b": 145,
+  "delta_a_observed": -0.21304347826086956,
+  "delta_b_observed": 0.0,
+  "diff_observed": -0.21304347826086956,
+  "diff_mean_bootstrap": -0.21262428785607196,
+  "diff_ci_low_95": -0.2725074962518741,
+  "diff_ci_high_95": -0.15698275862068967,
+  "p_one_sided_diff_ge_zero": 0.001996007984031936,
+  "n_bootstrap": 500,
+  "seed": 42
+}

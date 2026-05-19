@@ -1,0 +1,129 @@
+claim_id,claim_type,value,precision,source_file,source_field,phase,used_in_section,notes
+macro_f1_test,scalar,0.926,3sf,artifacts/metrics.json,$.macro_f1,2,,"held-out test set, FGK"
+accuracy_test,scalar,0.934,3sf,artifacts/metrics.json,$.accuracy,2,,held-out test set
+per_class_recall_f_test,scalar,0.840,3sf,artifacts/metrics.json,$.per_class_recall.F,2,,"class F, test set"
+per_class_precision_f_test,scalar,0.944,3sf,artifacts/metrics.json,$.per_class_precision.F,2,,"class F, test set"
+per_class_f1_f_test,scalar,0.889,3sf,artifacts/metrics.json,$.per_class_f1.F,2,,"class F, test set"
+per_class_recall_g_test,scalar,0.965,3sf,artifacts/metrics.json,$.per_class_recall.G,2,,"class G, test set"
+per_class_precision_g_test,scalar,0.914,3sf,artifacts/metrics.json,$.per_class_precision.G,2,,"class G, test set"
+per_class_f1_g_test,scalar,0.939,3sf,artifacts/metrics.json,$.per_class_f1.G,2,,"class G, test set"
+per_class_recall_k_test,scalar,0.938,3sf,artifacts/metrics.json,$.per_class_recall.K,2,,"class K, test set"
+per_class_precision_k_test,scalar,0.965,3sf,artifacts/metrics.json,$.per_class_precision.K,2,,"class K, test set"
+per_class_f1_k_test,scalar,0.951,3sf,artifacts/metrics.json,$.per_class_f1.K,2,,"class K, test set"
+cv_macro_f1_mean,scalar,0.913,3sf,artifacts/metrics.json,$.cv_macro_f1_mean,2,,StratifiedKFold n_splits=5
+cv_macro_f1_std,scalar,0.012,2sf,artifacts/metrics.json,$.cv_macro_f1_std,2,,StratifiedKFold n_splits=5
+cv_macro_f1_fold0,scalar,0.926,3sf,artifacts/metrics.json,$.cv_per_fold[0].macro_f1,2,,non-spatial CV fold 0
+cv_macro_f1_fold1,scalar,0.896,3sf,artifacts/metrics.json,$.cv_per_fold[1].macro_f1,2,,non-spatial CV fold 1
+cv_macro_f1_fold2,scalar,0.902,3sf,artifacts/metrics.json,$.cv_per_fold[2].macro_f1,2,,non-spatial CV fold 2
+cv_macro_f1_fold3,scalar,0.922,3sf,artifacts/metrics.json,$.cv_per_fold[3].macro_f1,2,,non-spatial CV fold 3
+cv_macro_f1_fold4,scalar,0.917,3sf,artifacts/metrics.json,$.cv_per_fold[4].macro_f1,2,,non-spatial CV fold 4
+cv_spatial_macro_f1_mean,scalar,0.903,3sf,artifacts/metrics.json,$.cv_spatial_macro_f1_mean,2,,StratifiedGroupKFold over 1926 DBSCAN spatial groups
+cv_spatial_macro_f1_std,scalar,0.016,2sf,artifacts/metrics.json,$.cv_spatial_macro_f1_std,2,,StratifiedGroupKFold over 1926 DBSCAN spatial groups
+cv_spatial_macro_f1_fold0,scalar,0.889,3sf,artifacts/metrics.json,$.cv_spatial_per_fold_macro_f1[0],2,,spatial CV fold 0
+cv_spatial_macro_f1_fold1,scalar,0.914,3sf,artifacts/metrics.json,$.cv_spatial_per_fold_macro_f1[1],2,,spatial CV fold 1
+cv_spatial_macro_f1_fold2,scalar,0.880,3sf,artifacts/metrics.json,$.cv_spatial_per_fold_macro_f1[2],2,,spatial CV fold 2
+cv_spatial_macro_f1_fold3,scalar,0.910,3sf,artifacts/metrics.json,$.cv_spatial_per_fold_macro_f1[3],2,,spatial CV fold 3
+cv_spatial_macro_f1_fold4,scalar,0.922,3sf,artifacts/metrics.json,$.cv_spatial_per_fold_macro_f1[4],2,,spatial CV fold 4
+cv_spatial_n_unique_groups,scalar,1926,exact,artifacts/metrics.json,$.cv_spatial_n_unique_groups,2,,"DBSCAN haversine eps=0.1 deg, min_samples=5"
+boundary_filtered_accuracy,scalar,0.993,3sf,artifacts/metrics.json,$.boundary_filtered_accuracy.boundary_filtered_acc,2,,"|Teff - bin edge| > 200 K, n=280"
+boundary_full_test_accuracy,scalar,0.934,3sf,artifacts/metrics.json,$.boundary_filtered_accuracy.full_test_acc,2,,full held-out test set
+boundary_delta_acc,scalar,0.059,2sf,artifacts/metrics.json,$.boundary_filtered_accuracy.delta_acc,2,,boundary-filtered minus full-test accuracy
+boundary_delta_acc_ci_low,scalar,0.039,2sf,artifacts/metrics.json,$.boundary_filtered_accuracy.delta_acc_ci_low,2,,95 percent bootstrap CI lower bound
+boundary_delta_acc_ci_high,scalar,0.082,2sf,artifacts/metrics.json,$.boundary_filtered_accuracy.delta_acc_ci_high,2,,95 percent bootstrap CI upper bound
+n_train,scalar,2122,exact,artifacts/metrics.json,$.n_train,2,,"post-SNR cut, post-NaN cut"
+n_val,scalar,454,exact,artifacts/metrics.json,$.n_val,2,,
+n_test,scalar,456,exact,artifacts/metrics.json,$.n_test,2,,
+confusion_test_f_to_f,scalar,68,exact,artifacts/metrics.json,$.confusion_matrix[0][0],2,,"true=F, predicted=F"
+confusion_test_f_to_g,scalar,13,exact,artifacts/metrics.json,$.confusion_matrix[0][1],2,,"true=F, predicted=G"
+confusion_test_f_to_k,scalar,0,exact,artifacts/metrics.json,$.confusion_matrix[0][2],2,,"true=F, predicted=K"
+confusion_test_g_to_f,scalar,3,exact,artifacts/metrics.json,$.confusion_matrix[1][0],2,,"true=G, predicted=F"
+confusion_test_g_to_g,scalar,222,exact,artifacts/metrics.json,$.confusion_matrix[1][1],2,,"true=G, predicted=G"
+confusion_test_g_to_k,scalar,5,exact,artifacts/metrics.json,$.confusion_matrix[1][2],2,,"true=G, predicted=K"
+confusion_test_k_to_f,scalar,1,exact,artifacts/metrics.json,$.confusion_matrix[2][0],2,,"true=K, predicted=F"
+confusion_test_k_to_g,scalar,8,exact,artifacts/metrics.json,$.confusion_matrix[2][1],2,,"true=K, predicted=G"
+confusion_test_k_to_k,scalar,136,exact,artifacts/metrics.json,$.confusion_matrix[2][2],2,,"true=K, predicted=K"
+jaccard_perm_vs_shap,scalar,0.481,3sf,artifacts/interpret/triangulation_report.json,$.pairwise_jaccard.perm_vs_shap,3,,top-20 features
+jaccard_perm_vs_occlusion,scalar,0.111,3sf,artifacts/interpret/triangulation_report.json,$.pairwise_jaccard.perm_vs_occlusion,3,,top-20 features
+jaccard_shap_vs_occlusion,scalar,0.111,3sf,artifacts/interpret/triangulation_report.json,$.pairwise_jaccard.shap_vs_occlusion,3,,top-20 features
+three_way_intersection_size,scalar,4,exact,artifacts/interpret/triangulation_report.json,$.three_way_intersection_size,3,,bins shared by perm/SHAP/occlusion top-20
+three_way_intersection_bin624_wavelength_aa,scalar,6559.16,2dp,artifacts/interpret/triangulation_report.json,$.three_way_intersection_bins[?(@.bin==624)].wavelength_aa,3,,Halpha cluster
+three_way_intersection_bin625_wavelength_aa,scalar,6562.44,2dp,artifacts/interpret/triangulation_report.json,$.three_way_intersection_bins[?(@.bin==625)].wavelength_aa,3,,Halpha cluster
+three_way_intersection_bin626_wavelength_aa,scalar,6565.73,2dp,artifacts/interpret/triangulation_report.json,$.three_way_intersection_bins[?(@.bin==626)].wavelength_aa,3,,Halpha cluster
+three_way_intersection_bin627_wavelength_aa,scalar,6569.01,2dp,artifacts/interpret/triangulation_report.json,$.three_way_intersection_bins[?(@.bin==627)].wavelength_aa,3,,Halpha cluster
+per_class_topk_perm_f_size,scalar,20,exact,artifacts/interpret/triangulation_report.json,$.per_class_top_k.perm.F|length,3,,perm top-K count for class F
+per_class_topk_perm_g_size,scalar,20,exact,artifacts/interpret/triangulation_report.json,$.per_class_top_k.perm.G|length,3,,perm top-K count for class G
+per_class_topk_perm_k_size,scalar,20,exact,artifacts/interpret/triangulation_report.json,$.per_class_top_k.perm.K|length,3,,perm top-K count for class K
+per_class_topk_shap_f_size,scalar,20,exact,artifacts/interpret/triangulation_report.json,$.per_class_top_k.shap.F|length,3,,shap top-K count for class F
+per_class_topk_shap_g_size,scalar,20,exact,artifacts/interpret/triangulation_report.json,$.per_class_top_k.shap.G|length,3,,shap top-K count for class G
+per_class_topk_shap_k_size,scalar,20,exact,artifacts/interpret/triangulation_report.json,$.per_class_top_k.shap.K|length,3,,shap top-K count for class K
+shap_stability_f,scalar,0.956,3sf,artifacts/interpret/shap_stability.json,$.per_class.F,3,,mean pairwise Jaccard across bootstrap subsamples
+shap_stability_g,scalar,0.961,3sf,artifacts/interpret/shap_stability.json,$.per_class.G,3,,mean pairwise Jaccard across bootstrap subsamples
+shap_stability_k,scalar,0.935,3sf,artifacts/interpret/shap_stability.json,$.per_class.K,3,,mean pairwise Jaccard across bootstrap subsamples
+baseline_acc_h_balmer_f,scalar,0.840,3sf,artifacts/ablation/gate_eval.json,$.pairs_evaluated[0].baseline_acc,4,,"(H_balmer, F) headline"
+masked_acc_mean_h_balmer_f,scalar,0,3sf,artifacts/ablation/gate_eval.json,$.pairs_evaluated[0].masked_acc_mean,4,,
+delta_acc_h_balmer_f,scalar,-0.84,2dp,artifacts/ablation/gate_eval.json,$.pairs_evaluated[0].delta_acc_mean,4,,
+delta_acc_ci_low_h_balmer_f,scalar,-0.91,2dp,artifacts/ablation/gate_eval.json,$.pairs_evaluated[0].delta_acc_ci_low,4,,
+delta_acc_ci_high_h_balmer_f,scalar,-0.77,2dp,artifacts/ablation/gate_eval.json,$.pairs_evaluated[0].delta_acc_ci_high,4,,
+p_value_vs_random_h_balmer_f,scalar,<0.002,<floor,artifacts/ablation/gate_eval.json,$.pairs_evaluated[0].p_value_vs_random,4,,floor=1/500
+n_test_h_balmer_f,scalar,81,exact,artifacts/ablation/gate_eval.json,$.pairs_evaluated[0].n_test,4,,
+baseline_acc_mg_b_g,scalar,0.965,3sf,artifacts/ablation/gate_eval.json,$.pairs_evaluated[1].baseline_acc,4,,"(Mg_b, G) headline"
+masked_acc_mean_mg_b_g,scalar,0.752,3sf,artifacts/ablation/gate_eval.json,$.pairs_evaluated[1].masked_acc_mean,4,,
+delta_acc_mg_b_g,scalar,-0.21,2dp,artifacts/ablation/gate_eval.json,$.pairs_evaluated[1].delta_acc_mean,4,,
+delta_acc_ci_low_mg_b_g,scalar,-0.26,2dp,artifacts/ablation/gate_eval.json,$.pairs_evaluated[1].delta_acc_ci_low,4,,
+delta_acc_ci_high_mg_b_g,scalar,-0.16,2dp,artifacts/ablation/gate_eval.json,$.pairs_evaluated[1].delta_acc_ci_high,4,,
+p_value_vs_random_mg_b_g,scalar,<0.002,<floor,artifacts/ablation/gate_eval.json,$.pairs_evaluated[1].p_value_vs_random,4,,floor=1/500
+n_test_mg_b_g,scalar,230,exact,artifacts/ablation/gate_eval.json,$.pairs_evaluated[1].n_test,4,,
+baseline_acc_mg_b_k,scalar,0.938,3sf,artifacts/ablation/gate_eval.json,$.pairs_evaluated[2].baseline_acc,4,,"(Mg_b, K) headline"
+masked_acc_mean_mg_b_k,scalar,0.938,3sf,artifacts/ablation/gate_eval.json,$.pairs_evaluated[2].masked_acc_mean,4,,
+delta_acc_mg_b_k,scalar,0.00,2dp,artifacts/ablation/gate_eval.json,$.pairs_evaluated[2].delta_acc_mean,4,,
+delta_acc_ci_low_mg_b_k,scalar,-0.02,2dp,artifacts/ablation/gate_eval.json,$.pairs_evaluated[2].delta_acc_ci_low,4,,
+delta_acc_ci_high_mg_b_k,scalar,0.02,2dp,artifacts/ablation/gate_eval.json,$.pairs_evaluated[2].delta_acc_ci_high,4,,
+p_value_vs_random_mg_b_k,scalar,0.866,3dp,artifacts/ablation/gate_eval.json,$.pairs_evaluated[2].p_value_vs_random,4,,floor=1/500
+n_test_mg_b_k,scalar,145,exact,artifacts/ablation/gate_eval.json,$.pairs_evaluated[2].n_test,4,,
+delta_acc_na_d_k,scalar,-0.0069,4dp,artifacts/ablation/gate_eval.json,$.pivot_confirmed[0].delta_acc_mean,4,,Decision 30 pivot pair
+delta_acc_ci_low_na_d_k,scalar,-0.0228,4dp,artifacts/ablation/gate_eval.json,$.pivot_confirmed[0].delta_acc_ci_low,4,,Decision 30 pivot pair
+delta_acc_ci_high_na_d_k,scalar,0.0000,4dp,artifacts/ablation/gate_eval.json,$.pivot_confirmed[0].delta_acc_ci_high,4,,Decision 30 pivot pair
+p_value_vs_random_na_d_k,scalar,0.006,3dp,artifacts/ablation/gate_eval.json,$.pivot_confirmed[0].p_value_vs_random,4,,Decision 30 pivot pair
+delta_acc_ca_i_k,scalar,0.0000,4dp,artifacts/ablation/gate_eval.json,$.pivot_confirmed[1].delta_acc_mean,4,,Decision 30 pivot pair
+delta_acc_ci_low_ca_i_k,scalar,0.0000,4dp,artifacts/ablation/gate_eval.json,$.pivot_confirmed[1].delta_acc_ci_low,4,,Decision 30 pivot pair
+delta_acc_ci_high_ca_i_k,scalar,0.0000,4dp,artifacts/ablation/gate_eval.json,$.pivot_confirmed[1].delta_acc_ci_high,4,,Decision 30 pivot pair
+p_value_vs_random_ca_i_k,scalar,0.878,3dp,artifacts/ablation/gate_eval.json,$.pivot_confirmed[1].p_value_vs_random,4,,Decision 30 pivot pair
+continuum_fill_locked,scalar,1.0,1dp,artifacts/ablation/gate_eval.json,$.continuum_fill_sensitivity.continuum_fill_locked,4,,initial CONTINUUM_FILL value
+continuum_fill_empirical_median,scalar,0.9158,4sf,artifacts/ablation/gate_eval.json,$.continuum_fill_sensitivity.continuum_fill_empirical_median,4,,np.nanmedian(X[~gap_mask])
+continuum_fill_max_shift,scalar,0.039,2sf,artifacts/ablation/gate_eval.json,$.continuum_fill_sensitivity.max_shift,4,,max delta_acc shift between fill values
+continuum_fill_production,scalar,0.9158,4sf,artifacts/ablation/gate_eval.json,$.continuum_fill_sensitivity.production_continuum_fill,4,,value used in production ablation rerun
+n_random_controls,scalar,500,exact,artifacts/ablation/gate_eval.json,$.n_random_controls,4,,raised from default 100 to give p-value resolution 0.002
+n_bootstrap,scalar,500,exact,artifacts/ablation/gate_eval.json,$.n_bootstrap,4,,
+line_match_precision_1p0_aa,scalar,0.050,2sf,artifacts/ablation/line_match.json,$.precision.1.0,4,,tolerance 1.0 A
+line_match_recall_1p0_aa,scalar,0.667,3sf,artifacts/ablation/line_match.json,$.recall.1.0,4,,tolerance 1.0 A
+line_match_jaccard_1p0_aa,scalar,0.049,2sf,artifacts/ablation/line_match.json,$.jaccard.1.0,4,,tolerance 1.0 A
+line_match_precision_2p0_aa,scalar,0.050,2sf,artifacts/ablation/line_match.json,$.precision.2.0,4,,tolerance 2.0 A
+line_match_recall_2p0_aa,scalar,0.667,3sf,artifacts/ablation/line_match.json,$.recall.2.0,4,,tolerance 2.0 A
+line_match_jaccard_2p0_aa,scalar,0.049,2sf,artifacts/ablation/line_match.json,$.jaccard.2.0,4,,tolerance 2.0 A
+line_match_precision_5p0_aa,scalar,0.067,2sf,artifacts/ablation/line_match.json,$.precision.5.0,4,,tolerance 5.0 A
+line_match_recall_5p0_aa,scalar,0.889,3sf,artifacts/ablation/line_match.json,$.recall.5.0,4,,tolerance 5.0 A
+line_match_jaccard_5p0_aa,scalar,0.066,2sf,artifacts/ablation/line_match.json,$.jaccard.5.0,4,,tolerance 5.0 A
+line_match_precision_10p0_aa,scalar,0.075,2sf,artifacts/ablation/line_match.json,$.precision.10.0,4,,tolerance 10.0 A
+line_match_recall_10p0_aa,scalar,1.00,3sf,artifacts/ablation/line_match.json,$.recall.10.0,4,,tolerance 10.0 A
+line_match_jaccard_10p0_aa,scalar,0.075,2sf,artifacts/ablation/line_match.json,$.jaccard.10.0,4,,tolerance 10.0 A
+n_lines_in_window,scalar,9,exact,artifacts/ablation/line_match.json,$.n_lines_in_window,4,,MK_LINES intersect 4800-6800 A
+agreement_rate,scalar,0.681,3sf,artifacts/benchmark/benchmark_report.json,$.agreement_rate,5,,"FGK only, Pickles vs LightGBM"
+macro_f1_fgk_pickles,scalar,0.630,3sf,artifacts/benchmark/benchmark_report.json,$.macro_f1_fgk,5,,treats Pickles labels as ground truth
+n_compared,scalar,69,exact,artifacts/benchmark/benchmark_report.json,$.n_compared,5,,rows with FGK Pickles assignment
+n_dropped_other,scalar,387,exact,artifacts/benchmark/benchmark_report.json,$.n_dropped_other,5,,rows whose Pickles best-template was OTHER (M-class etc.)
+benchmark_per_class_recall_f,scalar,0.854,3sf,artifacts/benchmark/benchmark_report.json,$.per_class_recall.F,5,,"class F, Pickles vs model"
+benchmark_per_class_precision_f,scalar,0.795,3sf,artifacts/benchmark/benchmark_report.json,$.per_class_precision.F,5,,"class F, Pickles vs model"
+benchmark_per_class_recall_g,scalar,0.800,3sf,artifacts/benchmark/benchmark_report.json,$.per_class_recall.G,5,,"class G, Pickles vs model"
+benchmark_per_class_precision_g,scalar,0.267,3sf,artifacts/benchmark/benchmark_report.json,$.per_class_precision.G,5,,"class G, Pickles vs model"
+benchmark_per_class_recall_k,scalar,0.571,3sf,artifacts/benchmark/benchmark_report.json,$.per_class_recall.K,5,,"class K, Pickles vs model"
+benchmark_per_class_precision_k,scalar,0.800,3sf,artifacts/benchmark/benchmark_report.json,$.per_class_precision.K,5,,"class K, Pickles vs model"
+pickles_n_files_seen,scalar,131,exact,artifacts/benchmark/benchmark_report.json,$.pickles_loader_stats.n_files_seen,5,,UVKLIB filesystem listing
+pickles_n_loaded,scalar,108,exact,artifacts/benchmark/benchmark_report.json,$.pickles_loader_stats.n_loaded,5,,
+pickles_n_unmapped_skipped,scalar,23,exact,artifacts/benchmark/benchmark_report.json,$.pickles_loader_stats.n_unmapped_skipped,5,,Pickles 109-131 luminosity duplicates per Decision 32
+fig_importance_main,figure,,figure,artifacts/figures/importance_main.pdf,,5,,main result figure
+fig_importance_per_class,figure,,figure,artifacts/figures/importance_overlay_per_class.pdf,,5,,per-class importance overlay
+fig_importance_overlay,figure,,figure,artifacts/figures/importance_overlay.pdf,,5,,perm/SHAP overlay
+fig_importance_per_class_gapmask,figure,,figure,artifacts/figures/importance_per_class_gapmask.pdf,,5,,per-class with inter-chip gap shaded
+fig_confusion_matrix_test,figure,,figure,artifacts/figures/confusion_matrix_test.pdf,,5,,test-set confusion matrix
+fig_confusion_matrix_pickles,figure,,figure,artifacts/figures/confusion_matrix_pickles.pdf,,5,,Pickles vs model confusion matrix
+fig_ablation_bars,figure,,figure,artifacts/figures/ablation_bars.pdf,,5,,"delta_acc bar chart per (line_set, class)"

@@ -1,0 +1,418 @@
+% Interventional masked-line ablation reveals partial shortcut learning in a
+% LightGBM MK classifier of Gaia-ESO UVES spectra
+%
+% Generic LaTeX skeleton compatible with arXiv. Swap \documentclass to
+% aa.cls for A&A or ojaa.cls for Open Journal of Astrophysics at
+% submission time. The body, math, and \citep{} usage are portable.
+%
+% Bib keys contain ADS bibcodes with & characters. Inside \citep{} this
+% is parsed as a literal & by LaTeX (not as a tab marker) so no escape
+% is required. If a future class file complains, wrap problematic keys
+% with \jobname-friendly aliases via \defcitealias.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage[round,authoryear]{natbib}
+\hypersetup{
+    pdftitle={Interventional masked-line ablation reveals partial shortcut learning in a LightGBM MK classifier of Gaia-ESO UVES spectra},
+    pdfauthor={Tirthesh Jani},
+    pdfsubject={Stellar classification, machine learning interpretability},
+    pdfkeywords={stellar classification; machine learning interpretability; interventional feature ablation; Gaia-ESO Survey; UVES; LightGBM},
+}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{authblk}
+\usepackage{xspace}
+
+% Convenience macros
+\newcommand{\Halpha}{H$\alpha$\xspace}
+\newcommand{\Hbeta}{H$\beta$\xspace}
+\newcommand{\Mgb}{Mg\,\textsc{b}\xspace}
+\newcommand{\NaD}{Na\,\textsc{d}\xspace}
+\newcommand{\CaI}{Ca\,\textsc{i}\xspace}
+\newcommand{\FeI}{Fe\,\textsc{i}\xspace}
+\newcommand{\CrI}{Cr\,\textsc{i}\xspace}
+\newcommand{\HeI}{He\,\textsc{i}\xspace}
+\newcommand{\HeII}{He\,\textsc{ii}\xspace}
+\newcommand{\Teff}{$T_{\mathrm{eff}}$\xspace}
+\newcommand{\dA}{\Delta A}
+
+\title{Interventional masked-line ablation reveals partial shortcut learning in a LightGBM MK classifier of Gaia-ESO UVES spectra}
+
+\author[1]{Tirthesh Jani\thanks{ORCID: \href{https://orcid.org/0009-0005-5965-4409}{0009-0005-5965-4409}; tirtheshjani@gmail.com}}
+\affil[1]{Independent researcher, Barrie, Ontario, Canada}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent We audit a LightGBM classifier of Morgan-Keenan (MK) spectral classes F, G and K trained on Gaia-ESO Survey FLAMES-UVES U580 spectra in the 4800 to 6800~\AA{} window. The classifier reaches a held-out test macro-F1 of 0.926 on 456 spectra and per-class recall above 0.84 on every class, beating a kNN-on-spectra baseline by 0.26 macro-F1. We then ask a different question: does that performance come from the canonical MK diagnostics that a stellar spectroscopist would point at, or from something else? We address this with interventional masked-line ablation: for each pre-specified (line set, class) pair, we replace the bins covering a diagnostic line with a continuum value, score the masked spectra against the unmodified model, and compare the resulting accuracy drop to a null distribution of 500 random non-line windows of the same total width. The five (line set, class) pairs evaluated were specified in version-controlled decision log entries on 2026-04-29 (line sets) and 2026-04-30 (class assignments, locked eight hours after the Phase~2 test-set evaluation in the same calendar day and immediately prior to ablation execution); we use ``pre-specified'' rather than ``pre-registered'' and do not claim external pre-registration.
+
+\noindent Two of three pre-specified headline pairs reject the random-window null at the Bonferroni-corrected per-pair $\alpha = 0.0033$ (family-wise $\alpha = 0.01$). Masking the Balmer series collapses F-class accuracy to zero; masking the \Mgb triplet drops G-class accuracy by 0.21. The third pair, \Mgb on K, returns a null result under the production Gaia-ESO continuum that a two-one-sided equivalence test confirms within a $\pm 0.025$ indifference zone ($p_{\mathrm{TOST}} = 0.008$); the two pivot pairs \NaD on K and \CaI on K also return null. A paired bootstrap on the substantive between-class difference $\dA_G^{(\mathrm{Mg}_b)} - \dA_K^{(\mathrm{Mg}_b)}$ gives $-0.21$ with 95\% CI $[-0.27, -0.16]$. The median \Mgb equivalent width on K-class test spectra is empirically larger than on G-class spectra (4.18 \AA\ vs 3.53~\AA, KS $p = 2.6 \times 10^{-7}$), ruling out saturation.
+
+\noindent An independent 5th-order Legendre continuum re-derivation on the same 145 K-class test rows shifts the (\Mgb, K) effect to $-0.034$ ($p = 0.002$) and collapses G-class baseline accuracy from 0.97 to 0.15, revealing that the inherited Gaia-ESO continuum encodes a per-class continuum-level signal the model exploits as a non-line shortcut. Fe~i / Cr~i mid-5200~\AA{} multiplet ablation returns $\dA_K = -0.021$ ($p = 0.002$) under the production continuum and $\dA_K = -0.028$ ($p = 0.002$) under the polynomial re-derivation, so K-class dependence on substituted metal-line multiplets is present and stable across continuum conventions. The K-class result is therefore a multi-leg shortcut combining the inherited continuum-level signal with Fe~i / Cr~i multiplet substitution in place of the canonical \Mgb / \NaD / \CaI diagnostics, and the audit detects the active leg under each continuum convention. We conclude that masked-line ablation is a falsifiable audit instrument with sharper teeth than correlational interpretability, that strong aggregate metrics on stellar classifiers can hide per-class diagnostic substitutions and pipeline-level continuum shortcuts that only an interventional probe will surface, and that no correlational tool (SHAP, permutation, occlusion) would have surfaced the continuum-level leg of the K-class shortcut on this dataset.
+\end{abstract}
+
+\noindent \textbf{Keywords:} stars: fundamental parameters; methods: data analysis; methods: statistical; techniques: spectroscopic; surveys; machine-learning interpretability
+
+\section{Introduction}
+\label{sec:intro}
+
+The Morgan-Keenan (MK) system has organised stellar spectra by temperature and luminosity since the mid-twentieth century, anchored on a small set of absorption-line diagnostics: Balmer lines for hot stars, \Mgb and \FeI for early-type and intermediate-type stars, \NaD and \CaI for cooler dwarfs, and TiO bands at the cool end \citep{GrayCorbally2009}. Modern stellar surveys have pushed catalogue sizes from thousands to tens of millions, and machine-learning classifiers now routinely produce MK or label-equivalent assignments at scale. The Cannon \citep{2015ApJ...808...16N} established the data-driven label approach. StarNet \citep{2018MNRAS.475.2978F} extended it with deep learning. Random-forest tree ensembles have proven competitive on FGK classification at modest sample sizes \citep{2019RAA....19..111L}. Most recently, \citet{2024A&A...692A.228C} inferred stellar parameters from Gaia-ESO FLAMES-GIRAFFE HR10 and HR21 with an invertible neural network on a sample of order 50000 spectra.
+
+A natural question follows. When a classifier achieves macro-F1 above 0.9, does it succeed by reading the same lines a human spectroscopist would read, or has it found a shortcut, a feature combination correlated with class but disconnected from the canonical diagnostics? The literature has answered this question almost exclusively with correlational tools: permutation importance, gradient saliency, SHAP \citep{LundbergLee2017SHAP}. These tools rank features by how the model uses them, but they do not test whether the model relies on a feature in the falsifiable sense. A feature can rank high because it correlates with a hidden \Teff proxy. A feature can rank low because the model has redundant predictors and treats it as substitutable. Neither outcome lets a reader conclude that masking the feature would change anything.
+
+This paper takes a different approach. We audit one specific tree-based classifier with \emph{interventional masked-line ablation}: we mask the bins covering a diagnostic line and measure the resulting accuracy drop on held-out test spectra. The question becomes interventional rather than correlational. If the model's predictions are functionally dependent on the line, masking it will move accuracy. If the model has substituted a proxy, masking the canonical line will leave accuracy untouched. By framing the audit as a per-class hypothesis test against a random-window null with bootstrap confidence intervals and Bonferroni-corrected significance, we recover a falsifiable statement: this classifier does, or does not, depend on this line for this class. The intervention is on the model's input domain, not on the data-generating process; we use ``interventional'' in the feature-intervention sense throughout, and a Pearl-style causal claim about the underlying astrophysics would require a structural model we do not specify (Section~\ref{subsec:ablation}).
+
+We apply the audit to a LightGBM classifier \citep{Ke2017LightGBM} trained on Gaia-ESO Survey DR5.1 FLAMES-UVES U580 spectra in the 4800 to 6800~\AA{} window \citep{2014A&A...565A.113S,2023A&A...676A.129H}. The classifier reaches macro-F1 = 0.926 on 456 held-out test spectra, exceeding a kNN-on-spectra baseline at $k = 5$ (macro-F1 = 0.665) by 0.261. Two of three pre-specified headline pairs reject the random-window null at the per-pair Bonferroni-corrected $\alpha = 0.0033$. The third pair, \Mgb on K, returns a null result that survives an equivalence test within $\pm 0.025$ indifference, and two pivot pairs we predicted to return null, \NaD on K and \CaI on K, also return null. We use \emph{partial shortcut learning} to mean class-conditional dependence on non-canonical spectral features in some classes (here K), while canonical features still drive prediction in adjacent classes (here F and G); the K class achieves its 0.94 recall without measurable functional dependence on three of the canonical neutral-metal diagnostics. An external chi-squared comparison against the Pickles 1998 stellar flux library \citep{1998PASP..110..863P} was attempted under three continuum-normalisation conventions; no convention produced a defensible aggregate FGK agreement rate, and the cross-check is reported in Appendix~\ref{app:pickles} as exploratory rather than corroborative.
+
+The contribution of this work is methodological. We present interventional masked-line ablation as a per-class, pre-specified, falsifiable audit instrument for stellar classifiers. We demonstrate the audit on one fully worked example. The code, the ablation module and the trained model are publicly released so that the same probe can be run against other classifiers, surveys and instrument setups. The wider implication is that interpretability claims about stellar machine learning need a higher evidentiary bar than correlational tools provide.
+
+The paper is organised as follows. Section \ref{sec:data} describes the Gaia-ESO UVES sample, the wavelength window, and the per-class supports. Section \ref{sec:methods} documents the feature pipeline, the LightGBM hyperparameters, the spatial cross-validation strategy, and the masked-line ablation protocol with its random-window null. Section \ref{sec:results} reports classifier performance, interpretability triangulation, the headline ablation results and the Pickles benchmark. Section \ref{sec:discussion} interprets the shortcut-learning finding and contrasts the audit against correlational baselines. Section \ref{sec:limitations} lists the limitations. Section \ref{sec:conclusions} concludes.
+
+\section{Data}
+\label{sec:data}
+
+\subsection{Survey, instrument and wavelength window}
+
+The audit is performed on FLAMES-UVES U580 spectra from the Gaia-ESO Survey \citep{2022A&A...666A.120G}. UVES is a high-resolution echelle spectrograph at the Very Large Telescope's UT2 \citep{2000SPIE.4008..534D}. The U580 setup combines a blue-arm chip covering 4770 to 5770~\AA{} and a red-arm chip covering 5832 to 6830~\AA{}, separated by an inter-chip gap at 5770 to 5832~\AA{} (the same range we mask in Section~\ref{subsec:wavelength-grid}). The resolving power on the central row is approximately 47000. We restrict the audit to the 4800 to 6800~\AA{} window, which sits inside U580 native coverage and avoids combining U520 and U580 setups. The window contains the canonical MK diagnostics relevant to FGK classification: \Hbeta at 4861~\AA{}, the \Mgb triplet at 5167, 5173 and 5184~\AA{}, the \NaD doublet at 5890 and 5896~\AA{}, two \CaI features at 6162 and 6439~\AA{}, and \Halpha at 6563~\AA{}. All wavelengths in this paper are in air, matching the GES UVES pipeline convention \citep{2014A&A...565A.113S}. Rest wavelengths are taken from the NIST Atomic Spectra Database \citep{NIST_ASD_2023}.
+
+Continuum normalisation is inherited from the Gaia-ESO pipeline. We do not re-derive the continuum on the audit side; the implications of this choice are discussed in Section \ref{sec:limitations}.
+
+\subsection{Catalogue source and stellar parameters}
+
+Recommended stellar parameters were retrieved from the ESO Science Archive TAP service, table \texttt{safcat."GES\_DR5\_1\_V1"}, citing \citet{2023A&A...676A.129H}. The query returned 6143 catalogue rows with non-null \Teff, $\log g$ and [Fe/H] under a \texttt{REC\_SETUP LIKE \%580\%} filter, capturing pure U580 plus mixed-setup observations including U580. Cross-matching against the regridded UVES HDF5 store at a 0.5~arcsec primary radius and 2~arcsec ambiguity cutoff returned 3955 matched spectra with full parameters. MK class labels were assigned by binning \Teff against \citet{2013ApJS..208....9P}: F is [6000, 7300)~K, G is [5300, 6000)~K, K is [3900, 5300)~K. The A class returned a single matched spectrum and was dropped at the label-construction stage; UVES is FGK-targeted by survey design \citep{2022A&A...666A.120G}, so the small A count is consistent with expectation rather than a recovery failure.
+
+\subsection{Quality cuts and final sample}
+
+We require a per-pixel median signal-to-noise ratio of at least 20 over the 4800 to 6800~\AA{} window. After this cut and a 10 percent post-rebin NaN cap, the labelled set comprises 3032 spectra: F = 536, G = 1534, K = 962. Per-class retention from the labelled parquet is uniform at 78, 76 and 78 percent. Per-class \Teff means are 6228~K (F), 5695~K (G) and 4808~K (K), within 308~K of the Pecaut and Mamajek canonical centres on every class. The sample is split into train, validation and test partitions at fractions 0.70, 0.15 and 0.15 with a fixed random seed. The held-out test set carries 456 spectra (F = 81, G = 230, K = 145).
+
+The Gaia-ESO target list concentrates on open clusters and known fields, so the spectra are not spatially independent. Section \ref{subsec:cv} reports a spatial cross-validation sensitivity check intended to bound the cluster-leakage component of the held-out score.
+
+\subsection{Wavelength grid and inter-chip gap}
+\label{subsec:wavelength-grid}
+
+Continuum-normalised spectra were rebinned to a uniform grid by a factor of 5 from the native UVES pixel size, producing 696 bins of approximately 2.86~\AA{} each over 4801 to 6796~\AA{}. The \NaD doublet, with components separated by 5.97~\AA{}, lands in distinct bins (409 and 411). The \Mgb triplet components also fall in distinct bins (147, 149 and 153). The UVES inter-chip gap is preserved rather than imputed: a boolean \texttt{gap\_mask} array marks bins whose centres fall in [5771, 5832]~\AA{}, 22 bins out of 696. The classifier sees the full feature matrix; the interpretability triangulation and the masked-line ablation drop these bins from any reported peak and from random-window control draws. The mask exists because the per-bin train medians inside the gap deviate from continuum by approximately 50 percent, and any importance peak that landed there would be an instrumental shortcut rather than a physical feature.
+
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Feature extraction}
+
+After rebinning, missing flux bins are filled by a per-bin median imputer fit on training rows only. The per-bin train medians are computed once and applied without modification to validation and test rows, following standard practice in spectrum-level imputation \citep{2015ApJ...808...16N,2018MNRAS.475.2978F}. After imputation the feature matrix carries no non-finite values. Features are not standardised or scaled; LightGBM is invariant to monotone transformations of inputs.
+
+\subsection{Classifier}
+
+\begin{sloppypar}
+We use LightGBM \citep{Ke2017LightGBM} with hyperparameters chosen for tractable TreeSHAP computation rather than tuned: \texttt{max\_depth = 8}, \texttt{num\_leaves = 63}, \texttt{learning\_rate = 0.05}, \texttt{n\_estimators = 500} with \texttt{early\_stopping\_rounds = 50}, \texttt{min\_child\_samples = 20}, \texttt{subsample = 0.9}, \texttt{subsample\_freq = 1}, \texttt{colsample\_bytree = 0.9}, \texttt{class\_weight = 'balanced'}, \texttt{random\_state = 42}. The class-balanced weighting compensates for the F to G class skew in the training set. Early stopping uses validation log-loss. The final model is fit on the union of training and validation partitions and evaluated on the held-out test set.
+\end{sloppypar}
+
+\subsection{Cross-validation}
+\label{subsec:cv}
+
+Two cross-validation passes are run on the train+val partition for sensitivity. The primary pass uses 5-fold StratifiedKFold over the surviving FGK labels and reports macro-F1 mean and standard deviation. The secondary pass uses StratifiedGroupKFold over spatial groups derived from sky coordinates by DBSCAN with the haversine metric (\texttt{eps = 0.1 deg}, \texttt{min\_samples = 5}). DBSCAN noise points receive unique negative group identifiers to prevent collapse into a single mega-cluster. The grouping yields 1966 unique spatial groups across the train$+$val partition (1898 singletons plus 68 multi-row clusters, the same count cited in Sections~\ref{subsec:perf} and \ref{sec:limitations}). Reporting both passes is a deliberate transparency choice: the primary StratifiedKFold mean is the conventional figure of merit, and the leakage-aware StratifiedGroupKFold mean bounds the residual cluster-leakage contribution per \citet{2019MNRAS.486.2075B}.
+
+\subsection{Interpretability triangulation}
+\label{subsec:triangulation}
+
+Three correlational interpretability methods are run on the validation partition: permutation importance with \texttt{n\_repeats = 10} and accuracy scoring; TreeSHAP via the SHAP TreeExplainer \citep{LundbergLee2017SHAP} computed on a stratified subsample of 1000 validation rows (yielding 454 rows after the per-class cap); and sliding-window occlusion with a 50~\AA{} window at 25~\AA{} stride. Top-20 feature sets are extracted from each method. The pairwise Jaccard index between methods is reported per (method-A, method-B) pair, post gap-mask. The triangulation is a sanity check on the audit, not the audit itself: the falsifiable claim of this paper is the masked-line ablation in Section \ref{subsec:ablation}, and triangulation is reported because it sets up the prediction that the ablation will then test.
+
+\subsection{Interventional masked-line ablation}
+\label{subsec:ablation}
+
+Following the disclaimer in Section~\ref{sec:intro}, ``interventional'' here means a $\mathrm{do}$-operation on input bins of a fixed trained model: the audit's conclusions are conditional on the fixed trained classifier and the held-out test set rather than on the population-level causal mechanism connecting temperature, metallicity, and absorption-line strength. Within that scope, the ablation produces a falsifiable per-pair conclusion that correlational interpretability cannot.
+
+This is the central method of the paper. Let $\mathcal{L}$ be a line set defined as a list of (rest wavelength, half-width) pairs, and let $b(\mathcal{L})$ be the set of feature bins whose centres fall within any half-width window of $\mathcal{L}$. For each (line set, class) pair $(\mathcal{L}, k)$, we compute the change in classification accuracy on the test rows whose true class is $k$ when the bins $b(\mathcal{L})$ are replaced by a continuum value $c$:
+\begin{equation}
+\dA_k^{(\mathcal{L})} = A_k^{(\mathcal{L}\,\text{masked})} - A_k^{(\text{baseline})}.
+\label{eq:delta-acc}
+\end{equation}
+We compute a 95 percent bootstrap confidence interval for $\dA_k^{(\mathcal{L})}$ from 500 resamples of the test rows. To assess significance, we draw 500 random non-line windows of the same total width as $b(\mathcal{L})$ from the bins outside \texttt{MK\_LINES} and \texttt{gap\_mask}, repeat the masking and accuracy computation for each, and report a one-sided $p$-value as the fraction of random-window draws whose $\dA_k$ is at most as negative as the observed value, with the Phipson--Smyth $(B+1)$-corrected denominator described below. We pre-specify a Bonferroni correction at family-wise $\alpha = 0.01$ across the three headline pairs, yielding per-pair $\alpha = 0.01 / 3 = 0.00333$. Per-pair $p$-values are reported unadjusted in Table~\ref{tab:ablation}; the headline gate passes when at least two per-pair $p$-values fall below $0.00333$. The Bonferroni family covers the three pre-specified headline NHST $p$-values only. The TOST equivalence test on $(\mathrm{Mg}_b, K)$ ($p_{\mathrm{TOST}}$) and the paired-bootstrap test on the substantive between-class difference $\dA_G^{(\mathrm{Mg}_b)} - \dA_K^{(\mathrm{Mg}_b)}$ are confirmatory analyses with their own pre-specified thresholds (the indifference zone and the one-sided null of zero difference, respectively), and are not additions to the multiple-comparison family. The line sets in the falsifiable gate were specified in a version-controlled decision log entry (commit \texttt{b021595}, 2026-04-29) on the day before the held-out test set was first scored by the trained classifier (commit \texttt{fa5576f}, 2026-04-30); the specific (line set, class) assignments of headline and pivot pairs were locked in commit \texttt{0682aa5} on 2026-04-30, eight hours after the Phase~2 test-set evaluation in the same calendar day and immediately prior to ablation execution. We do not claim external pre-registration on OSF, AsPredicted, or any analogous registry, and we use ``pre-specified'' rather than ``pre-registered'' throughout.
+
+The continuum fill value $c$ is set to the empirical median of the train-set feature matrix outside the inter-chip gap, $c = 0.916$ (4-significant-figure value 0.9158). We checked sensitivity by also running the headline pairs at $c = 1.0$; the maximum shift in $\dA_k$ across the three headline pairs is 0.039, exceeding our pre-specified sensitivity-trigger threshold of 0.02 (the magnitude of fill-value-driven $\dA_k$ shift that would force a rerun against the empirical median) and triggering the empirical-median rerun as the production result. We additionally probed two non-constant fill conventions on every (line set, class) pair: row-wise Gaussian noise centred on $c$ with standard deviation equal to the off-mask continuum std per row, and linear interpolation across the masked window using the two nearest unmasked bin values per row. Under all three conventions the (Mgb, G) effect stays at $\dA_G^{(\mathrm{Mg}_b)} \in [-0.257, -0.213]$ (the interpolation variant strengthens the effect) and the (Mgb, K) effect stays at $\dA_K^{(\mathrm{Mg}_b)} \in [+0.000, +0.014]$, within the $\pm 0.025$ indifference zone defined in Section~\ref{sec:results}. All fill-mode results are recorded in the gate-evaluation artifact for transparency.
+
+The pre-specified headline pairs are $(H_{\mathrm{balmer}}, F)$, $(\mathrm{Mg}_b, G)$ and $(\mathrm{Mg}_b, K)$. We pass the gate if at least two of three satisfy $\dA^{(\mathcal{L})}_{k,\mathrm{ci,\,high}} < 0$ and the per-pair Bonferroni-corrected $p \leq 0.00333$. Two additional pivot pairs $(\mathrm{Na}_D, K)$ and $(\mathrm{Ca}_I, K)$ are reported alongside the headline pairs but not part of the gate. They are pre-specified to test a specific prediction from the interpretability triangulation: that the K class achieves its accuracy without dependence on these neutral-metal diagnostics, contrary to the textbook expectation. A null result on $(\mathrm{Na}_D, K)$ and $(\mathrm{Ca}_I, K)$ confirms the prediction, and a strong negative $\dA_k$ refutes it.
+
+The forbidden mask for random-window controls is the union of all \texttt{MK\_LINES} half-windows and the \texttt{gap\_mask}, so controls cannot land on any catalogued diagnostic line nor inside the inter-chip gap. The draw success rate is reported per line set as a sanity check that the forbidden region has not collapsed the available draw space. We adopt the \citet{2010SAGMB...9...39P} $(B+1)$-corrected permutation $p$-value $p = (n_{\mathrm{at\,least\,as\,extreme}} + 1) / (n_{\mathrm{random\,controls}} + 1)$, which is the unbiased estimator for permutation $p$-values and avoids the misleading $p = 0$ when the observed $\dA_k$ is more extreme than every random-window draw. With $n_{\mathrm{random\,controls}} = 500$, the floor is $1/501 \approx 0.002$.
+
+\subsection{Reference baselines and external cross-check}
+\label{subsec:baselines}
+
+To scope the audit's substantive interest we report a kNN-on-spectra baseline (scikit-learn \texttt{KNeighborsClassifier} with $k \in \{1, 5, 11\}$ and $1 - \mathrm{Pearson}\,r$ as the distance metric, trained on the same train$+$val partition and evaluated on the same held-out test set; best macro-F1 of 0.665 at $k = 5$) in Section~\ref{subsec:perf}. We additionally attempted an external chi-squared cross-check against the Pickles 1998 UVKLIB stellar flux library \citep{1998PASP..110..863P} under three continuum-normalisation conventions (the original 200~\AA{} median filter, a narrower 50~\AA{} median filter matched to TiO bandhead spacing, and the iteratively sigma-clipped 5th-order Legendre fit recommended by \citet{1998PASP..110..863P} section 3.2). We pre-specified the cross-check gate as $\mathrm{agreement\,rate} \geq 0.55$ with $n_{\mathrm{compared}} > 100$ simultaneously; no convention met both criteria, and the cross-check is reported in Appendix~\ref{app:pickles} as exploratory rather than corroborative.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Classifier performance}
+\label{subsec:perf}
+
+The held-out test set produces macro-F1 = 0.926 on 456 spectra (Table \ref{tab:test-perf}). Per-class precision is 0.94 (F), 0.91 (G) and 0.96 (K); per-class recall is 0.84, 0.97 and 0.94. The confusion matrix concentrates off-diagonal mass at adjacent class boundaries: F-G confusion (both directions) sits at 3.5 percent of test rows and G-K confusion at 2.9 percent, while non-adjacent F-K confusion is one row out of 456 (0.22 percent). This adjacency pattern is consistent with the gradual character of MK boundaries on the Pecaut and Mamajek grid and does not by itself indicate physics-aware classification; it merely confirms that the classifier's mistakes track the temperature axis rather than crossing it.
+
+A kNN-on-spectra reference baseline trained on the same train$+$val partition with $1 - \mathrm{Pearson}\,r$ as the distance metric returns macro-F1 of 0.623 at $k=1$, 0.665 at $k=5$, and 0.649 at $k=11$. LightGBM beats the best of these by 0.261 macro-F1; per class, the largest gap is on K (recall 0.94 vs 0.58), consistent with the shortcut-learning interpretation developed in Section~\ref{subsec:results-ablation}. The audit is therefore not vacuous: the classifier under audit substantially outperforms a non-ML neighbourhood baseline.
+
+5-fold StratifiedKFold cross-validation on the train+val partition returns macro-F1 = $0.913 \pm 0.012$. The leakage-aware StratifiedGroupKFold pass over 1966 DBSCAN spatial groups returns $0.903 \pm 0.016$. The difference of 0.010 sits in the minimal-leakage band per \citet{2019MNRAS.486.2075B}, whose material threshold is 0.030. The held-out test macro-F1 of 0.926 is 1.5 standard deviations above the spatial-CV mean, well within sampling fluctuation. Of the 1966 spatial groups, 1898 (96.5 percent) are singletons covering 73.7 percent of the train$+$val rows; for those rows, StratifiedGroupKFold provides no group stratification beyond the row-level stratification already enforced, so the 0.010 macro-F1 gap is a lower bound on cluster leakage rather than a tight constraint. We return to this point in Section~\ref{sec:limitations}.
+
+A boundary-distance sensitivity check restricts evaluation to test rows whose \Teff lies more than 200~K from the nearest MK class boundary. On this 280-row subset, accuracy rises to 0.993 from a full-test 0.934, a difference of 0.059 with bootstrap 95 percent CI [0.039, 0.082]. The CI lower bound exceeds zero by an order of magnitude, evidence that the classifier's errors concentrate near class boundaries rather than at random.
+
+\subsection{Interpretability triangulation}
+
+The pairwise Jaccard between permutation importance and SHAP top-20 feature sets, post gap-mask, is 0.481 (13 of 27 distinct features shared). The Jaccard between permutation importance and occlusion is 0.111, and between SHAP and occlusion is also 0.111. The occlusion method's coarser 50~\AA{} window resolution makes its top-20 set less directly comparable to the bin-level perm and SHAP rankings: of the 20 most damaging occlusion windows, 7 contain at least one permutation top-20 bin and 8 contain at least one SHAP top-20 bin (within $\pm 25$~\AA{} of the window centre). At the window level the methods therefore agree on roughly 35 to 40 percent of high-attribution regions, indicating partial physics agreement rather than full disagreement, and the agreement concentrates on the highest-attribution regions (the Balmer cluster and the \Mgb triplet, as the three-way intersection below shows). The three-way intersection contains four bins, all in the \Halpha cluster at 6559 to 6569~\AA{}.
+
+Where the methods agree, they agree on a physics core: the \Hbeta cluster around 4856 to 4864~\AA{}, the \Mgb triplet at 5167, 5173 and 5184~\AA{}, and the \Halpha cluster at 6562 to 6569~\AA{}. Where they disagree, the disagreement concentrates on near-line \FeI and \CrI continuation bins of secondary diagnostic interest.
+
+The K-class SHAP top-20 substitutes mid-5200~\AA{} \FeI and \CrI multiplets, specifically \FeI at 5269.54~\AA{} (Moore RMT 15) and \CrI at 5206, 5208 and 5345~\AA{} (identified against \citet{GrayCorbally2009}), for the textbook neutral-metal diagnostics. \NaD2 at 5889.95~\AA{} (bin 409) and \NaD1 at 5895.92~\AA{} (bin 411) do not appear in the K SHAP top-20. The \CaI features at 6162.17~\AA{} (bin 499) and 6439.08~\AA{} (bin 587) do not appear either. Permutation importance corroborates the absence of \NaD and \CaI from K-class diagnostics. This sets the pre-specified prediction that the interventional masked-line ablation in the next section will then test.
+
+\subsection{Interventional masked-line ablation results}
+\label{subsec:results-ablation}
+
+The headline ablation results are reported in Table \ref{tab:ablation} and Figure \ref{fig:ablation}. Two of three pre-specified headline pairs reject the random-window null at $p = 0.002$ (the Phipson--Smyth floor with 500 random-window controls), both with bootstrap 95 percent CIs strictly below zero and both well below the per-pair Bonferroni-corrected $\alpha = 0.00333$ used for the headline gate.
+
+Masking the H Balmer line set on F-class test rows ($n = 81$) collapses accuracy from 0.840 baseline to 0.000 masked, a $\dA_F^{(H_{\mathrm{balmer}})} = -0.840$ with 95 percent CI $[-0.913, -0.765]$ and $p < 0.002$. The masked confusion matrix on these 81 rows shows every F prediction cascading to G (69 of 81) or K (12 of 81), and zero predictions falling on A, which has been removed from the label set anyway. The hierarchical Balmer-then-\Mgb reasoning of \citet{GrayCorbally2009} predicts exactly this pattern: with Balmer information removed, F-type spectra are read as cooler.
+
+Masking the \Mgb triplet on G-class test rows ($n = 230$) drops accuracy from 0.965 to 0.752, a $\dA_G^{(\mathrm{Mg}_b)} = -0.213$ with 95 percent CI $[-0.262, -0.159]$ and $p < 0.002$. The result holds under a boundary-distance subset analogous to the 200~K classifier-level check in Section \ref{subsec:perf} but defined for the (\Mgb, G) ablation only: restricting to spectra whose \Teff lies more than 150~K from the F to G or G to K boundaries gives $\dA_G^{(\mathrm{Mg}_b)} = -0.114$, attenuated relative to the full sample but still strongly significant. This attenuation is the expected behaviour of confidently classified G spectra: the model's \Mgb dependence is sharper near the G to K boundary, where \Mgb strength is the relevant discriminator, than well inside the G class where multiple proxies suffice.
+
+Masking the \Mgb triplet on K-class test rows ($n = 145$) returns $\dA_K^{(\mathrm{Mg}_b)} = 0.000$ with 95 percent CI $[-0.020, +0.020]$ and $p = 0.866$. The CI straddles zero; the random-window null is not rejected. This is the headline pivot finding. Three additional tests sharpen the null: a row-level flip-rate decomposition shows that only 2 of the 145 K-class baseline predictions changed under \Mgb masking (one correct$\to$incorrect, one incorrect$\to$correct), so the identical aggregate accuracy is not a balanced flip pattern across many rows but two row-level events that cancel; a two-one-sided equivalence test against a pre-specified $\pm 0.025$ $\dA$ indifference zone (one standard error of accuracy at $n=145$ under the binomial approximation) returns $p_{\mathrm{TOST}} = 0.008$ with both 90 percent CI bounds at $\pm 0.014$ inside the zone, rejecting the null of inequivalence; and the median \Mgb total equivalent width measured on the same 145 K-class test spectra is 4.18~\AA{} versus 3.53~\AA{} on the 230 G-class test spectra (KS $p = 2.6 \times 10^{-7}$), so K-class \Mgb absorption is empirically stronger than G-class, not weaker. The K class achieves its 0.94 recall without measurable functional dependence on the \Mgb triplet, and saturation does not explain the result.
+
+To formally test the substantive between-class claim ``the model depends on \Mgb for G and does not for K'' (rather than comparing two p-values), we compute a paired bootstrap on the difference $\dA_G^{(\mathrm{Mg}_b)} - \dA_K^{(\mathrm{Mg}_b)}$ across 500 resamples drawing G-class and K-class test rows independently with replacement. The observed difference is $-0.213$ with 95 percent CI $[-0.273, -0.157]$ and one-sided $p = 0.002$ (Phipson--Smyth floor), an explicit rejection of the H$_0$ that the two effects are equal.
+
+The two pivot pairs corroborate the substitution. Masking \NaD on K returns $\dA_K^{(\mathrm{Na}_D)} = -0.007$ with 95 percent CI $[-0.023, 0.000]$ and per-pair Phipson--Smyth $p = 0.008$; this $p$-value does not reach the per-pair $\alpha = 0.00333$ floor that would reject the predicted near-zero outcome, so the pivot pair's pre-specified null prediction is corroborated, and TOST equivalence at the $\pm 0.025$ indifference zone is independently reached at $p_{\mathrm{TOST}} = 0.022$ with both 90 percent CI bounds inside the zone (recall from Section~\ref{subsec:ablation} that the pivot pairs were pre-specified to test the predicted null and are not part of the headline Bonferroni family). Masking \CaI on K returns $\dA_K^{(\mathrm{Ca}_I)} = 0.000$ with $p = 0.878$, fully null, and TOST $p_{\mathrm{TOST}} = 0.002$. All three K-class candidates for canonical-line dependence are statistically equivalent to zero within the indifference zone.
+
+For completeness, masking \NaD on F and G is also null ($p \geq 0.890$), and masking the Balmer set on G drops accuracy by 0.317 (a strong physics-aware response, consistent with \Hbeta retaining diagnostic strength across G), but masking Balmer on K is also null. Masking \Mgb on F slightly raises F-class accuracy by 0.099 (eight rows flip from incorrect to correct, zero in the other direction), consistent with \Mgb being a confounder against G that the F class benefits from losing. Masking \CaI produces zero shifts on F, G and K alike: the audit detects no functional \CaI dependence in any class on this dataset.
+
+The line-peak match against \texttt{MK\_LINES} produces precision of 0.067 at 5~\AA{} tolerance (a literal failure against a 0.5 floor) but recall of 0.889 at 5~\AA{}. The recall says diagnostic lines are present in the global perm-importance trace; the precision says they are heavily diluted by off-line \FeI and \CrI peaks. We deliberately deemphasise line-peak matching in this paper: it is a correlational quantity, and the substantive falsifiable test is the masked-line ablation above.
+
+\subsection{Exploratory external cross-check against Pickles 1998}
+
+We attempted an external cross-check against the Pickles 1998 UVKLIB stellar flux library \citep{1998PASP..110..863P} under three continuum-normalisation conventions: a 200~\AA{} median filter (the original routine in our pipeline), a 50~\AA{} median filter matched to TiO bandhead spacing, and the iteratively sigma-clipped 5th-order Legendre fit recommended by \citet{1998PASP..110..863P} section~3.2. The 200~\AA{} variant produced an FGK-restricted agreement rate of 0.681 on only 69 of 456 test rows (a known bias: the wide median filter flattens M-class TiO bandheads and biases chi-squared rank-1 selection towards M templates). The Legendre variant removed that bias, recovering 454 of 456 FGK comparisons, but the resulting aggregate agreement rate collapsed to 0.275 with F-class precision and recall both at 0.000, indicating that the chi-squared template-fit methodology itself does not reliably recover F-class or G-class predictions from this audit's spectra under any of the three normalisations. No convention met the pre-specified $\geq 0.55$ agreement threshold with $n_{\mathrm{compared}} > 100$ simultaneously. The cross-check is reported in Appendix~\ref{app:pickles} as exploratory rather than corroborative; the audit's substantive conclusion rests on the masked-line ablation results above.
+
+\section{Discussion}
+\label{sec:discussion}
+
+The headline finding is that a tree-based stellar classifier with macro-F1 = 0.926 can pass that score by reading the Balmer series for F-type spectra and the \Mgb triplet for G-type spectra, while reading K-type spectra without measurable functional dependence on three of the canonical neutral-metal diagnostics. F is textbook. G is textbook. K is not.
+
+What does the K class read instead? The per-class TreeSHAP evidence and the per-class importance figure point at \FeI and \CrI multiplets in the mid-5200~\AA{} region, plus the wings of \Hbeta and \Halpha. We confirm the SHAP attribution interventionally: ablating an Fe~i / Cr~i mid-5200~\AA{} line set built from the SHAP-identified peaks (\CrI at 5206 and 5208~\AA{}, \FeI at 5269.54~\AA{}, \CrI at 5345~\AA{}; total mask width 30~\AA{}, comparable to \Mgb at 21~\AA{}) returns $\dA_K^{(\mathrm{Fe}/\mathrm{Cr})} = -0.021$ with 95 percent CI $[-0.047, 0.000]$ and Phipson--Smyth $p = 0.002$ on the production-continuum test set (Appendix~\ref{subapp:polynomial} Table~\ref{tab:a2_ablation}), so the K-class Fe~i / Cr~i dependence is real rather than SHAP-visible-but-functionally-redundant. Iron and chromium line strengths track temperature in K dwarfs; Balmer wing depth is not a textbook K diagnostic but is real spectral information that the model can monotonise against the F-G-K sequence. The model has learned a \Teff-correlated proxy. The proxy works because at $\mathrm{SNR} > 20$ over 696 bins there are many features that monotonise against temperature, and the gradient-boosted decision tree does not need any one of them in particular. The proxy also works because the GES UVES sample is FGK-targeted: the K class is internally diverse, and a model that captures most of the variance does not need to anchor on a single diagnostic.
+
+\subsection{\texorpdfstring{Robustness of the (\Mgb, K) null}{Robustness of the (Mg b, K) null}}
+\label{subsec:robustness}
+
+We probe the (\Mgb, K) null along three sceptical-reading axes: class-weight balancing, masking saturation, and inherited continuum convention.
+
+A first sceptical reading asks whether the (\Mgb, K) null is an artefact of class-weighted training: balanced weights up-sample F at the expense of K, so the model has more incentive to make F decisions sharper than K decisions. We test this directly. Retraining LightGBM with \texttt{class\_weight=None} (uniform weights) on the same train$+$val partition and re-running the (\Mgb, K) ablation returns $\dA_K^{(\mathrm{Mg}_b)} = +0.014$, with Phipson--Smyth $p = 1.000$ at the $(B+1)/(B+1)$ ceiling for $B = 500$ random-window draws: every random-window draw was at least as negative as the observed $+0.014$, so the observed effect is no more damaging than any non-line window of the same total width. The result sits well within the $\pm 0.025$ indifference zone. The model trained without class balancing still does not depend on \Mgb on K; the null is not an artefact of the weighting choice. We additionally retrained across a $3 \times 3$ sensitivity grid in \texttt{max\_depth} $\in \{6, 8, 10\}$ and \texttt{num\_leaves} $\in \{31, 63, 127\}$ and re-ran the (\Mgb, K) ablation on each of the nine retrained models: the null persists in every cell with $\max|\dA_K^{(\mathrm{Mg}_b)}| = 0.021$ (still inside the indifference zone) and $\min p = 0.896$. The K-class shortcut is therefore not an artefact of the specific (\texttt{max\_depth}, \texttt{num\_leaves}) cell used in the production model; the grid does not vary the boosting objective, the column subsampling, or the learning rate, and we make no broader claim about gradient-boosted decision trees on FGK UVES spectra in general.
+
+A second sceptical reading is that the (\Mgb, K) null might reflect masking saturation: if \Mgb strength is already small in K, the model should not lose much by zeroing it. The measurement in Section~\ref{subsec:results-ablation} disposes of this directly: the median \Mgb total equivalent width on the 145 K-class test spectra is 4.18~\AA{} versus 3.53~\AA{} on the 230 G-class test spectra, a 0.65~\AA{} excess on K relative to G with KS $p = 2.6 \times 10^{-7}$. K-class \Mgb absorption is empirically stronger than G-class on this sample, so the classifier that does not move when \Mgb is masked is not seeing weak signal; it is reading a different signal, which is precisely the shortcut-learning interpretation.
+
+A third sceptical reading is that the K-class null might be an artefact of the inherited Gaia-ESO continuum normalisation: if the continuum convention itself carries class-discriminative information, the audit's per-pair conclusions are conditional on that convention. We re-derived the continuum on the full 145 K-class test rows with an independent iteratively sigma-clipped 5th-order Legendre fit (Pickles convention~C in Appendix~\ref{app:pickles}, and visualised against the production normalisation in Figure~\ref{fig:continuum_medians}) and re-ran the (\Mgb, K) ablation: the effect shifts to $\dA_K^{(\mathrm{Mg}_b)} = -0.034$ with bootstrap 95 percent CI $[-0.069, 0.000]$ and Phipson--Smyth $p = 0.002$ (at the random-window null floor). The point estimate sits outside the $\pm 0.025$ indifference zone, and the K-class null does not persist under this alternative continuum convention. The mechanism is visible in the per-class continuum levels of the production feature matrix (Figure~\ref{fig:continuum_medians} left panel): the median-of-row-medians on the test set is 0.929 (F), 0.919 (G) and 0.902 (K), a 2.7-percentage-point monotone-with-temperature spread that pairwise KS-tests separate at $p \leq 1.6 \times 10^{-3}$ on adjacent classes and $p = 1.3 \times 10^{-8}$ on F vs K, and that the polynomial re-derivation lifts to a uniform $\approx 1.0$ (right panel). The model is trained on the original data and exploits this absolute continuum level as one signal of K-ness.
+
+We probed the multi-leg interpretation directly with three additional analyses reported in Appendix~\ref{subapp:polynomial} (Tables~\ref{tab:a2_baseline}, \ref{tab:a2_confusion}, \ref{tab:a2_ablation}). First, per-class baseline accuracy under \texttt{polynomial\_n5}: F drops from 0.840 to 0.728, G collapses from 0.965 to 0.148, K barely moves from 0.938 to 0.924. F retains accuracy because Balmer absorption is locally deep and survives a low-order polynomial fit; K retains accuracy because at least two non-continuum-level paths (Fe~i / Cr~i and, under this convention, \Mgb) remain available. Second, the full F/G/K confusion under \texttt{polynomial\_n5}: G-class predictions split with 70 going to F, 34 staying as G and 126 going to K, and 11 of 145 K rows go to F; the model cannot reliably tell G from K once the continuum-level signal is removed, and the dominant misclassification direction is G$\to$K. Third, the same Fe~i / Cr~i ablation run under \texttt{polynomial\_n5} continuum returns $\dA_K^{(\mathrm{Fe}/\mathrm{Cr})} = -0.028$ with 95 percent CI $[-0.056, -0.006]$ and $p = 0.002$, statistically indistinguishable from the production-continuum effect of $-0.021$ on the same test set; \Mgb on K under \texttt{polynomial\_n5} returns $\dA_K^{(\mathrm{Mg}_b)} = -0.034$ ($p = 0.002$). The K-class dependence on Fe~i / Cr~i is present under both continuum conventions, and the \Mgb dependence on K emerges only after the continuum-level path is removed. We read this as evidence of a multi-leg shortcut: under the production continuum the model reaches K through the inherited continuum-level signal and the substituted Fe~i / Cr~i multiplets, and the audit correctly identifies \Mgb as functionally redundant for K under that input regime; under the independent polynomial continuum the continuum-level path is removed, Fe~i / Cr~i remain in use at comparable magnitude, and \Mgb is recruited to make up the deficit. Both results are evidence of shortcut learning; the audit detects the active leg under each continuum convention. The K-class \Mgb null reported in Section~\ref{subsec:results-ablation} is therefore conditional on the inherited Gaia-ESO continuum convention. We recommend that future audits of stellar classifiers trained on pipeline-normalised spectra report the per-class continuum levels and treat the choice of continuum convention as a first-class sensitivity axis. The same polynomial continuum convention is the one under which the Pickles cross-check in Appendix~\ref{app:pickles} collapses all model-predicted F and G rows onto K templates, which is consistent with the same mechanism: removing the continuum-level signal removes the model's primary G-versus-K discriminator.
+
+The methodological contribution differentiates this paper from correlational audits. Permutation importance ranks features by accuracy drop under shuffling, which is a per-feature average over all classes and so masks per-class dependence structure. SHAP is per-class but is a Shapley decomposition of the model output, not a counterfactual on the input. The masked-line ablation is a direct intervention on the input domain. It produces, for each pre-specified (line set, class) pair, a single number with a confidence interval and a $p$-value. The number is falsifiable in the strong sense: it can disagree with the prediction the audit set up, and we know in advance which sign and what magnitude would refute the hypothesis. Falsifiability is the bar correlational interpretability does not clear.
+
+The contrast with \citet{2024A&A...692A.228C} on FLAMES-GIRAFFE is informative. Their cINN posterior provides per-spectrum two-component uncertainty budgets and is calibrated end-to-end on a sample roughly an order of magnitude larger than ours. The two papers are complementary rather than competing: their work is the parameter-inference frontier on a different instrument and a different sample size; ours is the audit instrument on the same survey's higher-resolution channel. We are not arguing that LightGBM is better than a cINN. We are arguing that whatever classifier is used, the test of physics-awareness needs to be interventional, and the audit instrument we present is portable to a cINN, a transformer, or a random forest with no architectural change because the intervention is on the input domain.
+
+\section{Limitations}
+\label{sec:limitations}
+
+\textbf{Sample scope and resolution trades.} Our analysis is based on roughly 3032 FLAMES-UVES spectra, an order of magnitude smaller than the 49858-star catalogue produced by \citet{2024A&A...692A.228C} from FLAMES-GIRAFFE. The Gaia-ESO UVES sample is FGK-dominated by design, since UVES targets are typically the brightest calibrators; the trade we accept by using UVES rather than GIRAFFE is line resolution and purity at the cost of statistical power. The sample supports stable per-class recall estimates for F, G and K (95 percent bootstrap CIs of order $\pm 0.03$ to $\pm 0.05$) and is sufficient to resolve the headline ablation effect, which exceeds these CIs by an order of magnitude. Very few O, B, A and M stars survive the SNR cut; we retain only F, G and K and drop the rest from the label set rather than reporting unreliable per-class metrics. \HeI and \HeII lines that diagnose O and B fall outside our 4800 to 6800~\AA{} window, and TiO band coverage for M is only partial. The masked-line ablation is therefore an audit of the FGK regime of MK classification on this dataset, not of the full OBAFGKM sequence. A broader audit requires either a different instrument setup (UVES U520 to recover \CaI H and K and the bluer Balmer lines) or a different survey altogether (LAMOST DR9 for M-star statistics). We also classify spectral class only; adding luminosity class as a second label would reduce per-class supports below the level at which the ablation has statistical power on this sample.
+
+\textbf{Probabilistic outputs and future calibration.} LightGBM emits probability outputs derived from softmax over leaf logits; these are not calibrated in the sense \citet{2024A&A...692A.228C} achieve with the cINN posterior, which provides per-spectrum two-component uncertainty budgets. Our paper reports bootstrap confidence intervals on aggregate metrics and on the ablation effect $\dA_k^{(\mathcal{L})}$, which is the appropriate uncertainty for the central scientific claim, but it does not provide spectrum-level posterior probabilities a downstream user could feed into a probabilistic catalogue. Post-hoc calibration via isotonic regression or conformal prediction would close this gap with no architectural change. We mark this as future work because the audit methodology itself is independent of the calibration choice.
+
+\textbf{Methodological dependencies on inherited pipelines.} Our feature vectors are built on continuum-normalised UVES spectra produced by the Gaia-ESO data reduction pipeline; we do not re-derive the continuum. The random-window null distribution absorbs any baseline contribution from continuum residuals shared across windows, so an effect that survives the null is in excess of any continuum-residual contribution. We re-derived the continuum on the full 145 K-class test rows with an independent iteratively sigma-clipped 5th-order Legendre fit and re-ran the (\Mgb, K) ablation: the effect shifts to $\dA_K^{(\mathrm{Mg}_b)} = -0.034$ with bootstrap 95 percent CI $[-0.069, 0.000]$ and Phipson--Smyth $p = 0.002$, outside the $\pm 0.025$ indifference zone. The K-class \Mgb null reported in Section~\ref{subsec:results-ablation} is therefore conditional on the inherited Gaia-ESO continuum convention; Section~\ref{sec:discussion} traces the mechanism to a per-class continuum-level signal that the polynomial re-derivation removes and that the same convention also collapses in the Pickles cross-check (Appendix~\ref{app:pickles}). The external Pickles 1998 chi-squared cross-check is reported as exploratory: no continuum convention we tried produced a defensible aggregate FGK agreement, so the cross-check cannot stand as independent corroboration of the headline.
+
+\textbf{Scope of generalisation and cluster-leakage bounds.} We audit one classifier (LightGBM) trained on one instrument (FLAMES-UVES) in one survey (Gaia-ESO DR5.1) against one diagnostic line list (the canonical MK set). This is a depth study, not a survey of methods; we make no claim that masked-line ablation reveals identical structure on a CNN or a transformer, nor on GIRAFFE rather than UVES, nor on LAMOST. The intervention is defined on the input domain, not on internal model representations, so the audit instrument is portable; we provide the masking and null-construction code as a Python module with a stable public API. The Gaia-ESO target list concentrates on open clusters and known fields, so the spectra are not spatially independent. The leakage-aware StratifiedGroupKFold pass in Section \ref{subsec:perf} returns a macro-F1 of 0.903, against the StratifiedKFold 0.913, a one-percentage-point gap in the minimal-leakage band per \citet{2019MNRAS.486.2075B} (whose material threshold is 0.030). However, 1898 of 1966 spatial groups (96.5 percent) are singletons covering 73.7 percent of train$+$val rows: for those rows, StratifiedGroupKFold provides no group stratification beyond the row-level stratification already enforced, so the 0.010 macro-F1 gap is a lower bound on cluster leakage rather than a tight constraint. A residual contribution of order one to two F1 percentage points cannot be ruled out.
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+We have audited a tree-based MK classifier of Gaia-ESO FLAMES-UVES U580 spectra for physics-awareness via interventional masked-line ablation. The classifier reaches macro-F1 = 0.926 on the held-out test set (beating a kNN-on-spectra baseline by 0.26 macro-F1), but the audit reveals that this aggregate score conceals class-specific structure: F and G classify on textbook MK diagnostics (the Balmer series and the \Mgb triplet, respectively), while K classifies, \emph{under the production Gaia-ESO continuum convention}, without measurable functional dependence on the \Mgb triplet, the \NaD doublet or the \CaI features at 6162 and 6439~\AA{}. This K-class null survives a two-one-sided equivalence test within a $\pm 0.025$ indifference zone, a row-level flip-rate decomposition (only 2 of 145 K predictions change under \Mgb masking), a uniform-weights retrain, and a $3 \times 3$ \texttt{max\_depth} $\times$ \texttt{num\_leaves} hyperparameter grid; the median \Mgb equivalent width on K-class test spectra is 0.65~\AA{} larger than on G-class spectra (KS $p = 2.6 \times 10^{-7}$), so saturation is empirically ruled out. Under an independent 5th-order Legendre re-derivation of the continuum on the same 145 K-class test rows, the (\Mgb, K) effect shifts to $-0.034$ ($p = 0.002$) and the parallel (\Mgb, G) test collapses G-class baseline accuracy from 0.965 to 0.148, revealing that the inherited continuum carries a class-discriminative signal which is itself part of the K-class shortcut. We interpret the headline result as a multi-leg K-class shortcut combining a continuum-level signal and substituted \FeI and \CrI multiplets in place of the canonical neutral-metal diagnostics, with corroboration from per-class TreeSHAP; the audit detects the active leg under each continuum convention.
+
+The methodological contribution is that interventional masked-line ablation is a falsifiable per-class audit instrument, sharper than the correlational tools that have dominated stellar machine-learning interpretability so far. The audit produces, for each pre-specified (line set, class) pair, a single number with a bootstrap confidence interval and a Phipson--Smyth-corrected $p$-value against a random-window null, plus a paired-bootstrap test on the substantive between-class difference and a TOST equivalence verdict against a pre-specified indifference zone. The intervention is defined on the input domain, so the audit is portable to other classifier architectures with no internal-representation hooks required. The implementation, including the masking and null-construction code, is released as a Python module under a permissive license.
+
+The audit's value also extends beyond per-line interpretability. The continuum-level shortcut identified in Section~\ref{subsec:robustness} would not have been surfaced by any of the correlational tools we ran (SHAP, permutation importance, sliding-window occlusion), all of which operate on bin-level attribution within a fixed normalisation; the shortcut is a property of the per-class distribution of an aggregate (the per-row median of normalised flux), invisible to feature-level rankings. The intervention probe surfaced it because intervening on the input bins and re-deriving the continuum on the audit side made the shortcut measurable. We therefore frame interventional ablation as an audit instrument for both per-line diagnostic substitutions and pipeline-level shortcuts that survive standard preprocessing; the latter category is, in our view, the larger and less-explored failure mode in stellar machine learning. The wider implication is that strong aggregate metrics on stellar classifiers are not, on their own, evidence of physics-awareness, and the community should expect interventional audits as standard reporting alongside classifier accuracy.
+
+\section*{Data and code availability}
+
+Code is available at \url{https://github.com/TirtheshJani/stellar-mk-audit} under MIT license. The trained model (\texttt{lgbm\_mk.pkl}), the engineered feature matrix (\texttt{features.npz}), and all numerical artifacts referenced in this paper are deposited at Zenodo under DOI [TBD post-mint] with the same release tag as the GitHub repository. Reproduction instructions are in \texttt{docs/reproducibility\_appendix.md}. The Gaia-ESO Survey data underlying this work is publicly available via the ESO Science Archive Facility. The Pickles UVKLIB stellar flux library is publicly available via the STScI HLSP reference-atlases mirror.
+
+\section*{Acknowledgements}
+
+This work uses data from the Gaia-ESO Public Spectroscopic Survey, ESO programme 188.B-3002, conducted with the FLAMES instrument at the VLT \citep{2022A&A...666A.120G,2014A&A...565A.113S}. Stellar parameters used for label construction are from \citet{2023A&A...676A.129H}. Atomic line rest wavelengths are from the NIST Atomic Spectra Database \citep{NIST_ASD_2023}. The Pickles 1998 UVKLIB stellar flux library was retrieved from the STScI HLSP reference-atlases mirror. Software dependencies include LightGBM \citep{Ke2017LightGBM}, SHAP \citep{LundbergLee2017SHAP}, scikit-learn, numpy, scipy, astropy, astroquery, and matplotlib.
+
+\bibliographystyle{plainnat}
+\bibliography{manuscript_citations}
+
+\appendix
+
+\section{Exploratory external cross-check against Pickles 1998}
+\label{app:pickles}
+
+\noindent\emph{No continuum-normalisation convention we tested produced a defensible aggregate FGK agreement rate; this cross-check is reported for transparency rather than as corroboration.}
+
+We attempted an external chi-squared cross-check against the Pickles 1998 UVKLIB stellar flux library \citep{1998PASP..110..863P}, loading templates from the STScI HLSP reference-atlases mirror, resampling them onto the audit's 696-bin grid, and selecting the lowest-chi-squared template per test row from the FGK subset of the library. We used the UVKLIB (ultraviolet-to-K-band) subset rather than the UVILIB (ultraviolet-to-I-band) subset because UVKLIB has the same MK coverage in our 4800 to 6800~\AA{} window and is the standard reference set in the Pickles distribution. Indices 1 to 85 of UVKLIB are dwarf and giant spectra; indices 86 to 108 are supergiant spectra which we retained (a K-supergiant best-match for a K-dwarf test spectrum is still a K-class match for our spectral-class comparison); indices 109 to 131 are documented duplicates of 86 to 108 in the supergiant sequence \citep[Table~2]{1998PASP..110..863P} and are skipped at load time. The continuum-normalisation method on the Pickles side was varied across three conventions, which we label A, B, and C below: A is a 200~\AA{} median filter (the original routine in our pipeline), B is a 50~\AA{} median filter matched to TiO bandhead spacing, and C is an iteratively sigma-clipped 5th-order Legendre fit per \citet{1998PASP..110..863P} section~3.2.
+
+Aggregate results, restricted to test rows the classifier predicted as F, G or K on the audit side and to Pickles templates of class F, G or K on the reference side, are summarised below. The pre-specified gate stated in Section~\ref{subsec:baselines} was $\mathrm{agreement\,rate} \geq 0.55$ with $n_{\mathrm{compared}} > 100$ simultaneously; no convention met both criteria.
+
+\begin{center}
+\begin{tabular}{lrrcccc}
+\toprule
+Continuum method & $n_{\mathrm{FGK}}$ & Agreement & F P/R & G P/R & K P/R \\
+\midrule
+A: 200~\AA{} median filter        &  69 & 0.681 & 0.80/0.85 & 0.27/0.80 & 0.80/0.57 \\
+B: 50~\AA{} median filter         &  35 & 0.343 & 0.00/0.00 & 0.54/0.37 & 0.83/0.39 \\
+C: Polynomial $n=5$ (sigma-clip)  & 454 & 0.275 & 0.00/0.00 & 0.00/0.00 & 0.89/0.29 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Convention~A: the 200~\AA{} median filter is wider than the dominant Pickles M-class TiO bandhead spacing (200 to 300~\AA{}); this flattens M-template normalised profiles to a standard deviation of approximately 0.035 against 0.067 to 0.120 for FGK templates, and chi-squared minimisation rewards the flatter templates by variance. Of 456 test rows, 387 had their lowest-chi-squared Pickles template land on M, leaving only 69 FGK comparisons.
+
+Convention~C: the polynomial $n=5$ variant removes the M-bias (only 2 of 456 land on M, leaving 454 FGK comparisons), but the chi-squared template-fit method does not reliably recover F or G predictions at all under this convention: \emph{every model-predicted F or G row is matched to a K template, leaving the convention-C row's K-class denominator dominated by misallocated F and G predictions}. We hypothesise the mechanism is the same one identified in Section~\ref{sec:discussion}: the polynomial re-derivation removes a class-discriminative continuum-level signal from the Gaia-ESO side, and the Pickles FGK templates after the same polynomial re-derivation have line-strength patterns whose chi-squared minimum on continuum-flattened audit spectra lands preferentially on the broader-featured K templates. The K-class precision of 0.89 under convention~C is therefore not informative about whether the audit's K predictions match Pickles K templates in any substantive sense; it reflects a degenerate denominator and does not corroborate the per-class structure of the headline. The K-class precision of 0.80 under convention~A is computed against a non-degenerate denominator and is the only per-class number from this cross-check we attach any interpretive weight to. The Pickles confusion matrix under convention~A is shown for reference as Figure~\ref{fig:pickles}, and we caution that the qualitative pattern under conventions~B and~C differs materially.
+
+The instability of convention~C in this appendix and the instability of the (\Mgb, K) ablation effect under the same convention reported in Section~\ref{sec:discussion} are two views of the same finding: the inherited Gaia-ESO continuum convention encodes a class-discriminative signal that the polynomial $n=5$ re-derivation removes, and downstream measurements (both this external cross-check and the ablation effect on K) shift accordingly. We therefore treat the Pickles cross-check as exploratory and rest the substantive conclusion on the masked-line ablation results in Section~\ref{subsec:results-ablation}, with the continuum-convention caveat carried forward into the K-class headline.
+
+\section{Continuum-convention diagnostics under polynomial\_n5}
+\label{subapp:polynomial}
+
+Three diagnostics on the held-out test set support the multi-leg K-class shortcut interpretation in Section~\ref{subsec:robustness}: per-class baseline accuracy under polynomial\_n5 (Table~\ref{tab:a2_baseline}); the full F / G / K confusion matrix under polynomial\_n5 (Table~\ref{tab:a2_confusion}); and Fe~\textsc{i} / Cr~\textsc{i} ablation under both continuum conventions alongside the headline (\Mgb, K) ablation (Table~\ref{tab:a2_ablation}). The Fe~\textsc{i} / Cr~\textsc{i} line set is post-hoc and built from the SHAP-identified K-class peaks of Section~\ref{subsec:results-ablation}: \CrI at 5206.04 and 5208.42~\AA{} (Moore RMT 7), \FeI at 5269.54~\AA{} (RMT 15), \CrI at 5345.80~\AA{} (RMT 1); each centre carries a $\pm 5$~\AA{} half-window. Total mask width is 30~\AA{}, comparable to \Mgb at 21~\AA{}. The Fe~\textsc{i} / Cr~\textsc{i} line set is not part of the pre-specified headline gate of Section~\ref{subsec:ablation} and the resulting effects are reported as confirmatory of the multi-leg framing rather than as new headline claims.
+
+\begin{table}[ht]
+\centering
+\caption{Per-class baseline accuracy on the 456-row held-out test set under the production (Gaia-ESO pipeline) continuum normalisation and after independent iteratively sigma-clipped 5th-order Legendre re-derivation. F retains accuracy because Balmer absorption is locally deep and survives a low-order polynomial fit; G collapses because the continuum-level signal it relied on as the primary G-versus-K discriminator is removed; K barely moves because at least two non-continuum-level paths (Fe~\textsc{i} / Cr~\textsc{i} and, under this convention, \Mgb) remain available.}
+\label{tab:a2_baseline}
+\begin{tabular}{lrcc}
+\toprule
+Class & $n_{\mathrm{test}}$ & Production acc. & Polynomial\_n5 acc. \\
+\midrule
+F & 81  & 0.840 & 0.728 \\
+G & 230 & 0.965 & 0.148 \\
+K & 145 & 0.938 & 0.924 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Full F / G / K confusion matrix on the 456-row held-out test set after polynomial\_n5 re-derivation of the continuum on the audit side. Rows are true class, columns are predicted class, both in F-G-K order. The dominant misclassification direction is G to K (126 of 230 G rows go to K, 70 to F, and only 34 stay as G). F retains 73 percent recall and K retains 92 percent recall. Compare with the production confusion in the caption of Table~\ref{tab:test-perf}: F = (68, 13, 0), G = (3, 222, 5), K = (1, 8, 136).}
+\label{tab:a2_confusion}
+\begin{tabular}{lrrr}
+\toprule
+True $\backslash$ predicted & F & G & K \\
+\midrule
+F & 59 & 12 &  10 \\
+G & 70 & 34 & 126 \\
+K & 11 &  0 & 134 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Masked-line ablation on the K-class held-out test rows ($n = 145$), comparing the production (Gaia-ESO pipeline) continuum against the polynomial\_n5 re-derivation. The Fe~\textsc{i} / Cr~\textsc{i} line set is the SHAP-identified post-hoc line set described above. Under the production continuum the K class shows real (small but significant) dependence on Fe~\textsc{i} / Cr~\textsc{i} and is null on \Mgb. Under the polynomial\_n5 continuum the Fe~\textsc{i} / Cr~\textsc{i} dependence persists at comparable magnitude, the \Mgb dependence emerges, and the K-class shortcut composition is therefore multi-leg under both conventions but with the continuum-level leg removed under polynomial\_n5. $p$-values use the \citet{2010SAGMB...9...39P} $(B+1)/(B+1)$ correction with $B = 500$.}
+\label{tab:a2_ablation}
+\begin{tabular}{llrrr}
+\toprule
+Continuum & Line set & $\dA_K$ & 95\% CI & $p$ \\
+\midrule
+Production     & \Mgb                                          & $\phantom{-}0.000$ & $[-0.020, \phantom{-}+0.020]$ & 0.866 \\
+Polynomial\_n5 & \Mgb                                          & $-0.034$           & $[-0.069, \phantom{-}\phantom{+}0.000]$ & 0.002 \\
+\midrule
+Production     & Fe~\textsc{i} / Cr~\textsc{i} (5201--5350~\AA{}) & $-0.021$ & $[-0.047, \phantom{-}\phantom{+}0.000]$ & 0.002 \\
+Polynomial\_n5 & Fe~\textsc{i} / Cr~\textsc{i} (5201--5350~\AA{}) & $-0.028$ & $[-0.056, -0.006]$ & 0.002 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Tables}
+
+\begin{table}[ht]
+\centering
+\caption{Held-out test classification performance. Macro values use unweighted averaging across F, G and K. Confusion matrix (rows = true, columns = predicted, both in F-G-K order): F = (68, 13, 0), G = (3, 222, 5), K = (1, 8, 136).}
+\label{tab:test-perf}
+\begin{tabular}{lrrrr}
+\toprule
+Class & $n_{\mathrm{test}}$ & Precision & Recall & F1 \\
+\midrule
+F     & 81  & 0.944 & 0.840 & 0.889 \\
+G     & 230 & 0.914 & 0.965 & 0.939 \\
+K     & 145 & 0.965 & 0.938 & 0.951 \\
+\midrule
+Macro & 456 & 0.941 & 0.914 & 0.926 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Interventional masked-line ablation: pre-specified headline pairs (top three rows) and pivot pairs (bottom two rows). The gate requires at least 2 of 3 headline pairs to satisfy $\dA_{\mathrm{ci,\,high}} < 0$ and the per-pair Bonferroni-corrected $p \leq 0.00333$ (family-wise $\alpha = 0.01$). $n_{\mathrm{random\,controls}} = 500$. Bootstrap resamples = 500. Continuum fill value at production = 0.916 (empirical median of training feature matrix outside the inter-chip gap). $p$-values use the \citet{2010SAGMB...9...39P} $(B+1)$-corrected formula; the floor at $n_{\mathrm{random\,controls}} = 500$ is $1/501 \approx 0.002$.}
+\label{tab:ablation}
+\begin{tabular}{llrrrrrr}
+\toprule
+Line set & Class & $n_{\mathrm{test}}$ & $A_{\mathrm{baseline}}$ & $A_{\mathrm{masked}}$ & $\dA$ & 95\% CI & $p$ \\
+\midrule
+H Balmer & F & 81  & 0.840 & 0.000 & $-0.840$ & $[-0.913,-0.765]$ & 0.002 \\
+\Mgb     & G & 230 & 0.965 & 0.752 & $-0.213$ & $[-0.262,-0.159]$ & 0.002 \\
+\Mgb     & K & 145 & 0.938 & 0.938 & $\phantom{-}0.000$ & $[-0.020,+0.020]$ & 0.866 \\
+\midrule
+\NaD     & K & 145 & 0.938 & 0.931 & $-0.007$ & $[-0.023,\phantom{-}0.000]$ & 0.008 \\
+\CaI\textsuperscript{$\dagger$}     & K & 145 & 0.938 & 0.938 & $\phantom{-}0.000$ & $[\phantom{-}0.000,\phantom{-}0.000]$ & 0.878 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.4em}
+{\footnotesize $\dagger$~Masking \CaI did not change any K-class prediction across the 500 bootstrap resamples, so the 95\% CI degenerates to $[0.000, 0.000]$. This bounds the effect above by accuracy quantisation at $n_{\mathrm{test}} = 145$ (one prediction change $\approx 0.007$ accuracy units), not zero in a continuous sense.}
+\end{table}
+
+\section*{Figures}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.92\linewidth]{importance_main.pdf}
+\caption{Per-class importance with diagnostic-line annotations and inter-chip gap mask. Three vertically stacked panels (F, G, K from top to bottom) each overlay the per-class SHAP mean absolute value trace with a representative class-mean spectrum; dashed verticals mark \texttt{MK\_LINES} rest wavelengths and the inter-chip \texttt{gap\_mask} is shaded grey. A right-hand panel shared across the three rows summarises the masked-line ablation $\dA$ bars per line set per class with 95\% bootstrap CIs.}
+\label{fig:importance}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.55\linewidth]{confusion_matrix_test.pdf}
+\caption{Held-out test confusion matrix. Rows are true class, columns are predicted class, both in F-G-K order. Off-diagonal mass concentrates at adjacent boundaries.}
+\label{fig:confusion}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.85\linewidth]{ablation_bars.pdf}
+\caption{Headline interventional masked-line ablation effects. Bar chart of $\dA_k^{(\mathcal{L})}$ per (line set, class) pair, with 95 percent bootstrap CIs and a horizontal dashed line at zero for reference. Pre-specified headline pairs are drawn in solid blue (H Balmer on F, \Mgb on G, \Mgb on K); pivot pairs are drawn in hatched red (\NaD on K, \CaI on K). All annotated $p$-values are the Phipson--Smyth $(B+1)/(B+1)$-corrected fraction of $B = 500$ random non-line windows whose $\dA_k$ was at least as negative as the observed value; values at the $1/501$ floor are annotated as $p < 0.002$. Numerical values match Table~\ref{tab:ablation}.}
+\label{fig:ablation}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.82\linewidth]{importance_per_class_gapmask.pdf}
+\caption{Per-class SHAP overlay with inter-chip gap shaded. Visual support for the absence of \NaD and \CaI from the K-class top-20.}
+\label{fig:perclass}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\linewidth]{confusion_matrix_pickles.pdf}
+\caption{Pickles 1998 chi-squared cross-check confusion matrix under the 200~\AA{} median-filter continuum convention (convention~A of Appendix~\ref{app:pickles}), $n_{\mathrm{compared}} = 69$. The 50~\AA{} median-filter and 5th-order Legendre conventions give qualitatively different per-class structure (see Appendix~\ref{app:pickles} Table) and the cross-check is treated as exploratory rather than corroborative throughout. Under convention~A the pattern of disagreement (model over-predicts G against Pickles F templates with strong \Mgb; under-recovers Pickles K templates with strong \NaD and \CaI) is qualitatively consistent with the shortcut-learning interpretation, but conventions~B and~C produce different patterns that do not support the same reading.}
+\label{fig:pickles}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.92\linewidth]{continuum_medians.pdf}
+\caption{Per-class continuum-median distributions on the held-out test set, under the production (Gaia-ESO pipeline) normalisation (left) and after independent iteratively sigma-clipped 5th-order Legendre re-derivation (right). Box plots show the per-row median of normalised flux on bins outside the inter-chip gap, for F ($n=81$), G ($n=230$), and K ($n=145$). The production panel exhibits a 2.7-percentage-point monotone-with-temperature spread (medians 0.929 / 0.919 / 0.902 for F / G / K) that pairwise KS tests separate at $p < 1.6 \times 10^{-3}$ on adjacent classes and $p = 1.3 \times 10^{-8}$ on F versus K; the polynomial re-derivation lifts every row to a per-class median near 1.0 and removes the class-discriminative continuum-level signal that the model uses as a non-line K-class shortcut (Section~\ref{subsec:robustness}).}
+\label{fig:continuum_medians}
+\end{figure}
+
+\end{document}
