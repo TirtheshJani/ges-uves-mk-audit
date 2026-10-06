@@ -4,12 +4,12 @@
 
 Outputs (all 300 DPI PDFs under ``--out-dir``):
 
-  * importance_main.pdf (plot_main_figure)
-  * confusion_matrix_test.pdf (plot_confusion_matrix from metrics.json)
-  * confusion_matrix_pickles.pdf (plot_confusion_matrix from benchmark_report.json, FGK-only)
-  * ablation_bars.pdf (plot_ablation_bars from gate_eval.json)
+  * importance_main.pdf            (plot_main_figure)
+  * confusion_matrix_test.pdf      (plot_confusion_matrix from metrics.json)
+  * confusion_matrix_pickles.pdf   (plot_confusion_matrix from benchmark_report.json, FGK-only)
+  * ablation_bars.pdf              (plot_ablation_bars from gate_eval.json)
 
-legacy overlays (``importance_overlay.pdf``,
+Legacy overlays (``importance_overlay.pdf``,
 ``importance_overlay_per_class.pdf``) are also rendered for the dossier.
 """
 from __future__ import annotations
@@ -119,7 +119,7 @@ def main(argv: list[str] | None = None) -> None:
     rows, headline_pairs, pivot_pairs = _gate_eval_to_pairs(gate_eval)
 
     # 1. Main figure: spectrum + per-class SHAP top-K + MK lines + gap shading
-    # + ablation bars in side panel.
+    #    + ablation bars in side panel.
     main_rows: list[dict[str, Any]] = []
     for ls, cls in headline_pairs:
         for row in rows:
@@ -179,7 +179,7 @@ def main(argv: list[str] | None = None) -> None:
         n_random_controls=int(gate_eval.get("n_random_controls", 500)),
     )
 
-    # 5. legacy overlays for the dossier.
+    # 5. Legacy overlays for the dossier.
     plot_summary_overlay(
         wc, imp, mean_abs_per_class, class_labels, rep_spectrum,
         args.out_dir / "importance_overlay.pdf",

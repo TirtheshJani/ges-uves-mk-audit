@@ -2,19 +2,20 @@
 # SPDX-License-Identifier: MIT
 """Paired bootstrap, flip rate, and TOST equivalence on per-row ablation outputs.
 
-Steps 2a (paired bootstrap), 2b (flip rate), 2c (TOST equivalence).
 Consumes ``artifacts/ablation/per_row_predictions.npz`` produced by
-``scripts/ablation.py`` (). The three analyses share the
-same per-row baseline and masked predictions so they live in one driver.
-
-, #2c (TOST equivalence), and #4 (paired
-bootstrap on the substantive between-class difference) are addressed by
-this script's three output JSONs.
+``scripts/ablation.py``. The three analyses share the same per-row baseline
+and masked predictions so they live in one driver: a paired bootstrap on
+the between-class difference of masking effects, a flip-rate decomposition
+(with exact McNemar p-value and Clopper-Pearson bound), and a TOST
+equivalence test on the (Mg b, K) delta.
 
 Outputs:
-  - artifacts/ablation/paired_bootstrap.json: Step 2a result
-  - artifacts/ablation/flip_rates.json: Step 2b result
-  - artifacts/ablation/tost.json: Step 2c result
+  - artifacts/ablation/paired_bootstrap.json
+  - artifacts/ablation/flip_rates.json
+  - artifacts/ablation/tost.json
+
+Legacy invocation that reproduces the deposited artifacts:
+``python scripts/ablation_paired.py --n-bootstrap 500 --seed 42``.
 
 The class label encoding is y=1 -> F, y=2 -> G, y=3 -> K (see
 src/interpret/labels.py).
@@ -28,10 +29,12 @@ from pathlib import Path
 
 import numpy as np
 
+from src.interpret.ablation import clopper_pearson_upper, mcnemar_exact_p
+
 logger = logging.getLogger(__name__)
 
 CLASS_NAME_TO_LABEL: dict[str, int] = {"F": 1, "G": 2, "K": 3}
-TOST_INDIFFERENCE_ZONE: float = 0.025  # , locked 2026-05-16
+TOST_INDIFFERENCE_ZONE: float = 0.025  # pre-specified equivalence half-width in accuracy units
 
 
 def _per_class_accuracy(y_true: np.ndarray, y_pred: np.ndarray, c: int) -> float:
@@ -58,9 +61,9 @@ def paired_bootstrap_delta_difference(
 
     p-value tests H0: delta_a - delta_b >= 0 (one-sided). Smaller p means
     class_a's effect is more negative than class_b's by a larger margin.
-     the substantive claim is "the model depends on the
-    line set for class_a and does not for class_b", so class_a should be
-    the class with the larger predicted effect.
+    The substantive claim is "the model depends on the line set for class_a
+    and does not for class_b", so class_a should be the class with the
+    larger predicted effect.
     """
     rng = np.random.default_rng(seed)
     idx_a = np.flatnonzero(y_test == class_a)
@@ -113,12 +116,18 @@ def flip_rate(
     y_pred_base: np.ndarray,
     y_pred_masked: np.ndarray,
     c: int,
+    true_prob_base: np.ndarray | None = None,
+    true_prob_masked: np.ndarray | None = None,
 ) -> dict[str, float | int]:
     """Compute per-class flip-rate decomposition under masking.
 
-    identical aggregate accuracy may hide a balanced
-    flip pattern. Reports n_correct_to_incorrect, n_incorrect_to_correct,
-    n_flipped_total, n_total, and the rates.
+    Identical aggregate accuracy before and after masking may hide a
+    balanced flip pattern. Reports n_correct_to_incorrect,
+    n_incorrect_to_correct, n_flipped_total, n_total, the rates, the exact
+    two-sided McNemar p-value on the discordant pairs and the one-sided
+    95 percent Clopper-Pearson upper bound on the correct-to-incorrect rate.
+    When per-row true-class probabilities are supplied, also reports
+    ``mean_delta_true_prob`` (mean of masked minus baseline over the class).
     """
     mask = y_test == c
     n_total = int(mask.sum())
@@ -134,6 +143,9 @@ def flip_rate(
             "flip_rate_total": float("nan"),
             "flip_rate_correct_to_incorrect": float("nan"),
             "flip_rate_incorrect_to_correct": float("nan"),
+            "mcnemar_exact_p": float("nan"),
+            "flip_rate_upper95": float("nan"),
+            "mean_delta_true_prob": float("nan"),
         }
     yt = y_test[mask]
     yb = y_pred_base[mask]
@@ -145,6 +157,12 @@ def flip_rate(
     n_uc = int(np.sum(base_correct & masked_correct))
     n_ui = int(np.sum(~base_correct & ~masked_correct))
     n_flipped = int(np.sum(yb != ym))
+    if true_prob_base is not None and true_prob_masked is not None:
+        mean_dp = float(np.mean(
+            np.asarray(true_prob_masked)[mask] - np.asarray(true_prob_base)[mask]
+        ))
+    else:
+        mean_dp = float("nan")
     return {
         "class_label": int(c),
         "n_total": n_total,
@@ -156,6 +174,9 @@ def flip_rate(
         "flip_rate_total": float(n_flipped / n_total),
         "flip_rate_correct_to_incorrect": float(n_ci / n_total),
         "flip_rate_incorrect_to_correct": float(n_ic / n_total),
+        "mcnemar_exact_p": mcnemar_exact_p(n_ci, n_ic),
+        "flip_rate_upper95": clopper_pearson_upper(n_ci, n_total),
+        "mean_delta_true_prob": mean_dp,
     }
 
 
@@ -170,9 +191,9 @@ def tost_equivalence(
 ) -> dict[str, float | bool]:
     """Two one-sided t-test equivalence for per-class delta_acc.
 
-    a CI of approximately +/-0.02 with n=145 is not the
-    same as a TOST rejection of inequivalence; we test whether delta_acc
-    lies entirely inside the +/-indifference_zone band.
+    A bootstrap CI of approximately +/-0.02 with n=145 is not the same as
+    a TOST rejection of inequivalence; we test whether delta_acc lies
+    entirely inside the +/-indifference_zone band.
 
     Procedure (bootstrap analogue of Schuirmann 1987 / Lakens 2017):
       - Bootstrap distribution of delta_acc_c from 500 resamples.
@@ -235,6 +256,32 @@ def tost_equivalence(
     }
 
 
+def _true_class_prob(
+    payload: dict, key: str, y_test: np.ndarray,
+) -> np.ndarray | None:
+    """P(true class) per row from a ``proba_*`` array in the payload, or None."""
+    if key not in payload or "proba_classes" not in payload:
+        return None
+    P = np.asarray(payload[key], dtype=np.float64)
+    classes = np.asarray(payload["proba_classes"]).astype(np.int64)
+    col_of = {int(c): i for i, c in enumerate(classes)}
+    try:
+        cols = np.array([col_of[int(c)] for c in y_test])
+    except KeyError:
+        return None
+    return P[np.arange(len(y_test)), cols]
+
+
+def _payload_provenance(payload: dict) -> dict[str, str | float | int | None]:
+    """Configuration recorded in the per-row payload by ``masked_line_ablation``."""
+    out: dict[str, str | float | int | None] = {}
+    for k in ("null_mode", "match_on", "fill_mode"):
+        out[k] = str(payload[k]) if k in payload else None
+    out["continuum_fill"] = float(payload["continuum_fill"]) if "continuum_fill" in payload else None
+    out["ablation_seed"] = int(payload["seed"]) if "seed" in payload else None
+    return out
+
+
 def _line_sets_in_payload(pr: dict) -> list[str]:
     return sorted(
         k.removeprefix("y_pred_masked__")
@@ -249,14 +296,17 @@ def main(argv: list[str] | None = None) -> int:
         "--per-row",
         type=Path,
         default=Path("artifacts/ablation/per_row_predictions.npz"),
-        help="path to per_row_predictions.npz ()",
+        help="path to per_row_predictions.npz written by scripts/ablation.py",
     )
     p.add_argument(
         "--out-dir",
         type=Path,
         default=Path("artifacts/ablation"),
     )
-    p.add_argument("--n-bootstrap", type=int, default=500)
+    p.add_argument(
+        "--n-bootstrap", type=int, default=2000,
+        help="bootstrap resamples (default 2000; the deposited artifacts used 500)",
+    )
     p.add_argument("--seed", type=int, default=42)
     p.add_argument(
         "--tost-indifference-zone",
@@ -278,7 +328,11 @@ def main(argv: list[str] | None = None) -> int:
     y_pred_base = payload["y_pred_base"].astype(np.int64)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     line_sets = _line_sets_in_payload(payload)
-    logger.info("loaded per-row payload with line sets: %s", line_sets)
+    provenance = _payload_provenance(payload)
+    true_prob_base = _true_class_prob(payload, "proba_base", y_test)
+    logger.info(
+        "loaded per-row payload with line sets: %s (provenance %s)", line_sets, provenance,
+    )
 
     # --- Step 2a: paired bootstrap on (Mg b, G) vs (Mg b, K) ---
     if "y_pred_masked__Mg_b" not in payload:
@@ -296,6 +350,7 @@ def main(argv: list[str] | None = None) -> int:
         "class_a": "G",
         "class_b": "K",
         "indifference_zone_decision_39": float(args.tost_indifference_zone),
+        "ablation_provenance": provenance,
         **paired,
     }
     paired_path = args.out_dir / "paired_bootstrap.json"
@@ -314,14 +369,19 @@ def main(argv: list[str] | None = None) -> int:
     label_to_name = {v: k for k, v in CLASS_NAME_TO_LABEL.items()}
     for set_name in line_sets:
         y_pred_masked = payload[f"y_pred_masked__{set_name}"].astype(np.int64)
+        true_prob_masked = _true_class_prob(payload, f"proba_masked__{set_name}", y_test)
         for label in (1, 2, 3):
-            row = flip_rate(y_test, y_pred_base, y_pred_masked, label)
+            row = flip_rate(
+                y_test, y_pred_base, y_pred_masked, label,
+                true_prob_base=true_prob_base, true_prob_masked=true_prob_masked,
+            )
             row["line_set"] = set_name
             row["mk_class"] = label_to_name[label]
             flips.append(row)
     flip_payload = {
         "n_line_sets": len(line_sets),
         "n_pairs": len(flips),
+        "ablation_provenance": provenance,
         "rows": flips,
     }
     flip_path = args.out_dir / "flip_rates.json"
@@ -362,6 +422,7 @@ def main(argv: list[str] | None = None) -> int:
         "decision_39_default": float(TOST_INDIFFERENCE_ZONE),
         "n_bootstrap": int(args.n_bootstrap),
         "seed": int(args.seed),
+        "ablation_provenance": provenance,
         "results": tost_results,
     }
     tost_path = args.out_dir / "tost.json"

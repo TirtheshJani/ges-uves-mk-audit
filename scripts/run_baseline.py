@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Non-ML baseline drivers (kNN and Pickles template-fit) for the test set.
 
-. Reviewer-moderate: a non-ML baseline scopes the audit's
+A non-ML baseline scopes the audit's
 substantive interest. If LightGBM beats kNN by > 0.05 macro-F1, the audit
 remains methodologically valuable. If the gap is smaller, the manuscript
 framing widens to "audit instrument independent of classifier performance".

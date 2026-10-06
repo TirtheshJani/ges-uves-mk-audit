@@ -1,17 +1,35 @@
 #!/usr/bin/env python
 # SPDX-License-Identifier: MIT
-"""Masked-line ablation driver: CSV of deltas + bootstrap CI + random-null p-values.
+"""Masked-line ablation driver: CSV of deltas, bootstrap CIs, Monte-Carlo p-values and paired flip statistics.
 
-implementation per Consumes the gap_mask key
-written by build_features.py to forbid the random-null sampler from drawing
-windows that land in the UVES inter-chip gap. Headline gate
-evaluates the three FGK pairs locked under (H_balmer, F),
-(Mg_b, G), (Mg_b, K). Two pivot pairs from are reported separately
-as confirmatory: (Na_D, K), (Ca_I, K).
+Consumes the ``gap_mask`` key written by ``build_features.py`` to forbid
+the random-window sampler from drawing windows that land in the UVES
+inter-chip gap. The headline gate evaluates the three pre-specified FGK
+pairs (H_balmer, F), (Mg_b, G), (Mg_b, K). Two pivot pairs are reported
+separately as confirmatory: (Na_D, K), (Ca_I, K).
 
-A continuum-fill sensitivity pass is run on the headline pairs only, comparing
-the locked CONTINUUM_FILL=1.0 against the empirical median of the test feature
-matrix outside the gap mask, per physics red-line Q4.
+A continuum-fill sensitivity pass is run on the headline pairs only,
+comparing CONTINUUM_FILL=1.0 against the empirical median of the test
+feature matrix outside the gap mask, and a fill-mode pass compares the
+constant, noise and linear-interpolation fills.
+
+Reference-set configuration (see ``src.interpret.ablation``):
+
+  --null-mode class_matched (default) compares each class's observed recall
+      delta against that class's own random-window recall deltas;
+      --null-mode pooled compares against the all-class accuracy deltas.
+  --match-on bins (default) draws random windows with the line set's exact
+      per-segment bin counts, mutually non-overlapping; --match-on angstrom
+      matches total width in Angstrom with equal-width segments.
+
+Legacy invocation that reproduces the deposited ``artifacts/ablation``
+outputs (pooled accuracy reference, Angstrom-matched windows, 500 random
+windows, 500 bootstrap resamples, constant empirical-median fill):
+
+    python scripts/ablation.py --features artifacts/features.npz \
+        --model artifacts/lgbm_mk.pkl --out-dir artifacts/ablation \
+        --null-mode pooled --match-on angstrom --n-random-controls 500 \
+        --n-bootstrap 500 --fill-mode constant --continuum-fill empirical-median
 """
 from __future__ import annotations
 
@@ -27,7 +45,13 @@ import numpy as np
 from src.interpret.classifier import load_model
 from src.interpret.line_match import save_sweep, sweep_tolerances
 from src.interpret.lines import ALLOWED_MK_CLASSES, LINE_SETS
-from src.interpret.occlusion import AblationRow, masked_line_ablation
+from src.interpret.ablation import (
+    VALID_FILL_MODES,
+    VALID_MATCH_ON,
+    VALID_NULL_MODES,
+    AblationRow,
+    masked_line_ablation,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -42,14 +66,11 @@ PIVOT_PAIRS: list[tuple[str, str]] = [
     ("Ca_I", "K"),
 ]
 
-# per-pair Bonferroni-corrected alpha for the headline
-# gate. Family-wise alpha = 0.01 across HEADLINE_PASS_FLOOR = 2 of the
-# len(HEADLINE_PAIRS) = 3 headline pairs, so per-pair alpha = 0.01 / 3 =
-# 0.00333.... The original default of 0.01 was uncorrected;
-# Step 9b applies the standard Bonferroni correction so the manuscript
-# abstract and section 3.5 can quote a per-pair threshold that is honest
-# vs the family-wise claim. Both production-passing pairs currently sit
-# at the Phipson-Smyth floor of 1/501 = 0.00200, well below 0.00333.
+# Per-pair Bonferroni-corrected alpha for the headline gate. Family-wise
+# alpha = 0.01 across the len(HEADLINE_PAIRS) = 3 headline pairs, so the
+# per-pair alpha is 0.01 / 3 = 0.00333.... With 500 random windows the
+# Phipson-Smyth floor is 1/501 = 0.00200; with the default 5000 windows it
+# is 1/5001 = 0.00020.
 GATE_FAMILYWISE_ALPHA: float = 0.01
 GATE_PVALUE_MAX: float = GATE_FAMILYWISE_ALPHA / 3.0
 GATE_DELTA_CI_HIGH_MAX: float = 0.0
@@ -78,8 +99,43 @@ def _row_lookup(rows: list[AblationRow]) -> dict[tuple[str, str], AblationRow]:
     return {(r.line_set, r.mk_class): r for r in rows}
 
 
+PAIRED_FIELDS: tuple[str, ...] = (
+    "n_bins_masked",
+    "total_width_aa",
+    "n_flip_lost",
+    "n_flip_gained",
+    "mcnemar_exact_p",
+    "mean_delta_true_prob",
+    "flip_rate_upper95",
+    "n_random_controls_succeeded",
+    "null_mode",
+    "match_on",
+    "fill_mode",
+)
+
+
+def _paired_fields(row: AblationRow) -> dict[str, Any]:
+    """JSON-serialisable view of the paired statistics and configuration fields."""
+    out: dict[str, Any] = {}
+    for name in PAIRED_FIELDS:
+        v = getattr(row, name)
+        if isinstance(v, (np.floating, float)):
+            v = float(v)
+            v = None if not np.isfinite(v) else v
+        elif isinstance(v, (np.integer, int)):
+            v = int(v)
+        out[name] = v
+    return out
+
+
 def evaluate_headline_gate(rows: list[AblationRow]) -> dict[str, Any]:
-    """Evaluate the FGK headline gate per 
+    """Evaluate the FGK headline gate on the ablation rows.
+
+    A headline pair passes when its Monte-Carlo p-value is at most
+    ``GATE_PVALUE_MAX`` and the upper bootstrap CI bound on delta is below
+    ``GATE_DELTA_CI_HIGH_MAX``. The paired statistics (flip counts, exact
+    McNemar p, mean change in true-class probability, Clopper-Pearson
+    bound) are reported per pair but do not enter the pass/fail decision.
 
     Returns a dict with:
       - n_pairs_passed: int
@@ -121,6 +177,7 @@ def evaluate_headline_gate(rows: list[AblationRow]) -> dict[str, Any]:
             "delta_acc_ci_low": float(row.delta_acc_ci_low),
             "delta_acc_ci_high": float(row.delta_acc_ci_high),
             "p_value_vs_random": float(row.p_value_vs_random),
+            **_paired_fields(row),
             "passed": passed,
         })
     pivot_eval: list[dict[str, Any]] = []
@@ -134,9 +191,9 @@ def evaluate_headline_gate(rows: list[AblationRow]) -> dict[str, Any]:
                 "predicted_near_zero": "",
             })
             continue
-        # predicted a near-zero delta for these pairs. We flag the
-        # prediction as confirmed when the 95 percent CI for delta_acc straddles
-        # zero or sits on the positive side; refuted otherwise.
+        # A near-zero delta is predicted for these pairs. The prediction is
+        # flagged as confirmed when the 95 percent CI for delta_acc straddles
+        # zero; refuted otherwise.
         ci_lo = float(row.delta_acc_ci_low)
         ci_hi = float(row.delta_acc_ci_high)
         confirms = bool(np.isfinite(ci_lo) and np.isfinite(ci_hi) and ci_lo <= 0.0 <= ci_hi)
@@ -149,6 +206,7 @@ def evaluate_headline_gate(rows: list[AblationRow]) -> dict[str, Any]:
             "delta_acc_ci_low": ci_lo,
             "delta_acc_ci_high": ci_hi,
             "p_value_vs_random": float(row.p_value_vs_random),
+            **_paired_fields(row),
             "decision_30_prediction": "near_zero_delta",
             "ci_straddles_zero": confirms,
         })
@@ -176,6 +234,8 @@ def _sensitivity_pass(
     n_random_controls: int,
     continuum_fill: float,
     fill_mode: str = "constant",
+    null_mode: str = "class_matched",
+    match_on: str = "bins",
 ) -> dict[tuple[str, str], float]:
     """Re-run masked_line_ablation on the headline line sets only with an
     explicit ``continuum_fill`` value and ``fill_mode``. Returns
@@ -199,6 +259,8 @@ def _sensitivity_pass(
         gap_mask=gap_mask,
         continuum_fill=continuum_fill,
         fill_mode=fill_mode,
+        null_mode=null_mode,
+        match_on=match_on,
     )
     return {(r.line_set, r.mk_class): float(r.delta_acc_mean) for r in rows}
 
@@ -210,7 +272,8 @@ def _line_match_with_gap_mask(
     json_path: Path,
 ) -> dict[str, Any]:
     """Run the line-matching tolerance sweep on the global perm-importance trace
-    after zeroing out gap-mask bins per implementation note (2).
+    after zeroing out gap-mask bins, so gap-imputed bins cannot register
+    as line matches.
     """
     if not perm_npz_path.exists():
         logger.warning("perm-importance npz not found at %s; skipping line match", perm_npz_path)
@@ -248,10 +311,39 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--features", required=True, type=Path)
     p.add_argument("--model", required=True, type=Path)
     p.add_argument("--out-dir", required=True, type=Path)
-    p.add_argument("--n-bootstrap", type=int, default=500)
     p.add_argument(
-        "--n-random-controls", type=int, default=500,
-        help="size of random-window null distribution; 500 -> p resolution 0.002",
+        "--n-bootstrap", type=int, default=2000,
+        help="bootstrap resamples for the delta CI (default 2000; legacy runs used 500)",
+    )
+    p.add_argument(
+        "--n-random-controls", type=int, default=5000,
+        help=(
+            "size of the random-window Monte-Carlo reference set; p-value "
+            "floor is 1/(B+1) (default 5000 -> 0.0002; legacy 500 -> 0.002)"
+        ),
+    )
+    p.add_argument(
+        "--null-mode", choices=VALID_NULL_MODES, default="class_matched",
+        help=(
+            "class_matched: compare each class's recall delta against that "
+            "class's random-window recall deltas (default); pooled: compare "
+            "against the all-class accuracy deltas (legacy)"
+        ),
+    )
+    p.add_argument(
+        "--match-on", choices=VALID_MATCH_ON, default="bins",
+        help=(
+            "bins: random windows reproduce the line set's per-segment bin "
+            "counts and do not overlap (default); angstrom: equal-width "
+            "segments matching total width in Angstrom (legacy)"
+        ),
+    )
+    p.add_argument(
+        "--fill-mode", choices=VALID_FILL_MODES + ("interp",), default="constant",
+        help=(
+            "production fill convention for masked bins: constant (default), "
+            "noise, or gp_interp/interp (linear interpolation)"
+        ),
     )
     p.add_argument("--boundary-k", type=float, default=150.0,
                    help="robustness subset: keep only spectra with boundary_distance_k >= this")
@@ -282,10 +374,16 @@ def main(argv: list[str] | None = None) -> None:
     )
 
     logger.info(
-        "ablation CLI: features=%s model=%s out_dir=%s n_bootstrap=%d n_random_controls=%d seed=%d",
+        "ablation CLI: features=%s model=%s out_dir=%s n_bootstrap=%d "
+        "n_random_controls=%d seed=%d null_mode=%s match_on=%s fill_mode=%s",
         args.features, args.model, args.out_dir, args.n_bootstrap,
-        args.n_random_controls, args.seed,
+        args.n_random_controls, args.seed, args.null_mode, args.match_on,
+        args.fill_mode,
     )
+    mode_kwargs: dict[str, Any] = {
+        "null_mode": args.null_mode,
+        "match_on": args.match_on,
+    }
 
     payload = np.load(args.features, allow_pickle=False)
     X = payload["X"]
@@ -302,8 +400,7 @@ def main(argv: list[str] | None = None) -> None:
 
     model = load_model(args.model)
     # Use the full ALLOWED_MK_CLASSES mapping so that integer class ids in y
-    # index correctly into class_labels even when not all classes are present
-    #.
+    # index correctly into class_labels even when not all classes are present.
     class_labels = list(ALLOWED_MK_CLASSES)
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
@@ -342,6 +439,8 @@ def main(argv: list[str] | None = None) -> None:
         continuum_fill=production_fill,
         draw_stats_out=draw_stats,
         per_row_out=per_row,
+        fill_mode=args.fill_mode,
+        **mode_kwargs,
     )
     full_csv = args.out_dir / "masked_line_ablation_full.csv"
     _write_csv(full_csv, rows_full)
@@ -368,6 +467,8 @@ def main(argv: list[str] | None = None) -> None:
             seed=args.seed,
             gap_mask=gap_mask,
             continuum_fill=production_fill,
+            fill_mode=args.fill_mode,
+            **mode_kwargs,
         )
         _write_csv(
             args.out_dir / f"masked_line_ablation_boundary{int(args.boundary_k)}.csv",
@@ -376,9 +477,9 @@ def main(argv: list[str] | None = None) -> None:
     else:
         logger.warning("fewer than 50 rows after boundary cut; skipping subset run")
 
-    # Continuum-fill sensitivity pass (physics red-line mandate).
-    # The check is invariant to the production fill: always compare a fill=1.0
-    # rerun against a fill=empirical-median rerun on the headline pairs only.
+    # Continuum-fill sensitivity pass. The check is invariant to the
+    # production fill: always compare a fill=1.0 rerun against a
+    # fill=empirical-median rerun on the headline pairs only.
     headline_line_sets = {
         name: LINE_SETS[name]
         for name in {ls for ls, _ in HEADLINE_PAIRS}
@@ -391,6 +492,8 @@ def main(argv: list[str] | None = None) -> None:
         n_bootstrap=args.n_bootstrap,
         n_random_controls=args.n_random_controls,
         continuum_fill=1.0,
+        fill_mode=args.fill_mode,
+        **mode_kwargs,
     )
     deltas_at_median = _sensitivity_pass(
         model, X_test, y_test, wc, class_labels, gap_mask,
@@ -399,6 +502,8 @@ def main(argv: list[str] | None = None) -> None:
         n_bootstrap=args.n_bootstrap,
         n_random_controls=args.n_random_controls,
         continuum_fill=empirical_median,
+        fill_mode=args.fill_mode,
+        **mode_kwargs,
     )
     sensitivity_pairs: list[dict[str, Any]] = []
     max_shift = 0.0
@@ -449,12 +554,11 @@ def main(argv: list[str] | None = None) -> None:
         "pairs": sensitivity_pairs,
     }
 
-    # Fill-mode third-condition sensitivity per Step 3.
-    # the c=1.0 sensitivity check exceeded the 0.02 trigger
-    # (max_shift = 0.039 in production) so the fill convention matters; the
-    # plan adds a third condition (noise-injection or interpolation) at the
-    # production continuum_fill to bound the audit's dependence on the
-    # specific fill convention.
+    # Fill-mode sensitivity. The constant-fill sensitivity check exceeded
+    # the 0.02 trigger (max_shift = 0.039 in production), so the fill
+    # convention matters; the noise-injection and linear-interpolation
+    # fills at the production continuum_fill bound the dependence of the
+    # headline deltas on the specific fill convention.
     production_continuum_fill = (
         1.0 if production_fill is None else float(production_fill)
     )
@@ -471,6 +575,7 @@ def main(argv: list[str] | None = None) -> None:
         n_random_controls=args.n_random_controls,
         continuum_fill=production_continuum_fill,
         fill_mode="constant",
+        **mode_kwargs,
     )
     deltas_noise = _sensitivity_pass(
         model, X_test, y_test, wc, class_labels, gap_mask,
@@ -480,6 +585,7 @@ def main(argv: list[str] | None = None) -> None:
         n_random_controls=args.n_random_controls,
         continuum_fill=production_continuum_fill,
         fill_mode="noise",
+        **mode_kwargs,
     )
     deltas_gp = _sensitivity_pass(
         model, X_test, y_test, wc, class_labels, gap_mask,
@@ -489,6 +595,7 @@ def main(argv: list[str] | None = None) -> None:
         n_random_controls=args.n_random_controls,
         continuum_fill=production_continuum_fill,
         fill_mode="gp_interp",
+        **mode_kwargs,
     )
     fill_mode_pairs: list[dict[str, Any]] = []
     max_fill_mode_shift = 0.0
@@ -511,7 +618,7 @@ def main(argv: list[str] | None = None) -> None:
             "shift_max_minus_min": shift,
         })
     fill_mode_sensitivity = {
-        "production_fill_mode": "constant",
+        "production_fill_mode": args.fill_mode,
         "production_continuum_fill": production_continuum_fill,
         "shift_threshold": SENSITIVITY_SHIFT_THRESHOLD,
         "max_shift": max_fill_mode_shift,
@@ -557,6 +664,11 @@ def main(argv: list[str] | None = None) -> None:
             "succeeded": stats["succeeded"],
             "rate": stats["succeeded"] / stats["requested"] if stats["requested"] else 0.0,
             "above_floor": stats["succeeded"] >= int(0.8 * stats["requested"]),
+            "match_on": stats.get("match_on"),
+            "target_bin_counts": stats.get("target_bin_counts"),
+            "target_total_width_aa": stats.get("target_total_width_aa"),
+            "n_draws_bin_matched": stats.get("n_draws_bin_matched"),
+            "realised_total_bins_histogram": stats.get("realised_total_bins_histogram"),
         }
         for set_name, stats in draw_stats.items()
     }
@@ -571,6 +683,9 @@ def main(argv: list[str] | None = None) -> None:
     gate["seed"] = int(args.seed)
     gate["n_bootstrap"] = int(args.n_bootstrap)
     gate["n_random_controls"] = int(args.n_random_controls)
+    gate["null_mode"] = args.null_mode
+    gate["match_on"] = args.match_on
+    gate["fill_mode"] = args.fill_mode
     gate["gate_threshold_per_pair"] = float(GATE_PVALUE_MAX)
     gate["gate_threshold_familywise_alpha"] = float(GATE_FAMILYWISE_ALPHA)
     gate["gate_correction"] = "bonferroni"

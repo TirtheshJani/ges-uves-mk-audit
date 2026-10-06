@@ -662,7 +662,7 @@ def _phase4_rows(gate: dict[str, Any], line_match: dict[str, Any]) -> list[dict[
             src_g,
             "$.n_random_controls",
             "4",
-            notes="raised from default 100 per physics red-line",
+            notes="raised from the earlier default of 100 to improve p-value resolution",
         )
     )
     rows.append(
@@ -829,7 +829,7 @@ def _phase5_rows(bench: dict[str, Any]) -> list[dict[str, str]]:
             src,
             "$.pickles_loader_stats.n_unmapped_skipped",
             "5",
-            notes="Pickles 109-131 luminosity duplicates per ",
+            notes="templates with neither a header spectral type nor a map entry",
         )
     )
 

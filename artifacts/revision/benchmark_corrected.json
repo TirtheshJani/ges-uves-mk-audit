@@ -1,0 +1,1412 @@
+{
+  "description": "Pickles 1998 UVKLIB template cross-check of the production classifier on the held-out test rows, with template spectral types read from the FITS headers; three template continuum conventions; audit rows used as stored.",
+  "inputs": {
+    "features": "artifacts\\features.npz",
+    "model": "artifacts\\lgbm_mk.pkl",
+    "pickles_dir": "C:\\Users\\TJ\\Documents\\GitHub\\stellar-mk-audit\\data\\pickles",
+    "n_templates": 131,
+    "n_test": 456,
+    "continuum_methods_deposited": [
+      "median_filter_200",
+      "median_filter_50",
+      "polynomial_n5"
+    ],
+    "continuum_methods_additional": [
+      "polynomial_n5_window"
+    ],
+    "polynomial_n5_window_aa": [
+      4701.18603515625,
+      6896.1953125
+    ],
+    "template_type_source": "FITS primary header card COMMENT1 ('spectral type: ...')",
+    "audit_side_normalisation": "none (features.npz rows as stored)",
+    "chi2": "unit-variance mean squared difference over bins finite in both spectra",
+    "seed": 42
+  },
+  "header_type_map": {
+    "1": {
+      "type": "O5V",
+      "metallicity": "solar",
+      "original_filename": "uko5v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "2": {
+      "type": "O9V",
+      "metallicity": "solar",
+      "original_filename": "uko9v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "3": {
+      "type": "B0V",
+      "metallicity": "solar",
+      "original_filename": "ukb0v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "4": {
+      "type": "B1V",
+      "metallicity": "solar",
+      "original_filename": "ukb1v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "5": {
+      "type": "B3V",
+      "metallicity": "solar",
+      "original_filename": "ukb3v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "6": {
+      "type": "B57V",
+      "metallicity": "solar",
+      "original_filename": "ukb57v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "7": {
+      "type": "B8V",
+      "metallicity": "solar",
+      "original_filename": "ukb8v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "8": {
+      "type": "B9V",
+      "metallicity": "solar",
+      "original_filename": "ukb9v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "9": {
+      "type": "A0V",
+      "metallicity": "solar",
+      "original_filename": "uka0v.dat",
+      "luminosity_class": "V",
+      "mk_class": "A"
+    },
+    "10": {
+      "type": "A2V",
+      "metallicity": "solar",
+      "original_filename": "uka2v.dat",
+      "luminosity_class": "V",
+      "mk_class": "A"
+    },
+    "11": {
+      "type": "A3V",
+      "metallicity": "solar",
+      "original_filename": "uka3v.dat",
+      "luminosity_class": "V",
+      "mk_class": "A"
+    },
+    "12": {
+      "type": "A5V",
+      "metallicity": "solar",
+      "original_filename": "uka5v.dat",
+      "luminosity_class": "V",
+      "mk_class": "A"
+    },
+    "13": {
+      "type": "A7V",
+      "metallicity": "solar",
+      "original_filename": "uka7v.dat",
+      "luminosity_class": "V",
+      "mk_class": "A"
+    },
+    "14": {
+      "type": "F0V",
+      "metallicity": "solar",
+      "original_filename": "ukf0v.dat",
+      "luminosity_class": "V",
+      "mk_class": "F"
+    },
+    "15": {
+      "type": "F2V",
+      "metallicity": "solar",
+      "original_filename": "ukf2v.dat",
+      "luminosity_class": "V",
+      "mk_class": "F"
+    },
+    "16": {
+      "type": "F5V",
+      "metallicity": "solar",
+      "original_filename": "ukf5v.dat",
+      "luminosity_class": "V",
+      "mk_class": "F"
+    },
+    "17": {
+      "type": "F5V",
+      "metallicity": "weak",
+      "original_filename": "ukwf5v.dat",
+      "luminosity_class": "V",
+      "mk_class": "F"
+    },
+    "18": {
+      "type": "F6V",
+      "metallicity": "solar",
+      "original_filename": "ukf6v.dat",
+      "luminosity_class": "V",
+      "mk_class": "F"
+    },
+    "19": {
+      "type": "F6V",
+      "metallicity": "rich",
+      "original_filename": "ukrf6v.dat",
+      "luminosity_class": "V",
+      "mk_class": "F"
+    },
+    "20": {
+      "type": "F8V",
+      "metallicity": "solar",
+      "original_filename": "ukf8v.dat",
+      "luminosity_class": "V",
+      "mk_class": "F"
+    },
+    "21": {
+      "type": "F8V",
+      "metallicity": "weak",
+      "original_filename": "ukwf8v.dat",
+      "luminosity_class": "V",
+      "mk_class": "F"
+    },
+    "22": {
+      "type": "F8V",
+      "metallicity": "rich",
+      "original_filename": "ukrf8v.dat",
+      "luminosity_class": "V",
+      "mk_class": "F"
+    },
+    "23": {
+      "type": "G0V",
+      "metallicity": "solar",
+      "original_filename": "ukg0v.dat",
+      "luminosity_class": "V",
+      "mk_class": "G"
+    },
+    "24": {
+      "type": "G0V",
+      "metallicity": "weak",
+      "original_filename": "ukwg0v.dat",
+      "luminosity_class": "V",
+      "mk_class": "G"
+    },
+    "25": {
+      "type": "G0V",
+      "metallicity": "rich",
+      "original_filename": "ukrg0v.dat",
+      "luminosity_class": "V",
+      "mk_class": "G"
+    },
+    "26": {
+      "type": "G2V",
+      "metallicity": "solar",
+      "original_filename": "ukg2v.dat",
+      "luminosity_class": "V",
+      "mk_class": "G"
+    },
+    "27": {
+      "type": "G5V",
+      "metallicity": "solar",
+      "original_filename": "ukg5v.dat",
+      "luminosity_class": "V",
+      "mk_class": "G"
+    },
+    "28": {
+      "type": "G5V",
+      "metallicity": "weak",
+      "original_filename": "ukwg5v.dat",
+      "luminosity_class": "V",
+      "mk_class": "G"
+    },
+    "29": {
+      "type": "G5V",
+      "metallicity": "rich",
+      "original_filename": "ukrg5v.dat",
+      "luminosity_class": "V",
+      "mk_class": "G"
+    },
+    "30": {
+      "type": "G8V",
+      "metallicity": "solar",
+      "original_filename": "ukg8v.dat",
+      "luminosity_class": "V",
+      "mk_class": "G"
+    },
+    "31": {
+      "type": "K0V",
+      "metallicity": "solar",
+      "original_filename": "ukk0v.dat",
+      "luminosity_class": "V",
+      "mk_class": "K"
+    },
+    "32": {
+      "type": "K0V",
+      "metallicity": "rich",
+      "original_filename": "ukrk0v.dat",
+      "luminosity_class": "V",
+      "mk_class": "K"
+    },
+    "33": {
+      "type": "K2V",
+      "metallicity": "solar",
+      "original_filename": "ukk2v.dat",
+      "luminosity_class": "V",
+      "mk_class": "K"
+    },
+    "34": {
+      "type": "K3V",
+      "metallicity": "solar",
+      "original_filename": "ukk3v.dat",
+      "luminosity_class": "V",
+      "mk_class": "K"
+    },
+    "35": {
+      "type": "K4V",
+      "metallicity": "solar",
+      "original_filename": "ukk4v.dat",
+      "luminosity_class": "V",
+      "mk_class": "K"
+    },
+    "36": {
+      "type": "K5V",
+      "metallicity": "solar",
+      "original_filename": "ukk5v.dat",
+      "luminosity_class": "V",
+      "mk_class": "K"
+    },
+    "37": {
+      "type": "K7V",
+      "metallicity": "solar",
+      "original_filename": "ukk7v.dat",
+      "luminosity_class": "V",
+      "mk_class": "K"
+    },
+    "38": {
+      "type": "M0V",
+      "metallicity": "solar",
+      "original_filename": "ukm0v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "39": {
+      "type": "M1V",
+      "metallicity": "solar",
+      "original_filename": "ukm1v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "40": {
+      "type": "M2V",
+      "metallicity": "solar",
+      "original_filename": "ukm2v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "41": {
+      "type": "M2.5V",
+      "metallicity": "solar",
+      "original_filename": "ukm2.5v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "42": {
+      "type": "M3V",
+      "metallicity": "solar",
+      "original_filename": "ukm3v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "43": {
+      "type": "M4V",
+      "metallicity": "solar",
+      "original_filename": "ukm4v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "44": {
+      "type": "M5V",
+      "metallicity": "solar",
+      "original_filename": "ukm5v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "45": {
+      "type": "M6V",
+      "metallicity": "solar",
+      "original_filename": "ukm6v.dat",
+      "luminosity_class": "V",
+      "mk_class": "OTHER"
+    },
+    "46": {
+      "type": "B2IV",
+      "metallicity": "solar",
+      "original_filename": "ukb2iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "OTHER"
+    },
+    "47": {
+      "type": "B6IV",
+      "metallicity": "solar",
+      "original_filename": "ukb6iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "OTHER"
+    },
+    "48": {
+      "type": "A0IV",
+      "metallicity": "solar",
+      "original_filename": "uka0iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "A"
+    },
+    "49": {
+      "type": "A47IV",
+      "metallicity": "solar",
+      "original_filename": "uka47iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "A"
+    },
+    "50": {
+      "type": "F02IV",
+      "metallicity": "solar",
+      "original_filename": "ukf02iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "F"
+    },
+    "51": {
+      "type": "F5IV",
+      "metallicity": "solar",
+      "original_filename": "ukf5iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "F"
+    },
+    "52": {
+      "type": "F8IV",
+      "metallicity": "solar",
+      "original_filename": "ukf8iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "F"
+    },
+    "53": {
+      "type": "G0IV",
+      "metallicity": "solar",
+      "original_filename": "ukg0iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "G"
+    },
+    "54": {
+      "type": "G2IV",
+      "metallicity": "solar",
+      "original_filename": "ukg2iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "G"
+    },
+    "55": {
+      "type": "G5IV",
+      "metallicity": "solar",
+      "original_filename": "ukg5iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "G"
+    },
+    "56": {
+      "type": "G8IV",
+      "metallicity": "solar",
+      "original_filename": "ukg8iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "G"
+    },
+    "57": {
+      "type": "K0IV",
+      "metallicity": "solar",
+      "original_filename": "ukk0iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "K"
+    },
+    "58": {
+      "type": "K1IV",
+      "metallicity": "solar",
+      "original_filename": "ukk1iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "K"
+    },
+    "59": {
+      "type": "K3IV",
+      "metallicity": "solar",
+      "original_filename": "ukk3iv.dat",
+      "luminosity_class": "IV",
+      "mk_class": "K"
+    },
+    "60": {
+      "type": "O8III",
+      "metallicity": "solar",
+      "original_filename": "uko8iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "61": {
+      "type": "B12III",
+      "metallicity": "solar",
+      "original_filename": "ukb12iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "62": {
+      "type": "B3III",
+      "metallicity": "solar",
+      "original_filename": "ukb3iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "63": {
+      "type": "B5III",
+      "metallicity": "solar",
+      "original_filename": "ukb5iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "64": {
+      "type": "B9III",
+      "metallicity": "solar",
+      "original_filename": "ukb9iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "65": {
+      "type": "A0III",
+      "metallicity": "solar",
+      "original_filename": "uka0iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "A"
+    },
+    "66": {
+      "type": "A3III",
+      "metallicity": "solar",
+      "original_filename": "uka3iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "A"
+    },
+    "67": {
+      "type": "A5III",
+      "metallicity": "solar",
+      "original_filename": "uka5iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "A"
+    },
+    "68": {
+      "type": "A7III",
+      "metallicity": "solar",
+      "original_filename": "uka7iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "A"
+    },
+    "69": {
+      "type": "F0III",
+      "metallicity": "solar",
+      "original_filename": "ukf0iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "F"
+    },
+    "70": {
+      "type": "F2III",
+      "metallicity": "solar",
+      "original_filename": "ukf2iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "F"
+    },
+    "71": {
+      "type": "F5III",
+      "metallicity": "solar",
+      "original_filename": "ukf5iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "F"
+    },
+    "72": {
+      "type": "G0III",
+      "metallicity": "solar",
+      "original_filename": "ukg0iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "G"
+    },
+    "73": {
+      "type": "G5III",
+      "metallicity": "solar",
+      "original_filename": "ukg5iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "G"
+    },
+    "74": {
+      "type": "G5III",
+      "metallicity": "weak",
+      "original_filename": "ukwg5iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "G"
+    },
+    "75": {
+      "type": "G5III",
+      "metallicity": "rich",
+      "original_filename": "ukrg5iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "G"
+    },
+    "76": {
+      "type": "G8III",
+      "metallicity": "solar",
+      "original_filename": "ukg8iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "G"
+    },
+    "77": {
+      "type": "G8III",
+      "metallicity": "weak",
+      "original_filename": "ukwg8iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "G"
+    },
+    "78": {
+      "type": "K0III",
+      "metallicity": "solar",
+      "original_filename": "ukk0iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "79": {
+      "type": "K0III",
+      "metallicity": "weak",
+      "original_filename": "ukwk0iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "80": {
+      "type": "K0III",
+      "metallicity": "rich",
+      "original_filename": "ukrk0iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "81": {
+      "type": "K1III",
+      "metallicity": "solar",
+      "original_filename": "ukk1iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "82": {
+      "type": "K1III",
+      "metallicity": "weak",
+      "original_filename": "ukwk1iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "83": {
+      "type": "K1III",
+      "metallicity": "rich",
+      "original_filename": "ukrk1iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "84": {
+      "type": "K2III",
+      "metallicity": "solar",
+      "original_filename": "ukk2iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "85": {
+      "type": "K2III",
+      "metallicity": "weak",
+      "original_filename": "ukwk2iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "86": {
+      "type": "K2III",
+      "metallicity": "rich",
+      "original_filename": "ukrk2iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "87": {
+      "type": "K3III",
+      "metallicity": "solar",
+      "original_filename": "ukk3iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "88": {
+      "type": "K3III",
+      "metallicity": "weak",
+      "original_filename": "ukwk3iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "89": {
+      "type": "K3III",
+      "metallicity": "rich",
+      "original_filename": "ukrk3iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "90": {
+      "type": "K4III",
+      "metallicity": "solar",
+      "original_filename": "ukk4iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "91": {
+      "type": "K4III",
+      "metallicity": "weak",
+      "original_filename": "ukwk4iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "92": {
+      "type": "K4III",
+      "metallicity": "rich",
+      "original_filename": "ukrk4iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "93": {
+      "type": "K5III",
+      "metallicity": "solar",
+      "original_filename": "ukk5iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "94": {
+      "type": "K5III",
+      "metallicity": "rich",
+      "original_filename": "ukrk5iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "K"
+    },
+    "95": {
+      "type": "M0III",
+      "metallicity": "solar",
+      "original_filename": "ukm0iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "96": {
+      "type": "M1III",
+      "metallicity": "solar",
+      "original_filename": "ukm1iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "97": {
+      "type": "M2III",
+      "metallicity": "solar",
+      "original_filename": "ukm2iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "98": {
+      "type": "M3III",
+      "metallicity": "solar",
+      "original_filename": "ukm3iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "99": {
+      "type": "M4III",
+      "metallicity": "solar",
+      "original_filename": "ukm4iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "100": {
+      "type": "M5III",
+      "metallicity": "solar",
+      "original_filename": "ukm5iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "101": {
+      "type": "M6III",
+      "metallicity": "solar",
+      "original_filename": "ukm6iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "102": {
+      "type": "M7III",
+      "metallicity": "solar",
+      "original_filename": "ukm7iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "103": {
+      "type": "M8III",
+      "metallicity": "solar",
+      "original_filename": "ukm8iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "104": {
+      "type": "M9III",
+      "metallicity": "solar",
+      "original_filename": "ukm9iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "105": {
+      "type": "M10III",
+      "metallicity": "solar",
+      "original_filename": "ukm10iii.dat",
+      "luminosity_class": "III",
+      "mk_class": "OTHER"
+    },
+    "106": {
+      "type": "B2II",
+      "metallicity": "solar",
+      "original_filename": "ukb2ii.dat",
+      "luminosity_class": "II",
+      "mk_class": "OTHER"
+    },
+    "107": {
+      "type": "B5II",
+      "metallicity": "solar",
+      "original_filename": "ukb5ii.dat",
+      "luminosity_class": "II",
+      "mk_class": "OTHER"
+    },
+    "108": {
+      "type": "F0II",
+      "metallicity": "solar",
+      "original_filename": "ukf0ii.dat",
+      "luminosity_class": "II",
+      "mk_class": "F"
+    },
+    "109": {
+      "type": "F2II",
+      "metallicity": "solar",
+      "original_filename": "ukf2ii.dat",
+      "luminosity_class": "II",
+      "mk_class": "F"
+    },
+    "110": {
+      "type": "G5II",
+      "metallicity": "solar",
+      "original_filename": "ukg5ii.dat",
+      "luminosity_class": "II",
+      "mk_class": "G"
+    },
+    "111": {
+      "type": "K01II",
+      "metallicity": "solar",
+      "original_filename": "ukk01ii.dat",
+      "luminosity_class": "II",
+      "mk_class": "K"
+    },
+    "112": {
+      "type": "K34II",
+      "metallicity": "solar",
+      "original_filename": "ukk34ii.dat",
+      "luminosity_class": "II",
+      "mk_class": "K"
+    },
+    "113": {
+      "type": "M3II",
+      "metallicity": "solar",
+      "original_filename": "ukm3ii.dat",
+      "luminosity_class": "II",
+      "mk_class": "OTHER"
+    },
+    "114": {
+      "type": "B0I",
+      "metallicity": "solar",
+      "original_filename": "ukb0i.dat",
+      "luminosity_class": "I",
+      "mk_class": "OTHER"
+    },
+    "115": {
+      "type": "B1I",
+      "metallicity": "solar",
+      "original_filename": "ukb1i.dat",
+      "luminosity_class": "I",
+      "mk_class": "OTHER"
+    },
+    "116": {
+      "type": "B3I",
+      "metallicity": "solar",
+      "original_filename": "ukb3i.dat",
+      "luminosity_class": "I",
+      "mk_class": "OTHER"
+    },
+    "117": {
+      "type": "B5I",
+      "metallicity": "solar",
+      "original_filename": "ukb5i.dat",
+      "luminosity_class": "I",
+      "mk_class": "OTHER"
+    },
+    "118": {
+      "type": "B8I",
+      "metallicity": "solar",
+      "original_filename": "ukb8i.dat",
+      "luminosity_class": "I",
+      "mk_class": "OTHER"
+    },
+    "119": {
+      "type": "A0I",
+      "metallicity": "solar",
+      "original_filename": "uka0i.dat",
+      "luminosity_class": "I",
+      "mk_class": "A"
+    },
+    "120": {
+      "type": "A2I",
+      "metallicity": "solar",
+      "original_filename": "uka2i.dat",
+      "luminosity_class": "I",
+      "mk_class": "A"
+    },
+    "121": {
+      "type": "F0I",
+      "metallicity": "solar",
+      "original_filename": "ukf0i.dat",
+      "luminosity_class": "I",
+      "mk_class": "F"
+    },
+    "122": {
+      "type": "F5I",
+      "metallicity": "solar",
+      "original_filename": "ukf5i.dat",
+      "luminosity_class": "I",
+      "mk_class": "F"
+    },
+    "123": {
+      "type": "F8I",
+      "metallicity": "solar",
+      "original_filename": "ukf8i.dat",
+      "luminosity_class": "I",
+      "mk_class": "F"
+    },
+    "124": {
+      "type": "G0I",
+      "metallicity": "solar",
+      "original_filename": "ukg0i.dat",
+      "luminosity_class": "I",
+      "mk_class": "G"
+    },
+    "125": {
+      "type": "G2I",
+      "metallicity": "solar",
+      "original_filename": "ukg2i.dat",
+      "luminosity_class": "I",
+      "mk_class": "G"
+    },
+    "126": {
+      "type": "G5I",
+      "metallicity": "solar",
+      "original_filename": "ukg5i.dat",
+      "luminosity_class": "I",
+      "mk_class": "G"
+    },
+    "127": {
+      "type": "G8I",
+      "metallicity": "solar",
+      "original_filename": "ukg8i.dat",
+      "luminosity_class": "I",
+      "mk_class": "G"
+    },
+    "128": {
+      "type": "K2I",
+      "metallicity": "solar",
+      "original_filename": "ukk2i.dat",
+      "luminosity_class": "I",
+      "mk_class": "K"
+    },
+    "129": {
+      "type": "K3I",
+      "metallicity": "solar",
+      "original_filename": "ukk3i.dat",
+      "luminosity_class": "I",
+      "mk_class": "K"
+    },
+    "130": {
+      "type": "K4I",
+      "metallicity": "solar",
+      "original_filename": "ukk4i.dat",
+      "luminosity_class": "I",
+      "mk_class": "K"
+    },
+    "131": {
+      "type": "M2I",
+      "metallicity": "solar",
+      "original_filename": "ukm2i.dat",
+      "luminosity_class": "I",
+      "mk_class": "OTHER"
+    }
+  },
+  "readme_ordering_check": {
+    "V": {
+      "indices": [
+        1,
+        45
+      ],
+      "header_luminosity_counts": {
+        "V": 45
+      },
+      "consistent": true
+    },
+    "IV": {
+      "indices": [
+        46,
+        59
+      ],
+      "header_luminosity_counts": {
+        "IV": 14
+      },
+      "consistent": true
+    },
+    "III": {
+      "indices": [
+        60,
+        105
+      ],
+      "header_luminosity_counts": {
+        "III": 46
+      },
+      "consistent": true
+    },
+    "II": {
+      "indices": [
+        106,
+        113
+      ],
+      "header_luminosity_counts": {
+        "II": 8
+      },
+      "consistent": true
+    },
+    "I": {
+      "indices": [
+        114,
+        131
+      ],
+      "header_luminosity_counts": {
+        "I": 18
+      },
+      "consistent": true
+    }
+  },
+  "embedded_map_vs_header": {
+    "n_embedded_entries": 131,
+    "n_agree": 131,
+    "disagreements": {}
+  },
+  "per_method": {
+    "median_filter_200": {
+      "n_test": 456,
+      "n_compared_fgk": 448,
+      "n_best_template_A": 3,
+      "n_best_template_M": 4,
+      "n_best_template_OBA_other": 1,
+      "best_template_letter_counts": {
+        "F": 178,
+        "G": 174,
+        "K": 96,
+        "B": 1,
+        "M": 4,
+        "A": 3
+      },
+      "best_template_luminosity_counts": {
+        "supergiant": 242,
+        "dwarf": 203,
+        "subgiant": 2,
+        "giant": 9
+      },
+      "fraction_best_template_dwarf": 0.4451754385964912,
+      "fraction_best_template_subgiant": 0.0043859649122807015,
+      "fraction_best_template_giant": 0.019736842105263157,
+      "fraction_best_template_supergiant": 0.5307017543859649,
+      "best_template_luminosity_by_true_class": {
+        "F": {
+          "supergiant": 70,
+          "dwarf": 10,
+          "subgiant": 1
+        },
+        "G": {
+          "supergiant": 129,
+          "dwarf": 98,
+          "subgiant": 1,
+          "giant": 2
+        },
+        "K": {
+          "dwarf": 95,
+          "supergiant": 43,
+          "giant": 7
+        }
+      },
+      "best_template_type_counts_top": {
+        "F5I": 164,
+        "G5V": 104,
+        "K0V": 79,
+        "G0I": 69,
+        "K3V": 8,
+        "K2III": 8,
+        "F8I": 5,
+        "F0V": 3,
+        "A7V": 3,
+        "M3II": 3,
+        "F6V": 2,
+        "F8V": 2
+      },
+      "agreement_rate_model_vs_pickles": 0.53125,
+      "per_class_precision": {
+        "F": 0.8405797101449275,
+        "G": 0.4666666666666667,
+        "K": 0.4892086330935252
+      },
+      "per_class_recall": {
+        "F": 0.3258426966292135,
+        "G": 0.6436781609195402,
+        "K": 0.7083333333333334
+      },
+      "macro_f1_fgk": 0.5298072779060169,
+      "confusion_rows_pickles_cols_model": [
+        [
+          58,
+          101,
+          19
+        ],
+        [
+          10,
+          112,
+          52
+        ],
+        [
+          1,
+          27,
+          68
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "agreement_rate_truth_vs_pickles": 0.5357142857142857,
+      "per_class_recall_truth_vs_pickles": {
+        "F": 0.33707865168539325,
+        "G": 0.6206896551724138,
+        "K": 0.75
+      },
+      "legacy_style_agreement_including_A_rows": 0.5277161862527716,
+      "legacy_style_n_compared": 451,
+      "gate": {
+        "required_agreement": 0.55,
+        "min_n_compared": 100,
+        "observed_agreement": 0.53125,
+        "n_compared": 448,
+        "status": "FAIL"
+      }
+    },
+    "median_filter_50": {
+      "n_test": 456,
+      "n_compared_fgk": 433,
+      "n_best_template_A": 21,
+      "n_best_template_M": 2,
+      "n_best_template_OBA_other": 0,
+      "best_template_letter_counts": {
+        "G": 21,
+        "F": 61,
+        "K": 351,
+        "A": 21,
+        "M": 2
+      },
+      "best_template_luminosity_counts": {
+        "subgiant": 11,
+        "supergiant": 78,
+        "dwarf": 337,
+        "giant": 30
+      },
+      "fraction_best_template_dwarf": 0.7390350877192983,
+      "fraction_best_template_subgiant": 0.02412280701754386,
+      "fraction_best_template_giant": 0.06578947368421052,
+      "fraction_best_template_supergiant": 0.17105263157894737,
+      "best_template_luminosity_by_true_class": {
+        "F": {
+          "subgiant": 7,
+          "supergiant": 44,
+          "dwarf": 17,
+          "giant": 13
+        },
+        "G": {
+          "dwarf": 195,
+          "giant": 9,
+          "supergiant": 22,
+          "subgiant": 4
+        },
+        "K": {
+          "dwarf": 125,
+          "giant": 8,
+          "supergiant": 12
+        }
+      },
+      "best_template_type_counts_top": {
+        "K0V": 323,
+        "F5I": 41,
+        "F0II": 19,
+        "K2I": 18,
+        "A0III": 15,
+        "G0III": 9,
+        "G0IV": 6,
+        "K4III": 5,
+        "G0V": 4,
+        "A47IV": 4,
+        "K4V": 3,
+        "G5V": 2
+      },
+      "agreement_rate_model_vs_pickles": 0.41570438799076215,
+      "per_class_precision": {
+        "F": 0.6896551724137931,
+        "G": 0.0425531914893617,
+        "K": 0.9285714285714286
+      },
+      "per_class_recall": {
+        "F": 0.6557377049180327,
+        "G": 0.47619047619047616,
+        "K": 0.37037037037037035
+      },
+      "macro_f1_fgk": 0.42664182526371036,
+      "confusion_rows_pickles_cols_model": [
+        [
+          40,
+          16,
+          5
+        ],
+        [
+          6,
+          10,
+          5
+        ],
+        [
+          12,
+          209,
+          130
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "agreement_rate_truth_vs_pickles": 0.42725173210161665,
+      "per_class_recall_truth_vs_pickles": {
+        "F": 0.6885245901639344,
+        "G": 0.42857142857142855,
+        "K": 0.3817663817663818
+      },
+      "legacy_style_agreement_including_A_rows": 0.3964757709251101,
+      "legacy_style_n_compared": 454,
+      "gate": {
+        "required_agreement": 0.55,
+        "min_n_compared": 100,
+        "observed_agreement": 0.41570438799076215,
+        "n_compared": 433,
+        "status": "FAIL"
+      }
+    },
+    "polynomial_n5": {
+      "n_test": 456,
+      "n_compared_fgk": 0,
+      "n_best_template_A": 0,
+      "n_best_template_M": 85,
+      "n_best_template_OBA_other": 371,
+      "best_template_letter_counts": {
+        "B": 371,
+        "M": 85
+      },
+      "best_template_luminosity_counts": {
+        "supergiant": 451,
+        "dwarf": 5
+      },
+      "fraction_best_template_dwarf": 0.010964912280701754,
+      "fraction_best_template_subgiant": 0.0,
+      "fraction_best_template_giant": 0.0,
+      "fraction_best_template_supergiant": 0.9890350877192983,
+      "best_template_luminosity_by_true_class": {
+        "F": {
+          "supergiant": 79,
+          "dwarf": 2
+        },
+        "G": {
+          "supergiant": 228,
+          "dwarf": 2
+        },
+        "K": {
+          "supergiant": 144,
+          "dwarf": 1
+        }
+      },
+      "best_template_type_counts_top": {
+        "B5II": 371,
+        "M2I": 80,
+        "M2V": 2,
+        "M0V": 2,
+        "M1V": 1
+      },
+      "agreement_rate_model_vs_pickles": null,
+      "per_class_precision": {
+        "F": null,
+        "G": null,
+        "K": null
+      },
+      "per_class_recall": {
+        "F": null,
+        "G": null,
+        "K": null
+      },
+      "macro_f1_fgk": null,
+      "confusion_rows_pickles_cols_model": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "agreement_rate_truth_vs_pickles": null,
+      "per_class_recall_truth_vs_pickles": {
+        "F": null,
+        "G": null,
+        "K": null
+      },
+      "legacy_style_agreement_including_A_rows": null,
+      "legacy_style_n_compared": 0,
+      "gate": {
+        "required_agreement": 0.55,
+        "min_n_compared": 100,
+        "observed_agreement": null,
+        "n_compared": 0,
+        "status": "FAIL"
+      }
+    },
+    "polynomial_n5_window": {
+      "n_test": 456,
+      "n_compared_fgk": 387,
+      "n_best_template_A": 48,
+      "n_best_template_M": 1,
+      "n_best_template_OBA_other": 20,
+      "best_template_letter_counts": {
+        "F": 343,
+        "A": 48,
+        "O": 18,
+        "K": 39,
+        "B": 2,
+        "G": 5,
+        "M": 1
+      },
+      "best_template_luminosity_counts": {
+        "supergiant": 345,
+        "giant": 47,
+        "dwarf": 64
+      },
+      "fraction_best_template_dwarf": 0.14035087719298245,
+      "fraction_best_template_subgiant": 0.0,
+      "fraction_best_template_giant": 0.10307017543859649,
+      "fraction_best_template_supergiant": 0.756578947368421,
+      "best_template_luminosity_by_true_class": {
+        "F": {
+          "supergiant": 69,
+          "giant": 8,
+          "dwarf": 4
+        },
+        "G": {
+          "supergiant": 199,
+          "giant": 22,
+          "dwarf": 9
+        },
+        "K": {
+          "supergiant": 77,
+          "dwarf": 51,
+          "giant": 17
+        }
+      },
+      "best_template_type_counts_top": {
+        "F5I": 336,
+        "K3V": 38,
+        "A0III": 26,
+        "A5III": 21,
+        "O9V": 18,
+        "G5V": 5,
+        "F8I": 4,
+        "F0II": 2,
+        "B0I": 2,
+        "A0I": 1,
+        "F6V": 1,
+        "M6V": 1
+      },
+      "agreement_rate_model_vs_pickles": 0.2661498708010336,
+      "per_class_precision": {
+        "F": 1.0,
+        "G": 0.014018691588785047,
+        "K": 0.3482142857142857
+      },
+      "per_class_recall": {
+        "F": 0.17784256559766765,
+        "G": 0.6,
+        "K": 1.0
+      },
+      "macro_f1_fgk": 0.281977916561501,
+      "confusion_rows_pickles_cols_model": [
+        [
+          61,
+          211,
+          71
+        ],
+        [
+          0,
+          3,
+          2
+        ],
+        [
+          0,
+          0,
+          39
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "agreement_rate_truth_vs_pickles": 0.2842377260981912,
+      "per_class_recall_truth_vs_pickles": {
+        "F": 0.19825072886297376,
+        "G": 0.6,
+        "K": 1.0
+      },
+      "legacy_style_agreement_including_A_rows": 0.2367816091954023,
+      "legacy_style_n_compared": 435,
+      "gate": {
+        "required_agreement": 0.55,
+        "min_n_compared": 100,
+        "observed_agreement": 0.2661498708010336,
+        "n_compared": 387,
+        "status": "FAIL"
+      }
+    }
+  },
+  "any_method_passes_gate": false,
+  "any_deposited_method_passes_gate": false
+}

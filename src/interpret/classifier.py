@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 """LightGBM multiclass wrapper for the MK interpretability pipeline.
 
-Hyper-parameters follow the locked-in plan: balanced class weights, shallow
+Hyper-parameters are fixed before training: balanced class weights, shallow
 enough trees to keep SHAP tractable, early stopping on validation loss.
 
 The wrapper exposes the sklearn API (``fit``/``predict``) so that
@@ -303,7 +303,9 @@ def train_cv(
 ) -> dict[str, Any]:
     """Run group-aware stratified k-fold CV and return per-fold metrics.
 
-    Uses ``sklearn.model_selection.StratifiedGroupKFold`` per (Blanco-Cuaresma 2019, MNRAS 486, 2075). When the supplied ``groups``
+    Uses ``sklearn.model_selection.StratifiedGroupKFold`` so that spatially
+    co-located stars never straddle a fold boundary (Blanco-Cuaresma 2019,
+    MNRAS 486, 2075). When the supplied ``groups``
     array carries fewer unique values than ``n_splits``, the splitter cannot
     form valid folds, and the function logs the situation and degrades to
     ``StratifiedKFold`` without re-deriving groups.
@@ -467,7 +469,7 @@ def boundary_filtered_accuracy(
     and compares it to full-test accuracy. A physically-aware classifier should
     score higher on the boundary-filtered subset because temperature-edge cases
     are removed. Bootstrap 95 percent CI on delta_acc with 1000 resamples,
-    seed=42, follows the physics red-line.
+    seed=42. The filter is applied to the test split only.
     """
     X_test = np.asarray(X_test)
     y_test = np.asarray(y_test)

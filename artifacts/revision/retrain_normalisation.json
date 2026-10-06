@@ -1,0 +1,396 @@
+{
+  "description": "LightGBM retrained with the production hyperparameters on the same train/val/test partition under four continuum normalisations, with Mg b masked-line ablation deltas for each retrained model.",
+  "inputs": {
+    "features": "artifacts\\features.npz",
+    "hyperparameter_source": "artifacts\\lgbm_mk.pkl",
+    "hyperparameters": {
+      "boosting_type": "gbdt",
+      "class_weight": "balanced",
+      "colsample_bytree": 0.9,
+      "importance_type": "split",
+      "learning_rate": 0.05,
+      "max_depth": 8,
+      "min_child_samples": 20,
+      "min_child_weight": 0.001,
+      "min_split_gain": 0.0,
+      "n_estimators": 500,
+      "n_jobs": -1,
+      "num_leaves": 63,
+      "objective": "multiclass",
+      "random_state": 42,
+      "reg_alpha": 0.0,
+      "reg_lambda": 0.0,
+      "subsample": 0.9,
+      "subsample_for_bin": 200000,
+      "subsample_freq": 1,
+      "verbose": -1,
+      "num_class": 3
+    },
+    "early_stopping_rounds": 50,
+    "early_stopping_metric": "multi_logloss on val rows",
+    "n_train": 2122,
+    "n_val": 454,
+    "n_test": 456,
+    "n_random_controls": 500,
+    "n_bootstrap": 500,
+    "seed": 42,
+    "polynomial_order": 5,
+    "sigma_clip": 3.0,
+    "sigma_clip_iters": 5,
+    "line_set_Mg_b_aa": [
+      [
+        5165.0,
+        5186.0
+      ]
+    ]
+  },
+  "deposited_model_test": {
+    "accuracy": 0.9342105263157895,
+    "macro_f1": 0.926209019232275,
+    "per_class_recall": {
+      "F": 0.8395061728395061,
+      "G": 0.9652173913043478,
+      "K": 0.9379310344827586
+    },
+    "confusion_matrix": [
+      [
+        68,
+        13,
+        0
+      ],
+      [
+        3,
+        222,
+        5
+      ],
+      [
+        1,
+        8,
+        136
+      ]
+    ],
+    "confusion_labels": [
+      "F",
+      "G",
+      "K"
+    ],
+    "g_to_k": 5,
+    "best_iteration": 120
+  },
+  "retrained": {
+    "production": {
+      "transform": "deposited features unchanged",
+      "test": {
+        "accuracy": 0.9342105263157895,
+        "macro_f1": 0.926209019232275,
+        "per_class_recall": {
+          "F": 0.8395061728395061,
+          "G": 0.9652173913043478,
+          "K": 0.9379310344827586
+        },
+        "confusion_matrix": [
+          [
+            68,
+            13,
+            0
+          ],
+          [
+            3,
+            222,
+            5
+          ],
+          [
+            1,
+            8,
+            136
+          ]
+        ],
+        "confusion_labels": [
+          "F",
+          "G",
+          "K"
+        ],
+        "g_to_k": 5,
+        "best_iteration": 120
+      },
+      "test_global_median_off_gap": 0.9157990217208862,
+      "ablation_Mg_b": {
+        "continuum_fill": 0.9157990217208862,
+        "draw_stats": {
+          "Mg_b": {
+            "requested": 500,
+            "succeeded": 500
+          }
+        },
+        "Mg_b_F": {
+          "n_test": 81,
+          "baseline_recall": 0.8395061728395061,
+          "masked_recall": 0.9382716049382716,
+          "delta": 0.09876543209876543,
+          "delta_ci_low": 0.03869879990816116,
+          "delta_ci_high": 0.16789905726909637,
+          "p_value_vs_random": 1.0
+        },
+        "Mg_b_G": {
+          "n_test": 230,
+          "baseline_recall": 0.9652173913043478,
+          "masked_recall": 0.7521739130434782,
+          "delta": -0.21304347826086956,
+          "delta_ci_low": -0.2679768204689026,
+          "delta_ci_high": -0.1614643782377243,
+          "p_value_vs_random": 0.001996007984031936
+        },
+        "Mg_b_K": {
+          "n_test": 145,
+          "baseline_recall": 0.9379310344827586,
+          "masked_recall": 0.9379310344827586,
+          "delta": 0.0,
+          "delta_ci_low": -0.02069777436554432,
+          "delta_ci_high": 0.019884195178747177,
+          "p_value_vs_random": 0.8962075848303394
+        }
+      },
+      "cv_train_val": {
+        "splitter": "StratifiedKFold(n_splits=5, shuffle=True, random_state=42)",
+        "n_rows": 2576,
+        "per_fold_macro_f1": [
+          0.9264158132355022,
+          0.895526090075386,
+          0.9022490485089211,
+          0.9222681548849386,
+          0.9166288098333778
+        ],
+        "macro_f1_mean": 0.9126175833076251,
+        "macro_f1_sd": 0.01322157586987958,
+        "note": "each fold's held-out part doubles as the early-stopping set"
+      },
+      "reproduces_deposited_model": {
+        "deposited_macro_f1": 0.926209019232275,
+        "deposited_best_iteration": 120,
+        "retrained_macro_f1": 0.926209019232275,
+        "retrained_best_iteration": 120,
+        "abs_difference_macro_f1": 0.0,
+        "identical_confusion": true
+      }
+    },
+    "polynomial_n5": {
+      "transform": "sigma-clipped 5th-order Legendre re-normalisation of every row; gap bins included in the fit and divided by it",
+      "test": {
+        "accuracy": 0.9298245614035088,
+        "macro_f1": 0.9151901738108634,
+        "per_class_recall": {
+          "F": 0.8024691358024691,
+          "G": 0.9521739130434783,
+          "K": 0.9655172413793104
+        },
+        "confusion_matrix": [
+          [
+            65,
+            15,
+            1
+          ],
+          [
+            7,
+            219,
+            4
+          ],
+          [
+            1,
+            4,
+            140
+          ]
+        ],
+        "confusion_labels": [
+          "F",
+          "G",
+          "K"
+        ],
+        "g_to_k": 4,
+        "best_iteration": 110
+      },
+      "test_global_median_off_gap": 1.0032058954238892,
+      "ablation_Mg_b": {
+        "continuum_fill": 1.0032058954238892,
+        "draw_stats": {
+          "Mg_b": {
+            "requested": 500,
+            "succeeded": 500
+          }
+        },
+        "Mg_b_F": {
+          "n_test": 81,
+          "baseline_recall": 0.8024691358024691,
+          "masked_recall": 0.8641975308641975,
+          "delta": 0.061728395061728336,
+          "delta_ci_low": 0.013601443730294704,
+          "delta_ci_high": 0.12025301158428192,
+          "p_value_vs_random": 1.0
+        },
+        "Mg_b_G": {
+          "n_test": 230,
+          "baseline_recall": 0.9521739130434783,
+          "masked_recall": 0.8,
+          "delta": -0.15217391304347827,
+          "delta_ci_low": -0.1992742419242859,
+          "delta_ci_high": -0.1062544733285904,
+          "p_value_vs_random": 0.00998003992015968
+        },
+        "Mg_b_K": {
+          "n_test": 145,
+          "baseline_recall": 0.9655172413793104,
+          "masked_recall": 0.9793103448275862,
+          "delta": 0.013793103448275779,
+          "delta_ci_low": 0.0,
+          "delta_ci_high": 0.035986024886369705,
+          "p_value_vs_random": 1.0
+        }
+      }
+    },
+    "polynomial_n5_gap_restored": {
+      "transform": "polynomial_n5 with gap bins reset to production values",
+      "test": {
+        "accuracy": 0.9254385964912281,
+        "macro_f1": 0.9106837626184885,
+        "per_class_recall": {
+          "F": 0.8148148148148148,
+          "G": 0.9434782608695652,
+          "K": 0.9586206896551724
+        },
+        "confusion_matrix": [
+          [
+            66,
+            14,
+            1
+          ],
+          [
+            10,
+            217,
+            3
+          ],
+          [
+            1,
+            5,
+            139
+          ]
+        ],
+        "confusion_labels": [
+          "F",
+          "G",
+          "K"
+        ],
+        "g_to_k": 3,
+        "best_iteration": 105
+      },
+      "test_global_median_off_gap": 1.0032058954238892,
+      "ablation_Mg_b": {
+        "continuum_fill": 1.0032058954238892,
+        "draw_stats": {
+          "Mg_b": {
+            "requested": 500,
+            "succeeded": 500
+          }
+        },
+        "Mg_b_F": {
+          "n_test": 81,
+          "baseline_recall": 0.8148148148148148,
+          "masked_recall": 0.8765432098765432,
+          "delta": 0.06172839506172845,
+          "delta_ci_low": 0.013418919406831264,
+          "delta_ci_high": 0.11797912418842316,
+          "p_value_vs_random": 1.0
+        },
+        "Mg_b_G": {
+          "n_test": 230,
+          "baseline_recall": 0.9434782608695652,
+          "masked_recall": 0.7913043478260869,
+          "delta": -0.15217391304347827,
+          "delta_ci_low": -0.19787845015525818,
+          "delta_ci_high": -0.10927601903676987,
+          "p_value_vs_random": 0.00998003992015968
+        },
+        "Mg_b_K": {
+          "n_test": 145,
+          "baseline_recall": 0.9586206896551724,
+          "masked_recall": 0.9793103448275862,
+          "delta": 0.020689655172413723,
+          "delta_ci_low": 0.0,
+          "delta_ci_high": 0.047018736600875854,
+          "p_value_vs_random": 1.0
+        }
+      }
+    },
+    "row_median": {
+      "transform": "off-gap bins divided by the row's own off-gap median; gap bins unchanged",
+      "test": {
+        "accuracy": 0.9254385964912281,
+        "macro_f1": 0.9147266775660822,
+        "per_class_recall": {
+          "F": 0.8518518518518519,
+          "G": 0.9304347826086956,
+          "K": 0.9586206896551724
+        },
+        "confusion_matrix": [
+          [
+            69,
+            12,
+            0
+          ],
+          [
+            10,
+            214,
+            6
+          ],
+          [
+            1,
+            5,
+            139
+          ]
+        ],
+        "confusion_labels": [
+          "F",
+          "G",
+          "K"
+        ],
+        "g_to_k": 6,
+        "best_iteration": 123
+      },
+      "test_global_median_off_gap": 1.0,
+      "ablation_Mg_b": {
+        "continuum_fill": 1.0,
+        "draw_stats": {
+          "Mg_b": {
+            "requested": 500,
+            "succeeded": 500
+          }
+        },
+        "Mg_b_F": {
+          "n_test": 81,
+          "baseline_recall": 0.8518518518518519,
+          "masked_recall": 0.9135802469135802,
+          "delta": 0.061728395061728336,
+          "delta_ci_low": 0.012899600900709629,
+          "delta_ci_high": 0.11835385113954544,
+          "p_value_vs_random": 1.0
+        },
+        "Mg_b_G": {
+          "n_test": 230,
+          "baseline_recall": 0.9304347826086956,
+          "masked_recall": 0.7304347826086957,
+          "delta": -0.19999999999999996,
+          "delta_ci_low": -0.25578591227531433,
+          "delta_ci_high": -0.14649491012096405,
+          "p_value_vs_random": 0.001996007984031936
+        },
+        "Mg_b_K": {
+          "n_test": 145,
+          "baseline_recall": 0.9586206896551724,
+          "masked_recall": 0.9724137931034482,
+          "delta": 0.013793103448275779,
+          "delta_ci_low": 0.0,
+          "delta_ci_high": 0.0347222238779068,
+          "p_value_vs_random": 1.0
+        }
+      }
+    }
+  }
+}

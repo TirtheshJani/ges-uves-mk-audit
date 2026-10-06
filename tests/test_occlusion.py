@@ -1,11 +1,12 @@
-"""Unit tests for src.interpret.occlusion ().
+"""Unit tests for the masked-line ablation as re-exported by src.interpret.occlusion.
 
 Covers:
   - random-control sampler honours an extended forbidden mask that includes
     the UVES inter-chip gap plus all MK_LINES bins
   - masked_line_ablation forwards the gap-augmented forbidden mask to the
-    sampler (gap_mask propagation contract)
-  - AblationRow has exactly the nine fields downstream consumers depend on
+    sampler (gap_mask propagation contract) in both matching modes
+  - AblationRow keeps the nine legacy fields first, followed by the paired
+    statistics and configuration fields
   - random-window picks fail closed when no draw is feasible
 """
 from __future__ import annotations
@@ -15,7 +16,9 @@ from dataclasses import fields
 import numpy as np
 import pytest
 
+from src.interpret import ablation as abl
 from src.interpret import occlusion as occ
+from src.interpret.ablation import LEGACY_ABLATION_FIELDS
 from src.interpret.lines import LINE_SETS
 from src.interpret.occlusion import (
     AblationRow,
@@ -90,21 +93,37 @@ def test_masked_line_ablation_passes_gap_mask_to_sampler(
         captured.append(forbidden_mask.copy())
         return []
 
-    monkeypatch.setattr(occ, "_sample_random_windows", _fake_sampler)
+    def _fake_bins_sampler(
+        rng: np.random.Generator,
+        wave_centers: np.ndarray,
+        segment_bin_counts: list[int],
+        forbidden_mask: np.ndarray,
+        max_attempts_per_segment: int = 200,
+    ) -> list[tuple[float, float]]:
+        captured.append(forbidden_mask.copy())
+        return []
 
-    masked_line_ablation(
-        _StubModel(),
-        X_test=X,
-        y_test=y,
-        wave_centers=wc,
-        line_sets=LINE_SETS,
-        class_labels=["A", "F", "G", "K"],
-        per_class=True,
-        n_bootstrap=5,
-        n_random_controls=3,
-        seed=42,
-        gap_mask=gap_mask,
-    )
+    # The ablation module looks the samplers up in its own namespace, so the
+    # patch targets src.interpret.ablation (occlusion only re-exports).
+    monkeypatch.setattr(abl, "_sample_random_windows", _fake_sampler)
+    monkeypatch.setattr(abl, "_sample_random_windows_bins", _fake_bins_sampler)
+    assert occ.masked_line_ablation is abl.masked_line_ablation
+
+    for match_on in ("angstrom", "bins"):
+        masked_line_ablation(
+            _StubModel(),
+            X_test=X,
+            y_test=y,
+            wave_centers=wc,
+            line_sets=LINE_SETS,
+            class_labels=["A", "F", "G", "K"],
+            per_class=True,
+            n_bootstrap=5,
+            n_random_controls=3,
+            seed=42,
+            gap_mask=gap_mask,
+            match_on=match_on,
+        )
     assert captured, "sampler was not invoked"
     expected_lines = np.zeros(wc.shape, dtype=bool)
     for windows in LINE_SETS.values():
@@ -124,8 +143,8 @@ def test_masked_line_ablation_passes_gap_mask_to_sampler(
 
 
 def test_ablation_row_columns() -> None:
-    """AblationRow must carry exactly the nine fields downstream readers expect."""
-    expected = (
+    """AblationRow keeps the nine legacy fields first, then the paired-statistics fields."""
+    expected_legacy = (
         "line_set",
         "mk_class",
         "n_test",
@@ -136,9 +155,26 @@ def test_ablation_row_columns() -> None:
         "delta_acc_ci_high",
         "p_value_vs_random",
     )
+    expected_new = (
+        "n_bins_masked",
+        "total_width_aa",
+        "n_flip_lost",
+        "n_flip_gained",
+        "mcnemar_exact_p",
+        "mean_delta_true_prob",
+        "flip_rate_upper95",
+        "n_random_controls_succeeded",
+        "null_mode",
+        "match_on",
+        "fill_mode",
+    )
     actual = tuple(f.name for f in fields(AblationRow))
-    assert actual == expected
-    assert len(actual) == 9
+    assert actual[:9] == expected_legacy == LEGACY_ABLATION_FIELDS
+    assert actual[9:] == expected_new
+    assert len(actual) == 20
+    # Legacy nine-positional construction still works.
+    row = AblationRow("Mg_b", "K", 145, 0.9, 0.9, 0.0, -0.01, 0.01, 0.5)
+    assert row.null_mode == "class_matched" and row.match_on == "bins"
 
 
 def test_random_controls_fail_closed_when_forbidden_mask_full() -> None:
@@ -195,7 +231,7 @@ def test_masked_line_ablation_persists_per_row_predictions(tmp_path) -> None:
 
     Downstream consumers (paired bootstrap, flip rate, TOST) read this
     artefact to recompute per-class statistics without re-running the
-    ablation. Step 1 of.
+    ablation.
     """
     wc = _toy_wave_centers(n=300)
     rng = np.random.default_rng(11)
@@ -308,7 +344,7 @@ def test_apply_mask_noise_row_wise_sigma() -> None:
 
 
 def test_apply_mask_gp_interp_linear() -> None:
-    """fill_mode='gp_interp' linearly interpolates across the masked window.
+    """fill_mode='gp_interp' (alias 'interp') linearly interpolates across the masked window.
 
     On a monotonically rising row (X[r, j] = j), interpolation across a
     masked interior run exactly reconstructs the original.
@@ -321,6 +357,8 @@ def test_apply_mask_gp_interp_linear() -> None:
     out = _apply_mask(X, mask, fill=999.0, fill_mode="gp_interp")
     # Linear interp on a linear row reconstructs the original exactly.
     np.testing.assert_allclose(out[:, mask], X[:, mask], atol=1e-5)
+    out_alias = _apply_mask(X, mask, fill=999.0, fill_mode="interp")
+    np.testing.assert_array_equal(out_alias, out)
 
 
 def test_apply_mask_noise_requires_rng() -> None:

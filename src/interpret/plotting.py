@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: MIT
 """Matplotlib figures for the interpretability audit.
 
-production figures (``scripts/make_figure.py``):
+Production figures (``scripts/make_figure.py``):
 
   1. ``importance_main.pdf`` (``plot_main_figure``)
   2. ``confusion_matrix_*.pdf`` (``plot_confusion_matrix``)
   3. ``ablation_bars.pdf`` (``plot_ablation_bars``)
 
-legacy overlays kept for the audit dossier:
+Legacy overlays kept for the audit dossier:
 
   4. ``importance_overlay.pdf`` (``plot_summary_overlay``)
   5. ``importance_overlay_per_class.pdf`` (``plot_per_class_overlay``)
@@ -23,6 +23,72 @@ import numpy as np
 from src.interpret.lines import LINE_SETS, lines_for_class, lines_in_window
 
 logger = logging.getLogger(__name__)
+
+
+_LINE_SET_DISPLAY = {
+    "H_balmer": "H Balmer",
+    "Mg_b": r"Mg b",
+    "Na_D": r"Na D",
+    "Ca_I": r"Ca I",
+    "Fe_Cr": "Fe/Cr",
+}
+
+_LINE_NAME_DISPLAY = {
+    "H_beta": r"H$\beta$",
+    "Mg_b1": "Mg b",
+    "Mg_b2": "Mg b",
+    "Mg_b3": "Mg b",
+    "Na_D2": "Na D",
+    "Na_D1": "Na D",
+    "Ca_I_6162": "Ca I 6162",
+    "Ca_I_6439": "Ca I 6439",
+    "H_alpha": r"H$\alpha$",
+}
+
+
+def _pretty_line_set(name: str) -> str:
+    return _LINE_SET_DISPLAY.get(name, name.replace("_", " "))
+
+
+def _pretty_line_name(name: str) -> str:
+    return _LINE_NAME_DISPLAY.get(name, name.replace("_", " "))
+
+
+def _grouped_line_labels(lines, group_tol_aa: float = 12.0):
+    """Cluster nearby lines and emit one centroid label per cluster.
+
+    Returns a list of (centroid_wavelength, label_text, member_wavelengths)
+    tuples sorted by wavelength. Lines whose wavelength_aa values fall
+    within ``group_tol_aa`` of an existing cluster are merged into that
+    cluster and labelled with the shared display name (e.g. the Mg b
+    triplet collapses to a single "Mg b" label over 5167-5184 A).
+    """
+    if not lines:
+        return []
+    sorted_lines = sorted(lines, key=lambda lin: lin.wavelength_aa)
+    clusters: list[list] = []
+    for line in sorted_lines:
+        placed = False
+        if clusters:
+            last_lines = clusters[-1]
+            last_w = last_lines[-1].wavelength_aa
+            last_label = _pretty_line_name(last_lines[-1].name)
+            this_label = _pretty_line_name(line.name)
+            if (
+                this_label == last_label
+                and line.wavelength_aa - last_w <= group_tol_aa
+            ):
+                clusters[-1].append(line)
+                placed = True
+        if not placed:
+            clusters.append([line])
+    out = []
+    for members in clusters:
+        wavelengths = [m.wavelength_aa for m in members]
+        centroid = float(np.mean(wavelengths))
+        label = _pretty_line_name(members[0].name)
+        out.append((centroid, label, wavelengths))
+    return out
 
 
 def _normalise_trace(x: np.ndarray) -> np.ndarray:
@@ -142,7 +208,8 @@ def plot_per_class_importance(
     One subplot per surviving class. Each panel shows that class's
     mean |SHAP| trace, vertical dashed lines at the MK_LINES entries
     diagnostic for that class, and a hatched grey band over any
-    contiguous run of bins where ``gap_mask`` is True.
+    contiguous run of bins where ``gap_mask`` is True
+    (UVES inter-chip gap, Sacco et al. 2014).
 
     Saved at 300 DPI for print.
     """
@@ -158,8 +225,8 @@ def plot_per_class_importance(
 
     n = len(class_labels)
     fig, axes = plt.subplots(
-        nrows=n, ncols=1, sharex=True, figsize=(10.0, 2.0 * n + 0.5),
-        gridspec_kw={"hspace": 0.1},
+        nrows=n, ncols=1, sharex=True, figsize=(11.0, 2.2 * n + 0.6),
+        gridspec_kw={"hspace": 0.14},
     )
     if n == 1:
         axes = [axes]
@@ -173,7 +240,7 @@ def plot_per_class_importance(
             color=f"C{c}", lw=1.1,
         )
         ax.set_ylabel(f"|SHAP|\n({label})")
-        ax.set_ylim(0.0, 1.02)
+        ax.set_ylim(0.0, 1.20)
         for lo, hi in gap_spans:
             ax.axvspan(lo, hi, facecolor="grey", alpha=0.18, hatch="///",
                        edgecolor="grey", lw=0.0)
@@ -181,11 +248,16 @@ def plot_per_class_importance(
             line for line in lines_for_class(label)
             if wmin <= line.wavelength_aa <= wmax
         ]
-        for line in class_lines:
-            ax.axvline(line.wavelength_aa, color="black", ls="--", lw=0.6, alpha=0.85)
+        line_groups = _grouped_line_labels(class_lines)
+        for centroid, ltext, members in line_groups:
+            for w in members:
+                ax.axvline(w, color="black", ls="--", lw=0.55, alpha=0.70)
             ax.text(
-                line.wavelength_aa, 1.02, line.name.replace("_", " "),
-                rotation=90, ha="right", va="bottom", fontsize=7, color="black",
+                centroid, 1.10, ltext,
+                rotation=0, ha="center", va="center", fontsize=8,
+                color="black",
+                bbox=dict(boxstyle="round,pad=0.18", fc="white", ec="grey",
+                          lw=0.4, alpha=0.92),
             )
     axes[-1].set_xlabel("wavelength (Å)")
     fig.savefig(out_path, bbox_inches="tight", dpi=300)
@@ -223,7 +295,7 @@ def plot_main_figure(
     out_path: Path,
     top_k_per_class: int = 10,
 ) -> None:
-    """main figure: spectrum + per-class SHAP top-K markers + MK lines + gap shading.
+    """Main figure: spectrum + per-class SHAP top-K markers + MK lines + gap shading.
 
     Composition:
       * Top axis: representative normalized spectrum with MK_LINES dashed verticals.
@@ -231,7 +303,8 @@ def plot_main_figure(
         coloured circles at the relevant wavelength bins.
       * Inset panel on the right: ablation delta-acc bars (pulled from
         ``ablation_rows``).
-      * Grey shaded band over each contiguous gap_mask True run.
+      * Grey hatched band over each contiguous gap_mask True run
+        (UVES inter-chip gap, Sacco et al. 2014).
 
     All wavelengths in air. Saved at 300 DPI.
     """
@@ -252,11 +325,11 @@ def plot_main_figure(
             f"len(class_labels) {len(class_labels)}"
         )
 
-    fig = plt.figure(figsize=(12.0, 6.0))
+    fig = plt.figure(figsize=(12.5, 6.4))
     gs = fig.add_gridspec(
         nrows=2, ncols=2,
-        width_ratios=[3.5, 1.0], height_ratios=[1.0, 1.4],
-        hspace=0.05, wspace=0.18,
+        width_ratios=[3.2, 1.0], height_ratios=[1.0, 1.6],
+        hspace=0.08, wspace=0.22,
     )
     ax_spec = fig.add_subplot(gs[0, 0])
     ax_imp = fig.add_subplot(gs[1, 0], sharex=ax_spec)
@@ -267,18 +340,34 @@ def plot_main_figure(
 
     ax_spec.plot(wave_centers, representative_spectrum, color="black", lw=0.8)
     ax_spec.set_ylabel("normalized flux")
-    ax_spec.set_ylim(
-        np.nanpercentile(representative_spectrum, 2) - 0.05,
-        np.nanpercentile(representative_spectrum, 99) + 0.08,
-    )
+    spec_lo = np.nanpercentile(representative_spectrum, 2) - 0.05
+    spec_hi = np.nanpercentile(representative_spectrum, 99) + 0.16
+    ax_spec.set_ylim(spec_lo, spec_hi)
+    plt.setp(ax_spec.get_xticklabels(), visible=False)
+    gap_patch = None
     for lo, hi in gap_spans:
-        ax_spec.axvspan(lo, hi, facecolor="grey", alpha=0.18, hatch="///",
-                        edgecolor="grey", lw=0.0)
+        gap_patch = ax_spec.axvspan(
+            lo, hi, facecolor="grey", alpha=0.20, hatch="///",
+            edgecolor="grey", lw=0.0,
+        )
+
+    line_groups = _grouped_line_labels(list(lines_in_window(wmin, wmax)))
+    label_y = spec_hi - 0.03
+    for centroid, label, members in line_groups:
+        for w in members:
+            for ax in (ax_spec, ax_imp):
+                ax.axvline(w, color="black", ls="--", lw=0.55, alpha=0.55)
+        ax_spec.text(
+            centroid, label_y, label,
+            rotation=0, ha="center", va="top", fontsize=8, color="black",
+            bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none",
+                      alpha=0.75),
+        )
 
     for c, label in enumerate(class_labels):
         ax_imp.plot(
             wave_centers, _normalise_trace(shap_per_class[c]),
-            lw=0.9, alpha=0.55, label=f"|SHAP| ({label})", color=f"C{c}",
+            lw=1.0, alpha=0.6, label=f"|SHAP| ({label})", color=f"C{c}",
         )
         trace = np.asarray(shap_per_class[c], dtype=float).copy()
         trace[gap_mask] = -np.inf
@@ -289,24 +378,29 @@ def plot_main_figure(
             if top.size:
                 ax_imp.scatter(
                     wave_centers[top], _normalise_trace(shap_per_class[c])[top],
-                    s=24, color=f"C{c}", edgecolor="black", lw=0.5, zorder=5,
+                    s=28, color=f"C{c}", edgecolor="black", lw=0.5, zorder=5,
+                    label=f"top-{top_k_per_class} ({label})" if c == 0 else None,
                 )
     ax_imp.set_ylabel("|SHAP| (normalized)")
     ax_imp.set_xlabel("wavelength (Å)")
     ax_imp.set_ylim(0.0, 1.10)
     for lo, hi in gap_spans:
-        ax_imp.axvspan(lo, hi, facecolor="grey", alpha=0.18, hatch="///",
-                       edgecolor="grey", lw=0.0)
-
-    for line in lines_in_window(wmin, wmax):
-        for ax in (ax_spec, ax_imp):
-            ax.axvline(line.wavelength_aa, color="black", ls="--", lw=0.5, alpha=0.7)
-        ax_imp.text(
-            line.wavelength_aa, 1.10, line.name.replace("_", " "),
-            rotation=90, ha="right", va="bottom", fontsize=7, color="black",
+        ax_imp.axvspan(
+            lo, hi, facecolor="grey", alpha=0.20, hatch="///",
+            edgecolor="grey", lw=0.0,
         )
 
-    ax_imp.legend(loc="upper right", fontsize=8, framealpha=0.9)
+    legend_handles, legend_labels = ax_imp.get_legend_handles_labels()
+    if gap_patch is not None:
+        legend_handles.append(plt.Rectangle(
+            (0, 0), 1, 1, facecolor="grey", alpha=0.20, hatch="///",
+            edgecolor="grey",
+        ))
+        legend_labels.append("UVES inter-chip gap")
+    ax_imp.legend(
+        legend_handles, legend_labels,
+        loc="upper right", fontsize=8, framealpha=0.9, ncol=1,
+    )
 
     bar_labels = []
     bar_means = []
@@ -314,9 +408,9 @@ def plot_main_figure(
     bar_highs = []
     bar_colors = []
     for row in ablation_rows:
-        ls = row.get("line_set", "?")
+        ls = _pretty_line_set(row.get("line_set", "?"))
         cls = row.get("mk_class", "?")
-        bar_labels.append(f"{ls}\n{cls}")
+        bar_labels.append(f"{ls}\non {cls}")
         bar_means.append(float(row.get("delta_acc_mean", 0.0)))
         lo = float(row.get("delta_acc_ci_low", 0.0))
         hi = float(row.get("delta_acc_ci_high", 0.0))
@@ -326,13 +420,26 @@ def plot_main_figure(
 
     if bar_labels:
         x = np.arange(len(bar_labels))
-        ax_bars.bar(x, bar_means, color=bar_colors, alpha=0.85,
-                    yerr=[np.abs(bar_lows), np.abs(bar_highs)], capsize=3)
+        ax_bars.bar(
+            x, bar_means, color=bar_colors, alpha=0.88,
+            yerr=[np.abs(bar_lows), np.abs(bar_highs)], capsize=3,
+            edgecolor="black", lw=0.5,
+        )
         ax_bars.set_xticks(x)
         ax_bars.set_xticklabels(bar_labels, fontsize=8, rotation=0)
-        ax_bars.axhline(0.0, color="black", lw=0.6)
-        ax_bars.set_ylabel(r"$\Delta$ accuracy")
-        ax_bars.set_title("ablation", fontsize=9)
+        ax_bars.axhline(0.0, color="black", lw=0.7)
+        ax_bars.set_ylabel(r"$\Delta$ accuracy (masked $-$ baseline)")
+        ax_bars.set_title("Masked-line ablation", fontsize=10)
+        ax_bars.tick_params(axis="x", labelsize=7.5)
+        headline_proxy = plt.Rectangle((0, 0), 1, 1, fc="C0", alpha=0.88,
+                                       edgecolor="black")
+        pivot_proxy = plt.Rectangle((0, 0), 1, 1, fc="C3", alpha=0.88,
+                                    edgecolor="black")
+        ax_bars.legend(
+            [headline_proxy, pivot_proxy],
+            ["headline", "pivot"],
+            loc="lower right", fontsize=8, framealpha=0.9,
+        )
     else:
         ax_bars.set_axis_off()
 
@@ -348,9 +455,13 @@ def plot_confusion_matrix(
     title: str,
     out_path: Path,
 ) -> None:
-    """Render a confusion-matrix heatmap with per-cell counts annotated.
+    """Render a confusion-matrix heatmap with per-cell counts and row
+    percentages annotated.
 
-    Both axes carry the supplied class labels. Saved at 300 DPI for print.
+    Each cell shows the integer count on the top line and the row-normalised
+    percentage in parentheses underneath (or just the count if the row total
+    is zero or non-integer). Both axes carry the supplied class labels.
+    Saved at 300 DPI for print.
     """
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -365,26 +476,42 @@ def plot_confusion_matrix(
             f"cm shape {cm.shape} != len(labels) {len(labels)}"
         )
 
-    fig, ax = plt.subplots(figsize=(4.5, 4.0))
+    fig, ax = plt.subplots(figsize=(5.2, 4.6))
     im = ax.imshow(cm, cmap="Blues", aspect="equal")
-    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cbar.ax.tick_params(labelsize=8)
 
     ax.set_xticks(np.arange(len(labels)))
     ax.set_yticks(np.arange(len(labels)))
-    ax.set_xticklabels(labels)
-    ax.set_yticklabels(labels)
-    ax.set_xlabel("predicted")
-    ax.set_ylabel("true")
-    ax.set_title(title)
+    ax.set_xticklabels(labels, fontsize=10)
+    ax.set_yticklabels(labels, fontsize=10)
+    ax.set_xlabel("predicted", fontsize=10)
+    ax.set_ylabel("true", fontsize=10)
+    ax.set_title(title, fontsize=11)
 
+    row_sums = cm.sum(axis=1)
     threshold = float(cm.max()) / 2.0 if cm.size else 0.0
+    integer_cm = np.all(np.equal(np.mod(cm, 1), 0))
     for i in range(cm.shape[0]):
         for j in range(cm.shape[1]):
             value = cm[i, j]
             text_color = "white" if value > threshold else "black"
-            ax.text(j, i, f"{int(value):d}" if float(value).is_integer()
-                    else f"{value:.2f}",
-                    ha="center", va="center", color=text_color, fontsize=10)
+            if integer_cm:
+                count_text = f"{int(value):d}"
+            else:
+                count_text = f"{value:.2f}"
+            if integer_cm and row_sums[i] > 0:
+                pct = 100.0 * value / row_sums[i]
+                ax.text(j, i - 0.18, count_text,
+                        ha="center", va="center", color=text_color,
+                        fontsize=11, fontweight="bold")
+                ax.text(j, i + 0.20, f"({pct:.0f}%)",
+                        ha="center", va="center", color=text_color,
+                        fontsize=8.5)
+            else:
+                ax.text(j, i, count_text,
+                        ha="center", va="center", color=text_color,
+                        fontsize=10)
 
     logger.info("plot_confusion_matrix: writing %s (labels=%s)", out_path, labels)
     fig.savefig(out_path, bbox_inches="tight", dpi=300)
@@ -411,9 +538,6 @@ def plot_ablation_bars(
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    headline_set = {(ls, cls) for ls, cls in headline_pairs}
-    pivot_set = {(ls, cls) for ls, cls in pivot_pairs}
-
     # Order headline first, then pivot, preserving caller order.
     ordered: list[dict] = []
     for ls, cls in headline_pairs:
@@ -432,7 +556,12 @@ def plot_ablation_bars(
             "no rows matched headline or pivot pairs; check ablation_rows keys."
         )
 
-    labels = [f"{r['line_set']}\n{r['mk_class']}" for r in ordered]
+    n_tests = [int(r.get("n_test", 0)) for r in ordered]
+    labels = [
+        f"{_pretty_line_set(r['line_set'])}\non {r['mk_class']}"
+        + (f"\n(n = {n})" if n > 0 else "")
+        for r, n in zip(ordered, n_tests)
+    ]
     means = [float(r.get("delta_acc_mean", 0.0)) for r in ordered]
     ci_low = [float(r.get("delta_acc_ci_low", 0.0)) for r in ordered]
     ci_high = [float(r.get("delta_acc_ci_high", 0.0)) for r in ordered]
@@ -445,40 +574,59 @@ def plot_ablation_bars(
     colors = ["C3" if pv else "C0" for pv in is_pivot]
     hatches = ["///" if pv else "" for pv in is_pivot]
 
-    fig, ax = plt.subplots(figsize=(7.5, 4.5))
+    fig, ax = plt.subplots(figsize=(8.5, 5.2))
     x = np.arange(len(ordered))
     bars = ax.bar(
-        x, means, color=colors, alpha=0.85,
-        yerr=[err_low, err_high], capsize=4,
+        x, means, color=colors, alpha=0.88,
+        yerr=[err_low, err_high], capsize=5,
+        edgecolor="black", lw=0.6,
     )
     for bar, hatch in zip(bars, hatches):
         bar.set_hatch(hatch)
 
-    ax.axhline(0.0, color="black", lw=0.7)
+    ax.axhline(0.0, color="black", lw=0.9, zorder=0)
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, fontsize=9)
-    ax.set_ylabel(r"$\Delta$ accuracy (masked - baseline)")
-    ax.set_title("masked-line ablation: headline (solid) and pivot (hatched)")
+    ax.set_xticklabels(labels, fontsize=10)
+    ax.set_ylabel(r"$\Delta$ accuracy (masked $-$ baseline)")
+    ax.set_title(
+        "Interventional masked-line ablation: headline pairs (solid) and "
+        "pivot pairs (hatched)",
+        fontsize=10,
+    )
+    ax.grid(axis="y", color="lightgrey", lw=0.5, alpha=0.6, zorder=-1)
 
-    y_offset = (max(ci_high + [0.0]) - min(ci_low + [0.0]) + 1e-6) * 0.05
+    span = max(ci_high + [0.0]) - min(ci_low + [0.0])
+    if span <= 0:
+        span = 1.0
+    ax.set_ylim(min(ci_low + [0.0]) - 0.16 * span,
+                max(ci_high + [0.0]) + 0.20 * span)
     p_floor = 1.0 / max(n_random_controls, 1)
-    for xi, m, hi, pv in zip(x, means, ci_high, pvals):
-        annot_y = max(m, hi) + y_offset
+    for xi, m, hi_v, pv in zip(x, means, ci_high, pvals):
         if np.isnan(pv):
-            text = "p=n/a"
+            p_text = "p = n/a"
         elif pv < p_floor:
-            text = f"p<{p_floor:.3f}"
+            p_text = f"p < {p_floor:.3f}"
         else:
-            text = f"p={pv:.3f}"
-        ax.text(xi, annot_y, text, ha="center", va="bottom", fontsize=8)
+            p_text = f"p = {pv:.3f}"
+        dx_text = f"$\\Delta A$ = {m:+.3f}"
+        # Place both annotations above the upper error-bar tip.
+        top = max(m, hi_v)
+        ax.text(xi, top + 0.04 * span, dx_text,
+                ha="center", va="bottom", fontsize=9, fontweight="bold")
+        ax.text(xi, top + 0.10 * span, p_text,
+                ha="center", va="bottom", fontsize=8.5, color="dimgrey")
 
-    headline_proxy = plt.Rectangle((0, 0), 1, 1, fc="C0", alpha=0.85)
-    pivot_proxy = plt.Rectangle((0, 0), 1, 1, fc="C3", alpha=0.85, hatch="///")
+    headline_proxy = plt.Rectangle((0, 0), 1, 1, fc="C0", alpha=0.88,
+                                   edgecolor="black", lw=0.6)
+    pivot_proxy = plt.Rectangle((0, 0), 1, 1, fc="C3", alpha=0.88, hatch="///",
+                                edgecolor="black", lw=0.6)
     ax.legend(
         [headline_proxy, pivot_proxy],
-        ["headline", "pivot "],
-        loc="best", fontsize=9,
+        ["headline pair", "pivot pair"],
+        loc="lower right", fontsize=9, framealpha=0.9,
     )
+
+    ax.tick_params(axis="x", which="major", pad=6)
 
     logger.info(
         "plot_ablation_bars: writing %s (n_headline=%d, n_pivot=%d)",

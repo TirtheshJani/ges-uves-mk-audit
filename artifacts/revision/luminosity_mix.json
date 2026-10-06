@@ -1,0 +1,269 @@
+{
+  "description": "Luminosity-class composition of the F/G/K sample per split, production-model test accuracy by luminosity class, Teff-boundary proximity on the test set, and provenance of the Kiel and continuum-median figures.",
+  "inputs": {
+    "features": "artifacts\\features.npz",
+    "labels": "artifacts\\ges_mk_labels.parquet",
+    "model": "artifacts\\lgbm_mk.pkl",
+    "scale_decomposition_json": "artifacts\\revision\\scale_decomposition.json",
+    "join_key": "exact (ra_deg, dec_deg)",
+    "dwarf_definition": "log g > 3.5",
+    "teff_boundaries_k": [
+      5300.0,
+      6000.0
+    ],
+    "boundary_near_threshold_k": 150.0,
+    "seed": 42
+  },
+  "join_checks": {
+    "n_joined": 3032,
+    "n_unmatched": 0,
+    "dwarf_flag_matches_features": true,
+    "dwarf_flag_equals_logg_gt_3p5": true
+  },
+  "luminosity_mix": {
+    "all": {
+      "F": {
+        "n": 536,
+        "n_dwarf": 525,
+        "dwarf_fraction": 0.9794776119402985,
+        "median_logg": 4.010000228881836,
+        "median_teff_k": 6183.5,
+        "median_feh": -0.20000000298023224
+      },
+      "G": {
+        "n": 1534,
+        "n_dwarf": 1507,
+        "dwarf_fraction": 0.9823989569752282,
+        "median_logg": 4.230000019073486,
+        "median_teff_k": 5711.0,
+        "median_feh": -0.10000000149011612
+      },
+      "K": {
+        "n": 962,
+        "n_dwarf": 262,
+        "dwarf_fraction": 0.27234927234927236,
+        "median_logg": 2.680000066757202,
+        "median_teff_k": 4844.0,
+        "median_feh": -0.15000000596046448
+      },
+      "ALL": {
+        "n": 3032,
+        "n_dwarf": 2294,
+        "dwarf_fraction": 0.7565963060686016,
+        "median_logg": 4.090000152587891,
+        "median_teff_k": 5652.0,
+        "median_feh": -0.14000000059604645
+      }
+    },
+    "train": {
+      "F": {
+        "n": 375,
+        "n_dwarf": 367,
+        "dwarf_fraction": 0.9786666666666667,
+        "median_logg": 4.0,
+        "median_teff_k": 6185.0,
+        "median_feh": -0.1899999976158142
+      },
+      "G": {
+        "n": 1074,
+        "n_dwarf": 1051,
+        "dwarf_fraction": 0.978584729981378,
+        "median_logg": 4.230000019073486,
+        "median_teff_k": 5705.0,
+        "median_feh": -0.11999999731779099
+      },
+      "K": {
+        "n": 673,
+        "n_dwarf": 190,
+        "dwarf_fraction": 0.2823179791976226,
+        "median_logg": 2.680000066757202,
+        "median_teff_k": 4854.0,
+        "median_feh": -0.14000000059604645
+      },
+      "ALL": {
+        "n": 2122,
+        "n_dwarf": 1608,
+        "dwarf_fraction": 0.7577756833176249,
+        "median_logg": 4.090000152587891,
+        "median_teff_k": 5647.5,
+        "median_feh": -0.14000000059604645
+      }
+    },
+    "val": {
+      "F": {
+        "n": 80,
+        "n_dwarf": 80,
+        "dwarf_fraction": 1.0,
+        "median_logg": 4.039999961853027,
+        "median_teff_k": 6156.5,
+        "median_feh": -0.22999999672174454
+      },
+      "G": {
+        "n": 230,
+        "n_dwarf": 227,
+        "dwarf_fraction": 0.9869565217391304,
+        "median_logg": 4.230000019073486,
+        "median_teff_k": 5721.5,
+        "median_feh": -0.10000000149011612
+      },
+      "K": {
+        "n": 144,
+        "n_dwarf": 34,
+        "dwarf_fraction": 0.2361111111111111,
+        "median_logg": 2.665000081062317,
+        "median_teff_k": 4847.0,
+        "median_feh": -0.23999999463558197
+      },
+      "ALL": {
+        "n": 454,
+        "n_dwarf": 341,
+        "dwarf_fraction": 0.751101321585903,
+        "median_logg": 4.070000171661377,
+        "median_teff_k": 5666.0,
+        "median_feh": -0.1599999964237213
+      }
+    },
+    "test": {
+      "F": {
+        "n": 81,
+        "n_dwarf": 78,
+        "dwarf_fraction": 0.9629629629629629,
+        "median_logg": 4.010000228881836,
+        "median_teff_k": 6180.0,
+        "median_feh": -0.2199999988079071
+      },
+      "G": {
+        "n": 230,
+        "n_dwarf": 229,
+        "dwarf_fraction": 0.9956521739130435,
+        "median_logg": 4.230000019073486,
+        "median_teff_k": 5735.0,
+        "median_feh": -0.03999999910593033
+      },
+      "K": {
+        "n": 145,
+        "n_dwarf": 38,
+        "dwarf_fraction": 0.2620689655172414,
+        "median_logg": 2.6600000858306885,
+        "median_teff_k": 4814.0,
+        "median_feh": -0.12999999523162842
+      },
+      "ALL": {
+        "n": 456,
+        "n_dwarf": 345,
+        "dwarf_fraction": 0.756578947368421,
+        "median_logg": 4.130000114440918,
+        "median_teff_k": 5661.5,
+        "median_feh": -0.10500000044703484
+      }
+    }
+  },
+  "test_accuracy_by_luminosity_class": {
+    "F": {
+      "dwarf": {
+        "n": 78,
+        "accuracy": 0.8589743589743589,
+        "n_correct": 67,
+        "pred_counts": {
+          "F": 67,
+          "G": 11,
+          "K": 0
+        }
+      },
+      "giant": {
+        "n": 3,
+        "accuracy": 0.3333333333333333,
+        "n_correct": 1,
+        "pred_counts": {
+          "F": 1,
+          "G": 2,
+          "K": 0
+        }
+      }
+    },
+    "G": {
+      "dwarf": {
+        "n": 229,
+        "accuracy": 0.9694323144104804,
+        "n_correct": 222,
+        "pred_counts": {
+          "F": 3,
+          "G": 222,
+          "K": 4
+        }
+      },
+      "giant": {
+        "n": 1,
+        "accuracy": 0.0,
+        "n_correct": 0,
+        "pred_counts": {
+          "F": 0,
+          "G": 0,
+          "K": 1
+        }
+      }
+    },
+    "K": {
+      "dwarf": {
+        "n": 38,
+        "accuracy": 0.7894736842105263,
+        "n_correct": 30,
+        "pred_counts": {
+          "F": 0,
+          "G": 8,
+          "K": 30
+        }
+      },
+      "giant": {
+        "n": 107,
+        "accuracy": 0.9906542056074766,
+        "n_correct": 106,
+        "pred_counts": {
+          "F": 1,
+          "G": 0,
+          "K": 106
+        }
+      }
+    },
+    "G_to_K_errors": {
+      "n": 5,
+      "n_dwarf": 4,
+      "median_logg": 3.7799999713897705,
+      "median_teff_k": 5345.0
+    }
+  },
+  "test_boundary_distance": {
+    "F": {
+      "n": 81,
+      "median_boundary_distance_k": 180.0,
+      "n_within_150K": 34,
+      "accuracy_within_150K": 0.7058823529411765,
+      "accuracy_beyond_150K": 0.9361702127659575
+    },
+    "G": {
+      "n": 230,
+      "median_boundary_distance_k": 211.0,
+      "n_within_150K": 72,
+      "accuracy_within_150K": 0.9027777777777778,
+      "accuracy_beyond_150K": 0.9936708860759493
+    },
+    "K": {
+      "n": 145,
+      "median_boundary_distance_k": 433.0,
+      "n_within_150K": 24,
+      "accuracy_within_150K": 0.6666666666666666,
+      "accuracy_beyond_150K": 0.9917355371900827
+    }
+  },
+  "figures": {
+    "kiel_diagram": [
+      "submission\\kiel_diagram.pdf",
+      "artifacts\\figures\\kiel_diagram.pdf"
+    ],
+    "continuum_medians": [
+      "submission\\continuum_medians.pdf",
+      "artifacts\\figures\\continuum_medians.pdf"
+    ],
+    "continuum_medians_numbers_source": "artifacts\\revision\\scale_decomposition.json"
+  }
+}

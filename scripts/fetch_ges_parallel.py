@@ -9,7 +9,7 @@ runs about two hours.
 
 This wrapper parallelizes per-star queries via concurrent.futures and ALSO
 inlines two corrections that work around bugs in
-src.fetch.fetch_ges.query_eso_tap (kept read-only per ):
+src.fetch.fetch_ges.query_eso_tap (which is kept unchanged):
 
 1. ESO ObsCore exposes spatial coordinates as s_ra and s_dec (the IVOA standard
    prefix), not ra and dec. The upstream ADQL template uses o.ra and o.dec,

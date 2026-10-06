@@ -2,9 +2,11 @@
 # SPDX-License-Identifier: MIT
 """Run the Pickles template-matching benchmark against the LightGBM classifier.
 
-(A class dropped): the model is trained on F/G/K only.
-(Pickles 109-131 excluded): handled inside src.interpret.benchmark.
-(FGK-only agreement floor 0.55): applied here, written to
+The model is trained on F/G/K only (the A class is dropped at training
+time). All 131 STScI Pickles templates are loaded by
+``src.interpret.benchmark.load_pickles_library``; templates outside A/F/G/K
+collapse to ``OTHER`` and are removed by the FGK filter below. The FGK-only
+agreement floor of 0.55 is applied here and written to
 ``artifacts/benchmark/benchmark_report.json`` under ``decision_33_gate``.
 """
 from __future__ import annotations
@@ -34,9 +36,9 @@ def _filter_to_fgk(
     """Drop rows whose Pickles label is OTHER.
 
     Returns ``(y_pickles_fgk, y_model_fgk, n_dropped_other)``. The model
-    cannot predict ``OTHER`` since the classifier head only emits F/G/K
-    under, so the comparison is honest only on rows where
-    Pickles itself proposed an FGK label.
+    cannot predict ``OTHER`` since the classifier head only emits F/G/K,
+    so the comparison is meaningful only on rows where Pickles itself
+    proposed an FGK label.
     """
     y_pickles = np.asarray(y_pickles)
     y_model = np.asarray(y_model)
@@ -80,7 +82,7 @@ def main(argv: list[str] | None = None) -> None:
         dest="restrict_fgk",
         action="store_true",
         default=True,
-        help="Drop OTHER rows before computing the FGK-only metrics (default; ).",
+        help="Drop OTHER rows before computing the FGK-only metrics (default).",
     )
     p.add_argument(
         "--no-restrict-fgk",
@@ -95,8 +97,8 @@ def main(argv: list[str] | None = None) -> None:
         help=(
             "Pickles continuum-normalisation method. median_filter_200 is the production default; "
             "median_filter_50 narrows the window to preserve M-class TiO "
-            "bandhead structure; polynomial_n5 uses the Pickles 1998 section "
-            "3.2 prescription (iteratively sigma-clipped 5th-order Legendre)."
+            "bandhead structure; polynomial_n5 is an iteratively sigma-clipped "
+            "5th-order Legendre continuum fit."
         ),
     )
     p.add_argument("--verbose", "-v", action="store_true")

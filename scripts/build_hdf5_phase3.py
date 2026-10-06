@@ -20,8 +20,6 @@ This wrapper:
      downstream `coverage_probe`, `build_labels`, and `build_features`
      consumers do not change.
 
-See for the full justification.
-
 Usage:
     python -u -m scripts.build_hdf5_phase3 \
         --fits-dir data/ges/uves \

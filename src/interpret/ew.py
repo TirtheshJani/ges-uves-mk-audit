@@ -1,9 +1,8 @@
 # SPDX-License-Identifier: MIT
 """Equivalent-width measurement on continuum-normalised regridded spectra.
 
-. The reviewer's Mg b saturation rebuttal (manuscript line
-196, draft2) cites Pickles K templates rather than the actual K-class test
-spectra. This module measures equivalent widths directly on the audit's own
+The Mg b saturation argument should rest on the K-class test spectra
+themselves rather than on Pickles K templates. This module measures equivalent widths directly on the audit's own
 145 K-class and 230 G-class test rows so the Section 5 saturation argument
 can rest on the dataset under audit, not on a surrogate library.
 

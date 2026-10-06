@@ -1,0 +1,430 @@
+{
+  "description": "Scale-vs-spread decomposition of the polynomial re-normalisation effect on the fixed production LightGBM model, held-out test rows only.",
+  "inputs": {
+    "features": "artifacts\\features.npz",
+    "model": "artifacts\\lgbm_mk.pkl",
+    "n_test": 456,
+    "n_train_for_one_feature_classifier": 2122,
+    "n_bins": 696,
+    "n_gap_bins": 22,
+    "polynomial_order": 5,
+    "sigma_clip": 3.0,
+    "sigma_clip_iters": 5,
+    "seed": 42,
+    "uniform_multiplier": 1.09
+  },
+  "gap_bin_treatment": {
+    "polynomial_n5": "gap bins enter the Legendre fit (sigma-clipping removes strong outliers) and are divided by the fitted continuum, as in the existing audit scripts",
+    "polynomial_n5_gap_restored": "after re-normalisation the gap bins are reset to production values",
+    "multiplicative_transforms": "only the off-gap bins are rescaled; gap bins keep production values",
+    "gap_bin_values_production_test": {
+      "mean": 0.5055248737335205,
+      "median": 0.45709311962127686,
+      "std": 0.5147632360458374
+    }
+  },
+  "median_levels": {
+    "production_global_test_median": 0.9157990217208862,
+    "polynomial_n5_global_test_median": 1.0032058954238892,
+    "best_uniform_multiplier": 1.0954432922834487,
+    "production_train_global_median": 0.9167900681495667
+  },
+  "interventions": {
+    "production": {
+      "transform": "unchanged pipeline-normalised features",
+      "accuracy": 0.9342105263157895,
+      "macro_f1": 0.926209019232275,
+      "per_class_recall": {
+        "F": 0.8395061728395061,
+        "G": 0.9652173913043478,
+        "K": 0.9379310344827586
+      },
+      "confusion_matrix": [
+        [
+          68,
+          13,
+          0
+        ],
+        [
+          3,
+          222,
+          5
+        ],
+        [
+          1,
+          8,
+          136
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "g_to_k": 5,
+      "k_to_g": 8,
+      "n_pred": {
+        "F": 72,
+        "G": 243,
+        "K": 141
+      },
+      "median_level": 0.9157990217208862
+    },
+    "polynomial_n5": {
+      "transform": "sigma-clipped 5th-order Legendre re-normalisation of every row; fit over all bins (gap included), all bins divided by the fit",
+      "accuracy": 0.49780701754385964,
+      "macro_f1": 0.47536553190267794,
+      "per_class_recall": {
+        "F": 0.7283950617283951,
+        "G": 0.14782608695652175,
+        "K": 0.9241379310344827
+      },
+      "confusion_matrix": [
+        [
+          59,
+          12,
+          10
+        ],
+        [
+          70,
+          34,
+          126
+        ],
+        [
+          11,
+          0,
+          134
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "g_to_k": 126,
+      "k_to_g": 0,
+      "n_pred": {
+        "F": 140,
+        "G": 46,
+        "K": 270
+      },
+      "median_level": 1.0032058954238892
+    },
+    "polynomial_n5_gap_restored": {
+      "transform": "polynomial_n5, then the 22 gap bins reset to production values",
+      "accuracy": 0.4956140350877193,
+      "macro_f1": 0.472438221353884,
+      "per_class_recall": {
+        "F": 0.7283950617283951,
+        "G": 0.14347826086956522,
+        "K": 0.9241379310344827
+      },
+      "confusion_matrix": [
+        [
+          59,
+          12,
+          10
+        ],
+        [
+          71,
+          33,
+          126
+        ],
+        [
+          11,
+          0,
+          134
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "g_to_k": 126,
+      "k_to_g": 0,
+      "n_pred": {
+        "F": 141,
+        "G": 45,
+        "K": 270
+      },
+      "median_level": 1.0032058954238892
+    },
+    "common_median": {
+      "transform": "off-gap bins of each row scaled so the row median equals the global test median 0.9158",
+      "accuracy": 0.918859649122807,
+      "macro_f1": 0.909559306559184,
+      "per_class_recall": {
+        "F": 0.8641975308641975,
+        "G": 0.9304347826086956,
+        "K": 0.9310344827586207
+      },
+      "confusion_matrix": [
+        [
+          70,
+          11,
+          0
+        ],
+        [
+          11,
+          214,
+          5
+        ],
+        [
+          1,
+          9,
+          135
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "g_to_k": 5,
+      "k_to_g": 9,
+      "n_pred": {
+        "F": 82,
+        "G": 234,
+        "K": 140
+      },
+      "median_level": 0.9157990217208862
+    },
+    "uniform_x1.09": {
+      "transform": "off-gap bins of every row multiplied by 1.09",
+      "accuracy": 0.5592105263157895,
+      "macro_f1": 0.5497106780188288,
+      "per_class_recall": {
+        "F": 0.7901234567901234,
+        "G": 0.21739130434782608,
+        "K": 0.9724137931034482
+      },
+      "confusion_matrix": [
+        [
+          64,
+          8,
+          9
+        ],
+        [
+          53,
+          50,
+          127
+        ],
+        [
+          4,
+          0,
+          141
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "g_to_k": 127,
+      "k_to_g": 0,
+      "n_pred": {
+        "F": 121,
+        "G": 58,
+        "K": 277
+      },
+      "median_level": 0.9982209205627441
+    },
+    "uniform_x_best": {
+      "transform": "off-gap bins of every row multiplied by 1.0954 (= median(polynomial_n5) / median(production))",
+      "accuracy": 0.5394736842105263,
+      "macro_f1": 0.5268377216653078,
+      "per_class_recall": {
+        "F": 0.7777777777777778,
+        "G": 0.18695652173913044,
+        "K": 0.9655172413793104
+      },
+      "confusion_matrix": [
+        [
+          63,
+          7,
+          11
+        ],
+        [
+          54,
+          43,
+          133
+        ],
+        [
+          5,
+          0,
+          140
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "g_to_k": 133,
+      "k_to_g": 0,
+      "n_pred": {
+        "F": 122,
+        "G": 50,
+        "K": 284
+      },
+      "median_level": 1.0032057762145996
+    },
+    "gk_swap": {
+      "transform": "G rows x 0.9831, K rows x 1.0172 (per-class median-of-row-medians swapped); F rows unchanged",
+      "accuracy": 0.9035087719298246,
+      "macro_f1": 0.8949072185340405,
+      "per_class_recall": {
+        "F": 0.8395061728395061,
+        "G": 0.9,
+        "K": 0.9448275862068966
+      },
+      "confusion_matrix": [
+        [
+          68,
+          13,
+          0
+        ],
+        [
+          10,
+          207,
+          13
+        ],
+        [
+          1,
+          7,
+          137
+        ]
+      ],
+      "confusion_labels": [
+        "F",
+        "G",
+        "K"
+      ],
+      "g_to_k": 13,
+      "k_to_g": 7,
+      "n_pred": {
+        "F": 79,
+        "G": 227,
+        "K": 150
+      },
+      "median_level": 0.9112390279769897
+    }
+  },
+  "one_feature_classifier": {
+    "feature": "per-row median of off-gap normalised flux (production features)",
+    "model": "sklearn LogisticRegression(class_weight='balanced', max_iter=1000), fit on train rows",
+    "n_train": 2122,
+    "n_test": 456,
+    "test_accuracy_3class": 0.38596491228070173,
+    "test_balanced_accuracy_3class": 0.4750266841887698,
+    "test_macro_f1_3class": 0.3668777863161969,
+    "confusion_matrix": [
+      [
+        50,
+        9,
+        22
+      ],
+      [
+        114,
+        24,
+        92
+      ],
+      [
+        33,
+        10,
+        102
+      ]
+    ],
+    "roc_auc_g_vs_k_raw_median": 0.6936731634182908,
+    "roc_auc_g_vs_k_lr_conditional_prob": 0.6936731634182908,
+    "roc_auc_f_vs_g_raw_median": 0.6601180891035963,
+    "auc_orientation": "G vs K: K positive, score = -median (K rows have lower medians); F vs G: F positive, score = +median",
+    "n_g_test": 230,
+    "n_k_test": 145
+  },
+  "row_median_distributions": {
+    "production": {
+      "global_median_of_rows": 0.9157990217208862,
+      "per_class_median_of_row_medians": {
+        "F": 0.9287251830101013,
+        "G": 0.9178592562675476,
+        "K": 0.9023829698562622
+      },
+      "per_class_iqr_of_row_medians": {
+        "F": [
+          0.9116515517234802,
+          0.9442915916442871
+        ],
+        "G": [
+          0.9016797542572021,
+          0.9336052536964417
+        ],
+        "K": [
+          0.8708952069282532,
+          0.9157823920249939
+        ]
+      },
+      "per_class_n": {
+        "F": 81,
+        "G": 230,
+        "K": 145
+      },
+      "ks_pairwise": {
+        "F-G": {
+          "statistic": 0.2849704623222351,
+          "p_value": 8.412086754105985e-05
+        },
+        "G-K": {
+          "statistic": 0.3166416883468628,
+          "p_value": 2.111915620162108e-08
+        },
+        "F-K": {
+          "statistic": 0.4866752028465271,
+          "p_value": 1.0203817825404915e-11
+        }
+      }
+    },
+    "polynomial_n5": {
+      "global_median_of_rows": 1.0032058954238892,
+      "per_class_median_of_row_medians": {
+        "F": 1.0012516975402832,
+        "G": 1.0034258365631104,
+        "K": 1.0062541961669922
+      },
+      "per_class_iqr_of_row_medians": {
+        "F": [
+          0.9981937408447266,
+          1.0032148361206055
+        ],
+        "G": [
+          1.0003447532653809,
+          1.0058774948120117
+        ],
+        "K": [
+          1.0028576850891113,
+          1.009675145149231
+        ]
+      },
+      "per_class_n": {
+        "F": 81,
+        "G": 230,
+        "K": 145
+      },
+      "ks_pairwise": {
+        "F-G": {
+          "statistic": 0.3062801957130432,
+          "p_value": 1.7617663615965284e-05
+        },
+        "G-K": {
+          "statistic": 0.32713645696640015,
+          "p_value": 6.0334559570662805e-09
+        },
+        "F-K": {
+          "statistic": 0.5963388681411743,
+          "p_value": 8.978181145522997e-18
+        }
+      }
+    }
+  }
+}

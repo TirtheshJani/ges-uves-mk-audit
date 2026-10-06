@@ -2,10 +2,9 @@
 # SPDX-License-Identifier: MIT
 """Measure Mg b triplet equivalent widths on the held-out test set per class.
 
-. Replaces the saturation rebuttal in draft2 manuscript
-line 196 ("The Pickles K templates in our benchmark show Mg b equivalent
-widths comparable to or exceeding the G templates in the same library")
-with a measurement on the actual 145 K-class and 230 G-class test rows.
+Grounds the Mg b saturation argument in a measurement on the actual 145
+K-class and 230 G-class test rows rather than on the Pickles K and G
+templates used by the benchmark.
 
 Output: ``artifacts/ablation/mg_b_ew_test.json`` with per-class summary
 (n, median, IQR, mean, std), per-row arrays, and a two-sample KS test of

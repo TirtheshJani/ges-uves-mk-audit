@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: MIT
 """Appendix A2 diagnostics: ablation + confusion under polynomial_n5 continuum.
 
-review item 1. The reviewer noted that the multi-leg
-shortcut framing of draft 4 asserts more than the evidence directly tests,
-and asked for three additional analyses on the existing artifacts:
+The multi-leg shortcut framing asserts more than the headline ablation
+directly tests, so three additional analyses are run on the existing
+artifacts:
 
   (a) Fe i / Cr i ablation under the polynomial_n5 continuum, per class.
       Does the K class still have non-Mg b dependence after the continuum
@@ -30,7 +30,7 @@ Half-window of +/- 5 A around each gives the line set:
   (5340, 5350) Cr i at 5345
 
 Total width 30 A, comparable to Mg_b (21 A). The line set is added
-post-hoc in response to round-3 review; it is NOT part of the pre-
+post hoc; it is NOT part of the pre-
 specified headline gate (Section 3.5) and we treat the resulting
 ablation effects as confirmatory of the multi-leg framing rather than
 as new headline claims.
@@ -50,7 +50,7 @@ from sklearn.metrics import confusion_matrix
 from src.interpret.benchmark import _continuum_polynomial_clipped
 from src.interpret.classifier import load_model
 from src.interpret.lines import ALLOWED_MK_CLASSES, LINE_SETS
-from src.interpret.occlusion import masked_line_ablation
+from src.interpret.ablation import masked_line_ablation
 
 logger = logging.getLogger(__name__)
 
@@ -146,6 +146,9 @@ def main(argv: list[str] | None = None) -> int:
             seed=args.seed,
             gap_mask=gap_mask,
             continuum_fill=float(np.nanmedian(X_input[:, ~gap_mask])),
+            # Legacy reference-set configuration; reproduces the deposited artifact.
+            null_mode="pooled",
+            match_on="angstrom",
         )
         out = {}
         for r in rows:
@@ -164,7 +167,7 @@ def main(argv: list[str] | None = None) -> int:
     ablation_polynomial = _ablation_payload(X_renorm, "polynomial_n5")
 
     payload = {
-        "round": "reviewer follow-up(appendix A2)",
+        "round": "post-hoc follow-up (appendix A2)",
         "description": (
             "Fe/Cr ablation plus per-class baseline accuracy plus full F/G/K "
             "confusion under polynomial_n5 re-derivation of the continuum. "
@@ -174,7 +177,7 @@ def main(argv: list[str] | None = None) -> int:
         "fe_cr_line_set_provenance": (
             "Cr i 5206.04 (RMT 7), Cr i 5208.42 (RMT 7), Fe i 5269.54 "
             "(RMT 15), Cr i 5345.80 (RMT 1); half-window +/-5 A. "
-            "Post-hoc per round-3 review item 1; not part of pre-specified "
+            "Post-hoc diagnostic; not part of pre-specified "
             "headline gate (Section 3.5)."
         ),
         "seed": int(args.seed),

@@ -7,15 +7,16 @@ sensitivity grid). Each cell retrains the LightGBM classifier with one
 hyperparameter override, runs the masked_line_ablation on the (Mg b, K)
 pair only on the held-out test set, and records whether the null persists.
 
-The reviewer's Moderate concerns:
+Two robustness questions motivate the grid:
 
-  8a: "Class-balanced weights not sensitivity-tested. The more direct test
-     is to retrain with uniform weights and re-run the (Mg b, K) ablation."
+  (a) Class-balanced weights are not otherwise sensitivity-tested; the
+      direct test is to retrain with uniform weights and re-run the
+      (Mg b, K) ablation.
 
-  8b: "LightGBM hyperparameters not tuned. A reviewer will ask whether the
-     K-class shortcut is an artefact of an under-trained model. Include a
-     brief note: did you check that hyperparameter sensitivity preserves
-     the (Mg b, K) null?"
+  (b) LightGBM hyperparameters are fixed rather than tuned, so the
+      K-class result could in principle be an artefact of an under-trained
+      model; the grid checks that hyperparameter perturbations preserve
+      the (Mg b, K) null.
 
 Outputs:
   - artifacts/sensitivity/uniform_weights_mg_b_k.json
@@ -38,7 +39,7 @@ from src.interpret.classifier import (
     train,
 )
 from src.interpret.lines import ALLOWED_MK_CLASSES, LINE_SETS
-from src.interpret.occlusion import masked_line_ablation
+from src.interpret.ablation import masked_line_ablation
 
 logger = logging.getLogger(__name__)
 
@@ -108,6 +109,10 @@ def _retrain_and_ablate(
         seed=seed,
         gap_mask=gap_mask,
         continuum_fill=continuum_fill,
+        # Legacy reference-set configuration; reproduces the deposited
+        # sensitivity artifacts.
+        null_mode="pooled",
+        match_on="angstrom",
     )
     # Find the (Mg_b, K) row.
     mgk_row = next(

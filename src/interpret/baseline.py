@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
-"""Non-ML reference baselines for the MK classifier ().
+"""Non-ML reference baselines for the MK classifier.
 
-"Why is LightGBM at macro-F1=0.926 interesting? Run a
+Motivating question: "Why is LightGBM at macro-F1=0.926 interesting? Run a
 kNN-on-spectra baseline or a simple Pickles template-fit baseline on the
 same test split. If LightGBM beats it by 0.05 macro-F1, the audit is
 meaningful. If LightGBM ties or barely beats a non-ML baseline, the whole

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # SPDX-License-Identifier: MIT
-"""Figure 6: per-class continuum-median distributions under production and polynomial_n5.
+"""Figure: per-class continuum-median distributions, production vs polynomial_n5.
 
-review item 3. The reviewer asked for the per-class
-continuum-median spread (0.929 F, 0.919 G, 0.902 K on the test set) to
-be promoted from prose into a figure, since it is now central evidence
-for the continuum-level shortcut described in Section 5.
+Renders the per-class continuum-median spread (0.929 F, 0.919 G, 0.902 K on
+the held-out test set) as a two-panel box-and-whisker figure. The shortcut
+this figure surfaces is described in the manuscript Results section on the
+continuum-level shortcut on K and G.
 
 Two-panel figure:
   left: per-class continuum-median distribution under production
@@ -90,10 +90,10 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     fig, (ax_prod, ax_poly) = plt.subplots(
-        1, 2, figsize=(8.5, 4.0), sharey=True,
+        1, 2, figsize=(9.0, 4.4), sharey=False,
     )
 
-    def _box_panel(ax, per_class_dict, title):
+    def _box_panel(ax, per_class_dict, title, label_below: bool = False):
         positions = [1, 2, 3]
         data = [per_class_dict[c] for c in ("F", "G", "K")]
         bp = ax.boxplot(
@@ -105,35 +105,75 @@ def main(argv: list[str] | None = None) -> int:
             patch.set_facecolor(CLASS_COLORS[cls])
             patch.set_alpha(0.55)
         ax.set_xticks(positions)
-        ax.set_xticklabels(["F", "G", "K"])
-        ax.set_ylabel("per-row continuum median (\\AA-1 dex-1 normalised)")
+        ax.set_xticklabels(["F", "G", "K"], fontsize=10)
         ax.set_title(title, fontsize=10)
         ax.axhline(1.0, color="grey", lw=0.6, ls="--", alpha=0.6)
-        for cls, pos in zip(("F", "G", "K"), positions):
-            med = float(np.nanmedian(per_class_dict[cls]))
-            ax.annotate(
-                f"med={med:.3f}", xy=(pos, med),
-                xytext=(pos + 0.30, med),
-                fontsize=8, ha="left", va="center",
-                color=CLASS_COLORS[cls],
+        ax.grid(axis="y", color="lightgrey", lw=0.4, alpha=0.5)
+        # Per-class median annotations: place clearly outside the box so
+        # they cannot overlap each other even when the medians are close.
+        # On the production panel we place them just to the right of each
+        # box; on the polynomial panel (where medians cluster near 1.00)
+        # we stack them in a single row beneath the panel.
+        if label_below:
+            text_lines = [
+                f"med$_{{{cls}}}$ = {float(np.nanmedian(per_class_dict[cls])):.3f}"
+                for cls in ("F", "G", "K")
+            ]
+            ax.text(
+                0.5, -0.18, "    ".join(text_lines),
+                transform=ax.transAxes,
+                ha="center", va="top", fontsize=9,
             )
+        else:
+            for cls, pos in zip(("F", "G", "K"), positions):
+                med = float(np.nanmedian(per_class_dict[cls]))
+                ax.annotate(
+                    f"med = {med:.3f}", xy=(pos, med),
+                    xytext=(pos + 0.32, med),
+                    fontsize=9, ha="left", va="center",
+                    color=CLASS_COLORS[cls], fontweight="bold",
+                )
 
     _box_panel(
         ax_prod, per_class_prod,
-        f"production (Gaia-ESO pipeline)\nKS F-G p={ks_fg.pvalue:.2e}  G-K p={ks_gk.pvalue:.2e}  F-K p={ks_fk.pvalue:.2e}",
+        "Production (Gaia-ESO pipeline normalisation)",
+        label_below=False,
     )
     _box_panel(
         ax_poly, per_class_poly,
-        "polynomial_n5 re-derivation",
+        r"Independent 5th-order Legendre re-derivation",
+        label_below=True,
     )
 
-    ax_prod.set_ylabel("per-row median of normalised flux")
+    # Pairwise KS p-values: place them in a clean, free area inside the
+    # production panel rather than crammed into the title.
+    ks_lines = [
+        r"Pairwise KS test (per-row medians):",
+        f"  F vs G:  $p$ = {ks_fg.pvalue:.2e}",
+        f"  G vs K:  $p$ = {ks_gk.pvalue:.2e}",
+        f"  F vs K:  $p$ = {ks_fk.pvalue:.2e}",
+    ]
+    ax_prod.text(
+        0.03, 0.03, "\n".join(ks_lines),
+        transform=ax_prod.transAxes,
+        ha="left", va="bottom", fontsize=8.5,
+        family="monospace",
+        bbox=dict(boxstyle="round,pad=0.35", fc="white", ec="grey",
+                  lw=0.5, alpha=0.95),
+    )
+
+    ax_prod.set_ylabel("per-row median of normalised flux", fontsize=10)
     ax_poly.set_ylabel("")
+    # Match y-limits across panels so the visual scale stays comparable
+    # without forcing sharey (which would push the polynomial panel into a
+    # tiny strip near 1.0).
+    ax_prod.set_ylim(0.78, 1.04)
+    ax_poly.set_ylim(0.94, 1.04)
     fig.suptitle(
-        "Per-class continuum-median distributions: production vs polynomial_n5",
+        "Per-class continuum-median distributions: production vs polynomial re-derivation",
         fontsize=11,
     )
-    fig.tight_layout(rect=(0, 0, 1, 0.96))
+    fig.tight_layout(rect=(0, 0.04, 1, 0.96))
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(args.out, bbox_inches="tight", dpi=300)

@@ -17,7 +17,7 @@ nearest 100 K:
   G: [5300, 6000)
   K: [3900, 5300)
 
-O/B/M are excluded at label-construction time per the interpretability plan:
+O/B/M are excluded at label-construction time:
 GES UVES is FGK-targeted, and the classifier is trained only on A/F/G/K.
 """
 
@@ -276,7 +276,7 @@ def build_labels(
     cache_dir: directory for the ESO TAP catalog parquet cache
         (``cache_dir/ges_dr5_params.parquet``).
     match_radius_arcsec: position cross-match tolerance (default 0.5 arcsec
-        per Gaia DR3 astrometric accuracy; see physicist review).
+        matching Gaia DR3 astrometric accuracy).
     ambiguity_radius_arcsec: second-nearest-neighbour distance below which a
         match is treated as ambiguous and dropped.
     min_per_class: hard RuntimeError floor per surviving MK class.

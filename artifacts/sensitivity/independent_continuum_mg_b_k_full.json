@@ -1,6 +1,6 @@
 {
   "step": "8c",
-  "description": "independent continuum re-derivation on a 50-row K-class test subsample using polynomial_n5; directional check only (n=50)",
+  "description": "independent continuum re-derivation on all 145 K-class test rows using polynomial_n5 (full K-class test set, n=145)",
   "n_subsample": 145,
   "polynomial_order": 5,
   "seed": 42,

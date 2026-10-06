@@ -56,7 +56,7 @@ def _log_gap_region_medians(
 ) -> None:
     """Log per-bin train-median for the UVES inter-chip gap region.
 
-    Physicist red-line 2: ablation must not interpret gap-imputed
+    The ablation must not interpret gap-imputed
     bins as physics signal, so the per-bin median for bins inside the gap
     is logged here for downstream sanity-checking.
     """

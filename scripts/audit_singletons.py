@@ -2,14 +2,13 @@
 # SPDX-License-Identifier: MIT
 """Audit singleton-group composition of the spatial CV partition.
 
-. the manuscript's StratifiedGroupKFold
-pass produces a 0.010 macro-F1 gap relative to plain StratifiedKFold, and
-draft2 Section 6 (line 217) claims this "bounds the residual cluster-leakage
-contribution per Blanco-Cuaresma 2019." The reviewer asks what fraction of
-the 1926 spatial groups are singletons and what fraction of training rows
-live in singleton groups; if most rows are singletons, the group
-stratification is partial and the 0.010 gap is a lower bound on leakage,
-not a tight constraint.
+The StratifiedGroupKFold pass produces a 0.010 macro-F1 gap relative to
+plain StratifiedKFold, which the manuscript interprets as bounding the
+residual cluster-leakage contribution (Blanco-Cuaresma 2019). That reading
+depends on what fraction of the 1926 spatial groups are singletons and
+what fraction of training rows live in singleton groups: if most rows are
+singletons, the group stratification is partial and the 0.010 gap is a
+lower bound on leakage, not a tight constraint.
 
 This script re-derives the spatial groups from artifacts/features.npz on the
 train+val partition (the partition trained CV on), computes the

@@ -2,11 +2,11 @@
 # SPDX-License-Identifier: MIT
 """Independent continuum re-derivation check on the (Mg b, K) null.
 
-. "Continuum normalisation inherited
-from pipeline, no check. A minimal-effort check: re-derive continuum on a
-50-spectrum subsample with an independent algorithm (a polynomial fit, or
-the iSpec normaliser), recompute the (Mg b, K) ablation, confirm null
-persists."
+The production continuum normalisation is inherited from the preprocessing
+pipeline without an independent check. This script re-derives the continuum
+on a K-class test subsample with an independent algorithm (an iteratively
+sigma-clipped polynomial fit), recomputes the (Mg b, K) ablation, and
+confirms that the null persists.
 
 Procedure:
   1. Sample 50 K-class test rows (random_state=42 for reproducibility).
@@ -19,8 +19,7 @@ Procedure:
   4. Compare to the full-test-set baseline.
 
 Caveat: n=50 supports only a directional check, not equivalent statistical
-power. The reviewer correctly frames this as a "confirm null persists"
-sanity probe.
+power; it is a "confirm the null persists" sanity probe.
 
 Output: artifacts/sensitivity/independent_continuum_mg_b_k.json
 """
@@ -36,7 +35,7 @@ import numpy as np
 from src.interpret.benchmark import _continuum_polynomial_clipped
 from src.interpret.classifier import load_model
 from src.interpret.lines import ALLOWED_MK_CLASSES, LINE_SETS
-from src.interpret.occlusion import masked_line_ablation
+from src.interpret.ablation import masked_line_ablation
 
 logger = logging.getLogger(__name__)
 
@@ -111,6 +110,9 @@ def main(argv: list[str] | None = None) -> int:
         seed=args.seed,
         gap_mask=gap_mask,
         continuum_fill=float(np.nanmedian(X_sub[:, ~gap_mask])),
+        # Legacy reference-set configuration; reproduces the deposited artifact.
+        null_mode="pooled",
+        match_on="angstrom",
     )
     mgk_baseline = next(
         (r for r in rows_baseline if r.line_set == "Mg_b" and r.mk_class == "K"),
@@ -128,6 +130,8 @@ def main(argv: list[str] | None = None) -> int:
         seed=args.seed,
         gap_mask=gap_mask,
         continuum_fill=float(np.nanmedian(X_renorm[:, ~gap_mask])),
+        null_mode="pooled",
+        match_on="angstrom",
     )
     mgk_renorm = next(
         (r for r in rows_renorm if r.line_set == "Mg_b" and r.mk_class == "K"),

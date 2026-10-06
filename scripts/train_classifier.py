@@ -189,7 +189,7 @@ def main(argv: list[str] | None = None) -> None:
         metrics.accuracy, metrics.macro_f1, metrics.per_class_recall,
     )
 
-    # 4. Boundary-filtered sensitivity (physics red-line: TEST ONLY).
+    # 4. Boundary-filtered sensitivity (applied to the TEST split only).
     boundary = boundary_filtered_accuracy(
         model=model,
         X_test=X[test_idx],

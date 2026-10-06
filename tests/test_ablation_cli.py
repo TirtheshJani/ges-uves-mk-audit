@@ -19,11 +19,14 @@ from scripts.ablation import (
     evaluate_headline_gate,
     main,
 )
-from src.interpret.occlusion import AblationRow
+from src.interpret.ablation import AblationRow
 
 EXPECTED_CSV_HEADER = (
     "line_set,mk_class,n_test,baseline_acc,masked_acc_mean,delta_acc_mean,"
-    "delta_acc_ci_low,delta_acc_ci_high,p_value_vs_random"
+    "delta_acc_ci_low,delta_acc_ci_high,p_value_vs_random,"
+    "n_bins_masked,total_width_aa,n_flip_lost,n_flip_gained,mcnemar_exact_p,"
+    "mean_delta_true_prob,flip_rate_upper95,n_random_controls_succeeded,"
+    "null_mode,match_on,fill_mode"
 )
 
 
@@ -106,7 +109,7 @@ def _train_tiny_model(features_npz: Path) -> Path:
 
 def test_evaluate_headline_gate_fgk() -> None:
     """Synthetic rows: two FGK headline pairs PASS at p=0.002 < per-pair
-    Bonferroni alpha = 0.01/3 = 0.0033 (Step 9b); the third pair fails."""
+    Bonferroni alpha = 0.01/3 = 0.0033; the third pair fails."""
     rows: list[AblationRow] = []
     # Two passing headline pairs, one failing.
     for line_set, mk_class, p_val, ci_hi in [
@@ -125,7 +128,7 @@ def test_evaluate_headline_gate_fgk() -> None:
             delta_acc_ci_high=ci_hi,
             p_value_vs_random=p_val,
         ))
-    # Pivot rows (predicted near zero per ).
+    # Pivot rows (predicted near-zero delta).
     rows.append(AblationRow(
         line_set="Na_D", mk_class="K", n_test=50,
         baseline_acc=0.9, masked_acc_mean=0.9,
@@ -141,6 +144,11 @@ def test_evaluate_headline_gate_fgk() -> None:
     gate = evaluate_headline_gate(rows)
     assert gate["gate_status"] == "PASS"
     assert gate["n_pairs_passed"] >= 2
+    # Paired-statistics fields ride along in the per-pair detail.
+    for pair in gate["pairs_evaluated"] + gate["pivot_confirmed"]:
+        for key in ("n_flip_lost", "n_flip_gained", "mcnemar_exact_p",
+                    "flip_rate_upper95", "null_mode", "match_on", "fill_mode"):
+            assert key in pair
     assert {(p["line_set"], p["mk_class"]) for p in gate["pairs_evaluated"]} == set(
         HEADLINE_PAIRS
     )
@@ -193,7 +201,7 @@ def test_ablation_cli_smoke(tmp_path: Path) -> None:
     assert line_match_csv.exists()
     assert line_match_json.exists()
     assert gate_eval.exists()
-    assert per_row_npz.exists(), " CLI must emit per_row_predictions.npz"
+    assert per_row_npz.exists(), "CLI must emit per_row_predictions.npz"
 
     # per_row_predictions.npz has the keys downstream paired bootstrap / flip
     # rate / TOST will read. The fixture features.npz has the same wave grid
@@ -221,8 +229,14 @@ def test_ablation_cli_smoke(tmp_path: Path) -> None:
     assert header == EXPECTED_CSV_HEADER
 
     # Header dataclass field count matches.
-    assert len(fields(AblationRow)) == 9
-    assert len(EXPECTED_CSV_HEADER.split(",")) == 9
+    assert len(fields(AblationRow)) == 20
+    assert len(EXPECTED_CSV_HEADER.split(",")) == 20
+    # Default modes are recorded in every row.
+    body = full_csv.read_text().splitlines()[1:]
+    assert body and all(line.endswith(",class_matched,bins,constant") for line in body)
+    # LightGBM exposes predict_proba, so probability deltas and arrays exist.
+    assert "proba_base" in pr.files and "proba_classes" in pr.files
+    assert any(k.startswith("proba_masked__") for k in pr.files)
 
     # gate_eval.json contains the keys evaluate_headline_gate guarantees plus
     # the CLI-side enrichments.
@@ -245,4 +259,42 @@ def test_ablation_cli_smoke(tmp_path: Path) -> None:
         assert key in gate, f"gate_eval.json missing key {key!r}"
     assert gate["seed"] == 42
     assert gate["n_random_controls"] == 12
+    assert gate["null_mode"] == "class_matched"
+    assert gate["match_on"] == "bins"
+    assert gate["fill_mode"] == "constant"
+    for stats in gate["draw_success_rates"].values():
+        assert stats["match_on"] == "bins"
+        assert "target_bin_counts" in stats
     assert gate["continuum_fill_sensitivity"]["continuum_fill_locked"] == 1.0
+
+
+def test_ablation_cli_legacy_modes(tmp_path: Path) -> None:
+    """The documented legacy invocation runs and records pooled/angstrom modes."""
+    pytest.importorskip("lightgbm")
+    features = tmp_path / "features.npz"
+    perm = tmp_path / "perm_importance.npz"
+    out_dir = tmp_path / "ablation_legacy"
+    _build_synthetic_features(features, n_rows=60, n_bins=200)
+    _build_synthetic_perm(perm, n_bins=200)
+    model_path = _train_tiny_model(features)
+
+    main([
+        "--features", str(features),
+        "--model", str(model_path),
+        "--out-dir", str(out_dir),
+        "--n-bootstrap", "5",
+        "--n-random-controls", "6",
+        "--null-mode", "pooled",
+        "--match-on", "angstrom",
+        "--fill-mode", "constant",
+        "--continuum-fill", "empirical-median",
+        "--perm-importance", str(perm),
+        "--seed", "42",
+    ])
+    body = (out_dir / "masked_line_ablation_full.csv").read_text().splitlines()[1:]
+    assert body and all(line.endswith(",pooled,angstrom,constant") for line in body)
+    with (out_dir / "gate_eval.json").open() as f:
+        gate = json.load(f)
+    assert gate["null_mode"] == "pooled"
+    assert gate["match_on"] == "angstrom"
+    assert gate["continuum_fill_sensitivity"]["production_continuum_fill"] != 1.0
