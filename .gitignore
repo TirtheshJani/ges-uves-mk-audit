@@ -65,3 +65,16 @@ logs/
 *.synctex.gz
 *.toc
 submission/output.*
+
+# Scratch and preview files
+_view_*.png
+*_check.png
+*_smoke.png
+handoff_view.txt
+.pytest_run*.log
+artifacts/metrics.json.bak*
+
+# internal release notes, not shipped
+RELEASE_CHECKLIST.md
+REVISION_REPORT.md
+artifacts/revision/cleanup_list.txt

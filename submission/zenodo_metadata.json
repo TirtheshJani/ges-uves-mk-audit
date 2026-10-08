@@ -1,11 +1,10 @@
 {
-  "_comment": "Zenodo deposit metadata for the ges-uves-mk-audit code-and-data archive. Upload via the Zenodo web UI at https://zenodo.org/deposit/new or programmatically via the Zenodo REST API. Two placeholders to fill at upload time: arXiv id (after manuscript posts) and the GitHub release commit hash (after a release tag is pushed). The 'doi' field is auto-assigned by Zenodo at deposit time and should NOT be set here.",
-
+  "_comment": "Zenodo deposit metadata for the ges-uves-mk-audit code-and-data archive (version 1.1.0). Upload through the Zenodo web UI or REST API. The DOI field is assigned by Zenodo at deposit time and must not be set here; until then the placeholder text is 'DOI: to be assigned on Zenodo deposit'. Fill the arXiv identifier and the publication date after submission. .zenodo.json at the repository root carries the same metadata for the GitHub-Zenodo integration.",
+  "manuscript_title": "A masked-line ablation audit of a Gaia-ESO UVES MK (F/G/K) LightGBM classifier: what survives, and a train-test scale mismatch",
   "metadata": {
-    "title": "ges-uves-mk-audit: interventional masked-line ablation audit of a tree-based MK classifier on Gaia-ESO UVES spectra (code, trained model, and feature matrix)",
+    "title": "ges-uves-mk-audit: masked-line ablation audit of a Gaia-ESO UVES MK (F/G/K) LightGBM classifier (code, trained model and feature matrix)",
     "upload_type": "software",
-    "description": "<p>This deposit accompanies the manuscript of the same name and contains: (1) the trained LightGBM MK classifier (lgbm_mk.pkl, 1.77 MB), (2) the engineered feature matrix and labels (features.npz, with X, y, wave_centers, train/val/test indices, gap_mask, ra_deg, dec_deg, median_imputer, and metadata; about 7 MB compressed), (3) the full set of analysis artifacts (ablation, interpretability, sensitivity, and benchmark JSON/CSV/NPZ files), and (4) the manuscript numerical-claims dossier (manuscript_numbers.csv and .md) mapping every numeric value in the paper to its source artifact.</p><p>The audit applies interventional masked-line ablation to a tree-based stellar classifier of Gaia-ESO Survey FLAMES-UVES U580 spectra in the 4800 to 6800 Angstrom window. Headline finding: two of three pre-specified (line set, class) pairs reject the random-window null at p &lt; 0.002; the K-class null on the Mg b triplet, corroborated by null results on Na D and Ca I, is interpreted as a multi-leg shortcut combining an inherited continuum-level signal with Fe I and Cr I multiplet substitution in place of the canonical neutral-metal diagnostics.</p><p>Underlying spectra are public via the ESO Science Archive Facility under Gaia-ESO Programme 188.B-3002. Recommended stellar parameters are from Hourihane et al. 2023 (A&amp;A 676, A129; bibcode 2023A&amp;A...676A.129H). The Pickles 1998 UVKLIB stellar flux library used for the external benchmark is public via the STScI HLSP reference-atlases mirror. This deposit redistributes only the feature matrix derived from the Gaia-ESO spectra, not the raw spectra themselves; users seeking raw spectra should fetch from the ESO Science Archive directly. Please cite the Gaia-ESO Survey (Gilmore et al. 2022, A&amp;A 666, A120; Sacco et al. 2014, A&amp;A 565, A113) alongside this deposit when using the feature matrix.</p>",
-
+    "description": "<p>This archive accompanies a methods note on masked-line ablation of a three-class (F/G/K) effective-temperature-bin classifier of Gaia-ESO FLAMES-UVES U580 spectra (4800 to 6800 Angstrom), trained with LightGBM. It contains: (1) the trained classifier (lgbm_mk.pkl); (2) the engineered feature matrix and labels (features.npz); (3) the analysis scripts and library code, including the per-class masked-line ablation with a class-matched, bin-matched random-window null, row-level flip counts and an exact McNemar test; (4) the revision analyses under artifacts/revision/ (scale-versus-spread decomposition of the polynomial re-normalisation effect, retraining under alternative continuum normalisations, luminosity-class composition and a Kiel diagram, line-set geometry, and a corrected Pickles template cross-check that did not reach its agreement gate); (5) the dated decision log (docs/decision_log.md) and the folder provenance note; and (6) the LaTeX source of the manuscript with a script that writes every quoted number from the JSON artifacts.</p><p>Underlying spectra are public through the ESO Science Archive Facility (Gaia-ESO Programme 188.B-3002). Recommended stellar parameters are from Hourihane et al. 2023 (A&amp;A 676, A129). This deposit redistributes only the feature matrix derived from the Gaia-ESO spectra, not the raw spectra, and does not redistribute the Pickles library. Please cite the Gaia-ESO Survey (Gilmore et al. 2022, A&amp;A 666, A120; Sacco et al. 2014, A&amp;A 565, A113) when using the feature matrix.</p><p>Version 1.1.0 supersedes the unminted first deposit. DOI: to be assigned on Zenodo deposit.</p>",
     "creators": [
       {
         "name": "Jani, Tirthesh",
@@ -13,75 +12,80 @@
         "orcid": "0009-0005-5965-4409"
       }
     ],
-
     "keywords": [
       "stellar classification",
       "Morgan-Keenan",
       "machine learning interpretability",
-      "causal feature ablation",
+      "masked-line ablation",
+      "feature ablation",
       "Gaia-ESO Survey",
       "FLAMES-UVES",
       "LightGBM",
-      "shortcut learning",
-      "physics-aware machine learning"
+      "normalisation sensitivity",
+      "distribution shift"
     ],
-
-    "license": "MIT",
+    "license": "mit",
     "access_right": "open",
-
-    "communities": [
-      {"identifier": "astrophysics"}
-    ],
-
-    "subjects": [
-      {"term": "Astronomy and astrophysics", "identifier": "https://astrothesaurus.org/uat/85"},
-      {"term": "Stellar classification", "identifier": "https://astrothesaurus.org/uat/1589"},
-      {"term": "Spectroscopy", "identifier": "https://astrothesaurus.org/uat/1558"},
-      {"term": "Astrostatistics techniques", "identifier": "https://astrothesaurus.org/uat/1886"}
-    ],
-
+    "version": "1.1.0",
     "related_identifiers": [
+      {
+        "identifier": "https://github.com/TirtheshJani/ges-uves-mk-audit",
+        "relation": "isSupplementedBy",
+        "resource_type": "software",
+        "scheme": "url"
+      },
+      {
+        "identifier": "10.1051/0004-6361/201423619",
+        "relation": "isDerivedFrom",
+        "resource_type": "publication-article",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.1051/0004-6361/202243134",
+        "relation": "isDerivedFrom",
+        "resource_type": "publication-article",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.1051/0004-6361/202345910",
+        "relation": "isDerivedFrom",
+        "resource_type": "publication-article",
+        "scheme": "doi"
+      },
       {
         "identifier": "[arxiv-id-post-submission]",
         "relation": "isSupplementTo",
         "resource_type": "publication-preprint",
         "scheme": "arxiv",
-        "_comment": "Replace with arxiv id like 2605.12345 after the preprint posts. Until then, leave as placeholder."
-      },
-      {
-        "identifier": "https://github.com/TirtheshJani/ges-uves-mk-audit/tree/[release-commit-hash]",
-        "relation": "isSupplementedBy",
-        "resource_type": "software",
-        "scheme": "url",
-        "_comment": "Replace with the URL of the release commit hash after the corresponding git tag is pushed."
-      },
-      {
-        "identifier": "10.18727/0722-6691/5238",
-        "relation": "isDerivedFrom",
-        "resource_type": "publication-article",
-        "scheme": "doi",
-        "_comment": "Sacco et al. 2014 GES UVES pipeline (placeholder DOI; verify against ADS before mint)."
-      },
-      {
-        "identifier": "2022A&A...666A.120G",
-        "relation": "isDerivedFrom",
-        "resource_type": "publication-article",
-        "scheme": "ads",
-        "_comment": "Gilmore et al. 2022 GES DR5 overview."
-      },
-      {
-        "identifier": "2023A&A...676A.129H",
-        "relation": "isDerivedFrom",
-        "resource_type": "publication-article",
-        "scheme": "ads",
-        "_comment": "Hourihane et al. 2023 GES DR5 recommended parameters."
+        "_comment": "Replace with the arXiv identifier after the preprint posts."
       }
     ],
-
-    "version": "1.0.0",
+    "subjects": [
+      {
+        "term": "Astronomy and astrophysics",
+        "identifier": "https://astrothesaurus.org/uat/85"
+      },
+      {
+        "term": "Stellar classification",
+        "identifier": "https://astrothesaurus.org/uat/1589"
+      },
+      {
+        "term": "Spectroscopy",
+        "identifier": "https://astrothesaurus.org/uat/1558"
+      },
+      {
+        "term": "Astrostatistics techniques",
+        "identifier": "https://astrothesaurus.org/uat/1886"
+      }
+    ],
+    "communities": [
+      {
+        "identifier": "astrophysics"
+      }
+    ],
+    "doi_placeholder": "DOI: to be assigned on Zenodo deposit",
     "publication_date": "[YYYY-MM-DD post-submission]"
   },
-
   "files_to_attach": [
     {
       "path": "../artifacts/lgbm_mk.pkl",
@@ -113,9 +117,16 @@
     },
     {
       "path": "../artifacts/benchmark/",
-      "description": "Pickles 1998 UVKLIB external chi-squared cross-check (exploratory)"
+      "description": "Original Pickles 1998 UVKLIB chi-squared cross-check outputs (superseded by artifacts/revision/benchmark_corrected.json; produced with a template-type map that was later corrected)"
+    },
+    {
+      "path": "../artifacts/revision/",
+      "description": "Revision analyses: scale decomposition, retraining under alternative normalisations, luminosity mix, recalibrated and stratified ablation, corrected Pickles cross-check, line-set table, and the macro-to-source index"
+    },
+    {
+      "path": "../docs/",
+      "description": "Dated decision log, folder provenance note, reproducibility appendix, and the superseded manuscript drafts"
     }
   ],
-
   "preserve_existing_files": true
 }

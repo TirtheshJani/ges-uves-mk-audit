@@ -1,5 +1,5 @@
 {
-  "round": "round-3 reviewer item 1 (appendix A2)",
+  "round": "post-hoc follow-up (appendix A2)",
   "description": "Fe/Cr ablation plus per-class baseline accuracy plus full F/G/K confusion under polynomial_n5 re-derivation of the continuum. Production-continuum analogues reported alongside for comparison.",
   "fe_cr_line_set_aa": [
     [
@@ -15,7 +15,7 @@
       5350.0
     ]
   ],
-  "fe_cr_line_set_provenance": "Cr i 5206.04 (RMT 7), Cr i 5208.42 (RMT 7), Fe i 5269.54 (RMT 15), Cr i 5345.80 (RMT 1); half-window +/-5 A. Post-hoc per round-3 review item 1; not part of pre-specified headline gate (Section 3.5).",
+  "fe_cr_line_set_provenance": "Cr i 5206.04 (RMT 7), Cr i 5208.42 (RMT 7), Fe i 5269.54 (RMT 15), Cr i 5345.80 (RMT 1); half-window +/-5 A. Post-hoc follow-up analysis (appendix A2); not part of pre-specified headline gate (Section 3.5).",
   "seed": 42,
   "n_bootstrap": 500,
   "n_random_controls": 500,

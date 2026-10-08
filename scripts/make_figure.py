@@ -6,8 +6,13 @@ Outputs (all 300 DPI PDFs under ``--out-dir``):
 
   * importance_main.pdf            (plot_main_figure)
   * confusion_matrix_test.pdf      (plot_confusion_matrix from metrics.json)
-  * confusion_matrix_pickles.pdf   (plot_confusion_matrix from benchmark_report.json, FGK-only)
-  * ablation_bars.pdf              (plot_ablation_bars from gate_eval.json)
+  * confusion_matrix_pickles.pdf   (only with --benchmark: FGK-only confusion from a benchmark report)
+  * ablation_bars_legacy_gate_eval.pdf (only with --legacy-bars; the manuscript bar chart,
+                                    ablation_bars.pdf, is written by scripts/revision/ablation_recalibrated.py)
+
+With ``--ablation-recalibrated`` the right-hand panel of importance_main.pdf is drawn from the
+primary run (production continuum, linear-interpolation fill, class-matched bin-matched null) of
+artifacts/revision/ablation_recalibrated.json instead of the deposited gate_eval.json.
 
 Legacy overlays (``importance_overlay.pdf``,
 ``importance_overlay_per_class.pdf``) are also rendered for the dossier.
@@ -80,8 +85,13 @@ def main(argv: list[str] | None = None) -> None:
                    help="Path to artifacts/ablation/gate_eval.json")
     p.add_argument("--metrics", required=True, type=Path,
                    help="Path to artifacts/metrics.json")
-    p.add_argument("--benchmark", required=True, type=Path,
-                   help="Path to artifacts/benchmark/benchmark_report.json")
+    p.add_argument("--benchmark", type=Path, default=None,
+                   help="Optional benchmark report; when given, the Pickles confusion matrix is drawn")
+    p.add_argument("--ablation-recalibrated", type=Path, default=None,
+                   help="Path to artifacts/revision/ablation_recalibrated.json; when given, the "
+                        "ablation panel of importance_main.pdf uses its primary run")
+    p.add_argument("--legacy-bars", action="store_true",
+                   help="also write ablation_bars_legacy_gate_eval.pdf from gate_eval.json")
     p.add_argument("--out-dir", required=True, type=Path)
     p.add_argument("--representative-class", default="G")
     p.add_argument("--top-k-per-class", type=int, default=10)
@@ -114,20 +124,30 @@ def main(argv: list[str] | None = None) -> None:
 
     gate_eval = _load_json(args.ablation)
     metrics = _load_json(args.metrics)
-    benchmark = _load_json(args.benchmark)
+    benchmark = _load_json(args.benchmark) if args.benchmark is not None else None
 
     rows, headline_pairs, pivot_pairs = _gate_eval_to_pairs(gate_eval)
+    main_source = (rows, headline_pairs, pivot_pairs)
+    if args.ablation_recalibrated is not None:
+        recal = _load_json(args.ablation_recalibrated)
+        gate = recal["headline_gate"]
+        main_source = (
+            list(recal["runs"][recal["primary_run"]]["rows"]),
+            [(d["line_set"], d["mk_class"]) for d in gate["headline_pairs"]],
+            [(d["line_set"], d["mk_class"]) for d in gate["pivot_pairs"]],
+        )
+    main_all_rows, main_headline, main_pivot = main_source
 
     # 1. Main figure: spectrum + per-class SHAP top-K + MK lines + gap shading
     #    + ablation bars in side panel.
     main_rows: list[dict[str, Any]] = []
-    for ls, cls in headline_pairs:
-        for row in rows:
+    for ls, cls in main_headline:
+        for row in main_all_rows:
             if row.get("line_set") == ls and row.get("mk_class") == cls:
                 main_rows.append({**row, "is_pivot": False})
                 break
-    for ls, cls in pivot_pairs:
-        for row in rows:
+    for ls, cls in main_pivot:
+        for row in main_all_rows:
             if row.get("line_set") == ls and row.get("mk_class") == cls:
                 main_rows.append({**row, "is_pivot": True})
                 break
@@ -154,30 +174,32 @@ def main(argv: list[str] | None = None) -> None:
     )
 
     # 3. Confusion matrix from Pickles benchmark (FGK-only).
-    cm_pickles_full = np.asarray(benchmark.get("confusion_matrix"))
-    bench_labels = list(benchmark.get("labels", class_labels + ["OTHER"]))
-    fgk_idx = [i for i, lab in enumerate(bench_labels) if lab in {"F", "G", "K"}]
-    if cm_pickles_full.size and fgk_idx:
-        cm_pickles_fgk = cm_pickles_full[np.ix_(fgk_idx, fgk_idx)]
-        fgk_labels = [bench_labels[i] for i in fgk_idx]
-    else:
-        cm_pickles_fgk = cm_pickles_full
-        fgk_labels = bench_labels
-    plot_confusion_matrix(
-        cm=cm_pickles_fgk,
-        labels=fgk_labels,
-        title="Pickles vs model (FGK-only)",
-        out_path=args.out_dir / "confusion_matrix_pickles.pdf",
-    )
+    if benchmark is not None:
+        cm_pickles_full = np.asarray(benchmark.get("confusion_matrix"))
+        bench_labels = list(benchmark.get("labels", class_labels + ["OTHER"]))
+        fgk_idx = [i for i, lab in enumerate(bench_labels) if lab in {"F", "G", "K"}]
+        if cm_pickles_full.size and fgk_idx:
+            cm_pickles_fgk = cm_pickles_full[np.ix_(fgk_idx, fgk_idx)]
+            fgk_labels = [bench_labels[i] for i in fgk_idx]
+        else:
+            cm_pickles_fgk = cm_pickles_full
+            fgk_labels = bench_labels
+        plot_confusion_matrix(
+            cm=cm_pickles_fgk,
+            labels=fgk_labels,
+            title="Pickles vs model (FGK-only)",
+            out_path=args.out_dir / "confusion_matrix_pickles.pdf",
+        )
 
-    # 4. Ablation bar chart (headline + pivot) from gate_eval.json.
-    plot_ablation_bars(
-        ablation_rows=rows,
-        headline_pairs=headline_pairs,
-        pivot_pairs=pivot_pairs,
-        out_path=args.out_dir / "ablation_bars.pdf",
-        n_random_controls=int(gate_eval.get("n_random_controls", 500)),
-    )
+    # 4. Legacy ablation bar chart from gate_eval.json (not the manuscript figure).
+    if args.legacy_bars:
+        plot_ablation_bars(
+            ablation_rows=rows,
+            headline_pairs=headline_pairs,
+            pivot_pairs=pivot_pairs,
+            out_path=args.out_dir / "ablation_bars_legacy_gate_eval.pdf",
+            n_random_controls=int(gate_eval.get("n_random_controls", 500)),
+        )
 
     # 5. Legacy overlays for the dossier.
     plot_summary_overlay(

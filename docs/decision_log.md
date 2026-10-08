@@ -1,5 +1,7 @@
 # Decisions log: stellar-mk-audit
 
+> **Note on this file.** This is a dated historical log written during development of the audit in the sibling working repository, under its earlier name. It records decisions as they were taken on the dates shown, including intermediate states that later analyses superseded; it has not been rewritten. Where an entry conflicts with the manuscript or with `artifacts/revision/`, the manuscript and the files under `artifacts/revision/` are authoritative. Role names, plan references and phase numbers below are internal project vocabulary.
+
 Binding decisions for the LightGBM MK audit paper. Every decision that affects the paper's claims, methodology, or reproducibility is logged here with date, reasoning, and what would reverse it.
 
 This file is the reproducibility contract. Phase 6 methods writing pulls from here. The Physicist subagent (see `auditplan` §4.5) verifies entries against canonical references.

@@ -342,8 +342,18 @@ def test_occlusion_reexports_are_same_objects() -> None:
 _PICKLES_DIR = Path(__file__).resolve().parents[2] / "stellar-mk-audit" / "data" / "pickles"
 
 
+def _template_readable(name: str) -> bool:
+    """True when the template exists and can be opened for reading."""
+    try:
+        with (_PICKLES_DIR / name).open("rb") as handle:
+            handle.read(1)
+    except OSError:
+        return False
+    return True
+
+
 @pytest.mark.skipif(
-    not (_PICKLES_DIR / "pickles_uk_20.fits").exists(),
+    not _template_readable("pickles_uk_20.fits"),
     reason="STScI Pickles templates not available alongside the repository",
 )
 @pytest.mark.parametrize("n,expected", [(20, "F8V"), (46, "B2IV"), (1, "O5V"), (131, "M2I")])
@@ -355,7 +365,7 @@ def test_read_pickles_header_type_real_template(n: int, expected: str) -> None:
 
 
 @pytest.mark.skipif(
-    not (_PICKLES_DIR / "pickles_uk_131.fits").exists(),
+    not _template_readable("pickles_uk_131.fits"),
     reason="STScI Pickles templates not available alongside the repository",
 )
 def test_pickles_map_matches_all_real_headers() -> None:

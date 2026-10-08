@@ -51,6 +51,20 @@ from src.interpret.benchmark import (  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _repo_relative(path: Path) -> str:
+    """Repository-relative POSIX form of ``path`` so artifacts carry no machine-specific prefix."""
+    p = Path(path)
+    if p.is_absolute():
+        try:
+            p = p.resolve().relative_to(REPO_ROOT)
+        except ValueError:
+            return p.name
+    return p.as_posix()
+
+
 CLASS_NAMES = {1: "F", 2: "G", 3: "K"}
 SEED = 42
 AGREEMENT_FLOOR = 0.55
@@ -103,7 +117,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--features", type=Path, default=Path("artifacts/features.npz"))
     p.add_argument("--model", type=Path, default=Path("artifacts/lgbm_mk.pkl"))
     p.add_argument("--pickles-dir", type=Path,
-                   default=Path(r"C:\Users\TJ\Documents\GitHub\stellar-mk-audit\data\pickles"))
+                   default=Path("data/pickles"))
     p.add_argument("--out", type=Path, default=Path("artifacts/revision/benchmark_corrected.json"))
     p.add_argument("--verbose", "-v", action="store_true")
     args = p.parse_args(argv)
@@ -236,7 +250,8 @@ def main(argv: list[str] | None = None) -> int:
         "description": ("Pickles 1998 UVKLIB template cross-check of the production classifier on the "
                         "held-out test rows, with template spectral types read from the FITS headers; "
                         "three template continuum conventions; audit rows used as stored."),
-        "inputs": {"features": str(args.features), "model": str(args.model), "pickles_dir": str(args.pickles_dir),
+        "inputs": {"features": _repo_relative(args.features), "model": _repo_relative(args.model),
+                   "pickles_dir": _repo_relative(args.pickles_dir),
                    "n_templates": len(files), "n_test": int(len(test_idx)),
                    "continuum_methods_deposited": list(VALID_CONTINUUM_METHODS),
                    "continuum_methods_additional": ["polynomial_n5_window"],
