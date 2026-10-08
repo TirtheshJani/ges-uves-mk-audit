@@ -10,10 +10,13 @@ what fraction of training rows live in singleton groups: if most rows are
 singletons, the group stratification is partial and the 0.010 gap is a
 lower bound on leakage, not a tight constraint.
 
-This script re-derives the spatial groups from artifacts/features.npz on the
-train+val partition (the partition trained CV on), computes the
-singleton statistics, and patches the relevant fields into
-artifacts/metrics.json so the manuscript dossier can cite them.
+This script re-derives the spatial groups from artifacts/features.npz exactly
+as scripts/train_classifier.py does (DBSCAN over every feature row, train, validation
+and test, followed by restriction to the train+val rows that enter the CV), computes the
+singleton statistics on those restricted groups, and patches the relevant fields into
+artifacts/metrics.json so the manuscript dossier can cite them. Clustering the train+val
+rows alone (``--scope partition``) gives a different grouping, because clusters that
+span the partitions lose members; that variant is not the one the reported spatial CV used.
 """
 from __future__ import annotations
 
@@ -49,6 +52,13 @@ def main(argv: list[str] | None = None) -> int:
         default="trainval",
         help="match spatial-CV scope; trainval combines train + val",
     )
+    p.add_argument(
+        "--scope",
+        choices=("full", "partition"),
+        default="full",
+        help="rows DBSCAN is run on: 'full' = all feature rows (as in train_classifier.py), "
+        "'partition' = only the rows of the chosen partition",
+    )
     p.add_argument("--verbose", "-v", action="store_true")
     args = p.parse_args(argv)
 
@@ -64,15 +74,22 @@ def main(argv: list[str] | None = None) -> int:
         idx = np.concatenate([train_idx, val_idx])
     else:
         idx = train_idx
-    ra = fp["ra_deg"][idx]
-    dec = fp["dec_deg"][idx]
+    if args.scope == "full":
+        ra_all, dec_all = fp["ra_deg"], fp["dec_deg"]
+        n_cluster_rows = len(ra_all)
+        groups = derive_spatial_groups(
+            ra_all, dec_all, eps_deg=args.eps_deg, min_samples=args.min_samples
+        )[idx]
+    else:
+        n_cluster_rows = len(idx)
+        groups = derive_spatial_groups(
+            fp["ra_deg"][idx], fp["dec_deg"][idx],
+            eps_deg=args.eps_deg, min_samples=args.min_samples,
+        )
     logger.info(
-        "re-deriving spatial groups on %d rows (%s partition) "
-        "with eps_deg=%.4f min_samples=%d",
-        len(idx), args.partition, args.eps_deg, args.min_samples,
-    )
-    groups = derive_spatial_groups(
-        ra, dec, eps_deg=args.eps_deg, min_samples=args.min_samples
+        "spatial groups derived on %d rows (scope=%s), restricted to %d rows "
+        "(%s partition), eps_deg=%.4f min_samples=%d",
+        n_cluster_rows, args.scope, len(idx), args.partition, args.eps_deg, args.min_samples,
     )
     stats = singleton_group_stats(groups)
     logger.info(
@@ -92,6 +109,8 @@ def main(argv: list[str] | None = None) -> int:
         metrics = {}
     metrics["cv_spatial_singleton_stats"] = {
         "partition": args.partition,
+        "dbscan_scope": args.scope,
+        "n_rows_clustered": int(n_cluster_rows),
         "eps_deg": float(args.eps_deg),
         "min_samples": int(args.min_samples),
         **stats,

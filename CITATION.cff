@@ -1,37 +1,39 @@
 cff-version: 1.2.0
-title: "ges-uves-mk-audit: interventional masked-line ablation audit of a tree-based MK classifier on Gaia-ESO UVES spectra"
-message: "If you use this software, please cite both the software and the accompanying paper."
+title: "ges-uves-mk-audit: masked-line ablation audit of a Gaia-ESO UVES MK (F/G/K) LightGBM classifier (code, trained model and feature matrix)"
+message: "If you use this software, please cite both the software archive and the accompanying paper."
 type: software
+version: "1.1.0"
 authors:
   - family-names: "Jani"
     given-names: "Tirthesh"
     orcid: "https://orcid.org/0009-0005-5965-4409"
     email: "tirtheshjani@gmail.com"
     affiliation: "Independent researcher, Barrie, Ontario, Canada"
+abstract: "Code, trained LightGBM model, feature matrix and analysis artifacts for a methods note on masked-line ablation of a three-class (F/G/K) effective-temperature-bin classifier of Gaia-ESO FLAMES-UVES U580 spectra: which dependencies survive a controlled ablation, the luminosity-class composition of the classes, and a train-test scale mismatch that explains the collapse under polynomial re-normalisation."
 keywords:
   - "stellar classification"
+  - "Morgan-Keenan"
   - "machine learning interpretability"
-  - "causal feature ablation"
+  - "masked-line ablation"
+  - "feature ablation"
   - "Gaia-ESO Survey"
-  - "UVES"
+  - "FLAMES-UVES"
   - "LightGBM"
-  - "MK spectral classification"
+  - "normalisation sensitivity"
+  - "distribution shift"
 license: MIT
 repository-code: "https://github.com/TirtheshJani/ges-uves-mk-audit"
 url: "https://github.com/TirtheshJani/ges-uves-mk-audit"
+identifiers:
+  - type: other
+    value: "DOI: to be assigned on Zenodo deposit"
+    description: "Zenodo DOI of the code and data archive; no DOI has been minted yet. Replace this entry when the deposit is published."
 preferred-citation:
-  type: article
-  title: "Interventional masked-line ablation reveals partial shortcut learning in a LightGBM MK classifier of Gaia-ESO UVES spectra"
+  type: unpublished
+  title: "A masked-line ablation audit of a Gaia-ESO UVES MK (F/G/K) LightGBM classifier: what survives, and a train-test scale mismatch"
   authors:
     - family-names: "Jani"
       given-names: "Tirthesh"
       orcid: "https://orcid.org/0009-0005-5965-4409"
   year: 2026
-  journal: "arXiv preprint"
-  identifiers:
-    - type: other
-      value: "arXiv:[arxiv-id-post-submission]"
-      description: "arXiv preprint id, to be filled after submission"
-    - type: doi
-      value: "[zenodo-doi-post-mint]"
-      description: "Zenodo DOI for code and data, to be filled after Zenodo upload"
+  notes: "Manuscript in preparation. Journal reference and arXiv identifier to be added after submission."

@@ -1,0 +1,907 @@
+{
+ "macros": {
+  "n_index": 1699,
+  "n_defined": 1699,
+  "status_counts": {
+   "ok": 1697,
+   "typed_constant": 2
+  },
+  "mismatches": [],
+  "unresolved": [],
+  "typed_constants": [
+   {
+    "macro": "pkGate",
+    "source": "pre-specified agreement gate (decision log, benchmark entry)",
+    "shown": "\\ensuremath{0.55}",
+    "code_constant": 0.55,
+    "matches_code": true
+   },
+   {
+    "macro": "pkGateMinN",
+    "source": "pre-specified minimum n_compared",
+    "shown": "100",
+    "code_constant": 100.0,
+    "matches_code": true
+   }
+  ]
+ },
+ "literals": {
+  "n_literals": 135,
+  "counts": {
+   "structural": 43,
+   "typed_constant": 60,
+   "checked_result": 31,
+   "untraced": 1
+  },
+  "untraced": [
+   {
+    "literal": "6143",
+    "class": "untraced",
+    "why": "",
+    "context": "tt{safcat.\"GES\\_DR5\\_1\\_V1\"} . The query returned 6143 catalogue rows with non-null \\Teff, $\\l"
+   }
+  ],
+  "all": [
+   {
+    "literal": "1",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "vives, and a train--test scale mismatch}  \\author[1]{Tirthesh Jani\\thanks{ORCID: ; tirthesh"
+   },
+   {
+    "literal": "1",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "i\\thanks{ORCID: ; tirtheshjani@gmail.com}} \\affil[1]{Independent researcher, Barrie, Ontari"
+   },
+   {
+    "literal": "80",
+    "class": "checked_result",
+    "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
+    "context": "BM classifier that assigns Gaia-ESO FLAMES-UVES U580 spectra (4800 to 6800~\\AA) to three eff"
+   },
+   {
+    "literal": "4800",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "r that assigns Gaia-ESO FLAMES-UVES U580 spectra (4800 to 6800~\\AA) to three effective-tempera"
+   },
+   {
+    "literal": "6800",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ssigns Gaia-ESO FLAMES-UVES U580 spectra (4800 to 6800~\\AA) to three effective-temperature cla"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "axLost{} of the \\nClassK{} K test rows (the exact 95 percent upper bound on the loss rate is"
+   },
+   {
+    "literal": "1",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "udit to a LightGBM model  trained on Gaia-ESO DR5.1 FLAMES-UVES U580 spectra . The contribu"
+   },
+   {
+    "literal": "80",
+    "class": "checked_result",
+    "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
+    "context": "BM model  trained on Gaia-ESO DR5.1 FLAMES-UVES U580 spectra . The contributions are: (i) a "
+   },
+   {
+    "literal": "80",
+    "class": "checked_result",
+    "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
+    "context": " wavelength window}  The audit uses FLAMES-UVES U580 spectra from the Gaia-ESO Survey . UVES"
+   },
+   {
+    "literal": "80",
+    "class": "checked_result",
+    "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
+    "context": "ution echelle spectrograph at the VLT UT2 . The U580 setup combines a blue-arm chip (4770 to"
+   },
+   {
+    "literal": "4770",
+    "class": "structural",
+    "why": "external documentation fact: UVES U580 blue-arm chip start (ESO UVES manual)",
+    "context": "LT UT2 . The U580 setup combines a blue-arm chip (4770 to 5770~\\AA) and a red-arm chip (5832 t"
+   },
+   {
+    "literal": "5770",
+    "class": "structural",
+    "why": "external documentation fact: U580 blue-arm chip end",
+    "context": " The U580 setup combines a blue-arm chip (4770 to 5770~\\AA) and a red-arm chip (5832 to 6830~\\"
+   },
+   {
+    "literal": "5832",
+    "class": "structural",
+    "why": "external documentation fact: U580 red-arm chip start",
+    "context": "e-arm chip (4770 to 5770~\\AA) and a red-arm chip (5832 to 6830~\\AA) separated by an inter-chip"
+   },
+   {
+    "literal": "6830",
+    "class": "structural",
+    "why": "external documentation fact: U580 red-arm chip end",
+    "context": "ip (4770 to 5770~\\AA) and a red-arm chip (5832 to 6830~\\AA) separated by an inter-chip gap. We"
+   },
+   {
+    "literal": "4800",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ed by an inter-chip gap. We restrict the audit to 4800 to 6800~\\AA, which lies inside U580 cov"
+   },
+   {
+    "literal": "6800",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " inter-chip gap. We restrict the audit to 4800 to 6800~\\AA, which lies inside U580 coverage an"
+   },
+   {
+    "literal": "80",
+    "class": "checked_result",
+    "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
+    "context": "he audit to 4800 to 6800~\\AA, which lies inside U580 coverage and avoids mixing U520 and U58"
+   },
+   {
+    "literal": "20",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ich lies inside U580 coverage and avoids mixing U520 and U580 setups. The window contains \\H"
+   },
+   {
+    "literal": "80",
+    "class": "checked_result",
+    "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
+    "context": "inside U580 coverage and avoids mixing U520 and U580 setups. The window contains \\Hbeta at 4"
+   },
+   {
+    "literal": "4861",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "20 and U580 setups. The window contains \\Hbeta at 4861~\\AA, the \\Mgb triplet at 5167, 5173 and"
+   },
+   {
+    "literal": "5167",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " contains \\Hbeta at 4861~\\AA, the \\Mgb triplet at 5167, 5173 and 5184~\\AA, the \\NaD doublet at"
+   },
+   {
+    "literal": "5173",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ins \\Hbeta at 4861~\\AA, the \\Mgb triplet at 5167, 5173 and 5184~\\AA, the \\NaD doublet at 5890 "
+   },
+   {
+    "literal": "5184",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "a at 4861~\\AA, the \\Mgb triplet at 5167, 5173 and 5184~\\AA, the \\NaD doublet at 5890 and 5896~"
+   },
+   {
+    "literal": "5890",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "t at 5167, 5173 and 5184~\\AA, the \\NaD doublet at 5890 and 5896~\\AA, two \\CaI features at 6162"
+   },
+   {
+    "literal": "5896",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": ", 5173 and 5184~\\AA, the \\NaD doublet at 5890 and 5896~\\AA, two \\CaI features at 6162 and 6439"
+   },
+   {
+    "literal": "6162",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "oublet at 5890 and 5896~\\AA, two \\CaI features at 6162 and 6439~\\AA, and \\Halpha at 6563~\\AA. "
+   },
+   {
+    "literal": "6439",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " 5890 and 5896~\\AA, two \\CaI features at 6162 and 6439~\\AA, and \\Halpha at 6563~\\AA. Wavelengt"
+   },
+   {
+    "literal": "6563",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "CaI features at 6162 and 6439~\\AA, and \\Halpha at 6563~\\AA. Wavelengths are in air, following "
+   },
+   {
+    "literal": "6143",
+    "class": "untraced",
+    "why": "",
+    "context": "tt{safcat.\"GES\\_DR5\\_1\\_V1\"} . The query returned 6143 catalogue rows with non-null \\Teff, $\\l"
+   },
+   {
+    "literal": "580",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " g$ and [Fe/H] under a \\texttt{REC\\_SETUP LIKE '\\%580\\%'} filter; cross-matching against the "
+   },
+   {
+    "literal": "0.5",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " cross-matching against the regridded UVES store (0.5~arcsec primary radius, 2~arcsec ambigui"
+   },
+   {
+    "literal": "2",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " regridded UVES store (0.5~arcsec primary radius, 2~arcsec ambiguity cutoff) matched \\nMatc"
+   },
+   {
+    "literal": "6000",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "bels are \\Teff bins on the dwarf scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is "
+   },
+   {
+    "literal": "7300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "re \\Teff bins on the dwarf scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900,"
+   },
+   {
+    "literal": "5300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "n the dwarf scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These"
+   },
+   {
+    "literal": "6000",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "dwarf scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These are t"
+   },
+   {
+    "literal": "3900",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These are therefore effective"
+   },
+   {
+    "literal": "5300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These are therefore effective-tempe"
+   },
+   {
+    "literal": "20",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "equire a median signal-to-noise ratio of at least 20 per pixel over the window and cap post-"
+   },
+   {
+    "literal": "10",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ver the window and cap post-rebin missing bins at 10 percent. The labelled set holds \\lumNAl"
+   },
+   {
+    "literal": "0.70",
+    "class": "checked_result",
+    "why": "train fraction -> verified",
+    "context": " spectra: F = \\lumNF, G = \\lumNG, K = \\lumNK. The 0.70/0.15/0.15 train/validation/test split ("
+   },
+   {
+    "literal": "0.15",
+    "class": "checked_result",
+    "why": "val and test fractions -> verified",
+    "context": "tra: F = \\lumNF, G = \\lumNG, K = \\lumNK. The 0.70/0.15/0.15 train/validation/test split (fixed"
+   },
+   {
+    "literal": "0.15",
+    "class": "checked_result",
+    "why": "val and test fractions -> verified",
+    "context": "F = \\lumNF, G = \\lumNG, K = \\lumNK. The 0.70/0.15/0.15 train/validation/test split (fixed rand"
+   },
+   {
+    "literal": "5",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "   Normalised spectra are rebinned by a factor of 5 from the intermediate regridded store o"
+   },
+   {
+    "literal": "4801",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "mediate regridded store onto \\sdNBins{} bins over 4801 to 6796~\\AA. The grid is log-uniform wi"
+   },
+   {
+    "literal": "6796",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "regridded store onto \\sdNBins{} bins over 4801 to 6796~\\AA. The grid is log-uniform with $\\Del"
+   },
+   {
+    "literal": "5.0",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": " The grid is log-uniform with $\\Delta\\ln\\lambda = 5.0\\times10^{-4}$ per bin, so bin widths ru"
+   },
+   {
+    "literal": "0",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "is log-uniform with $\\Delta\\ln\\lambda = 5.0\\times10^{-4}$ per bin, so bin widths run from 2"
+   },
+   {
+    "literal": "4",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "og-uniform with $\\Delta\\ln\\lambda = 5.0\\times10^{-4}$ per bin, so bin widths run from 2.40 "
+   },
+   {
+    "literal": "2.40",
+    "class": "checked_result",
+    "why": "5e-4 * 4801 -> verified",
+    "context": "5.0\\times10^{-4}$ per bin, so bin widths run from 2.40 to 3.40~\\AA{} (mean \\meanBinWidth~\\AA; "
+   },
+   {
+    "literal": "3.40",
+    "class": "checked_result",
+    "why": "5e-4 * 6796 -> verified",
+    "context": "s10^{-4}$ per bin, so bin widths run from 2.40 to 3.40~\\AA{} (mean \\meanBinWidth~\\AA; \\meanBin"
+   },
+   {
+    "literal": "2000",
+    "class": "checked_result",
+    "why": "R = 1/dlnlambda for dlnlambda = 5e-4 -> verified",
+    "context": "). The corresponding bin resolving power is about 2000, so line windows in this paper are reso"
+   },
+   {
+    "literal": "5",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "he train+val partition (\\nTrainVal{} rows) we run 5-fold StratifiedKFold and a StratifiedGr"
+   },
+   {
+    "literal": "10",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "tion partition we compute permutation importance (10 repeats, accuracy scoring), TreeSHAP  o"
+   },
+   {
+    "literal": "1000",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ng), TreeSHAP  on a stratified subsample of up to 1000 rows (all 454 validation rows are used)"
+   },
+   {
+    "literal": "454",
+    "class": "checked_result",
+    "why": "n_val -> verified",
+    "context": "on a stratified subsample of up to 1000 rows (all 454 validation rows are used), and sliding-"
+   },
+   {
+    "literal": "50",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ion rows are used), and sliding-window occlusion (50~\\AA{} window, 25~\\AA{} stride). Top-\\tr"
+   },
+   {
+    "literal": "25",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "), and sliding-window occlusion (50~\\AA{} window, 25~\\AA{} stride). Top-\\triTopK{} bin sets "
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ext{masked})} - A_k^{(\\text{baseline})},   with a 95 percent percentile bootstrap interval f"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " also report the one-sided exact Clopper--Pearson 95 percent upper bound on the loss rate (l"
+   },
+   {
+    "literal": "1",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "he Monte Carlo $p$-value is $p_{\\mathrm{MC}} = (b+1)/(B+1)$, where $b$ counts random window"
+   },
+   {
+    "literal": "1",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "te Carlo $p$-value is $p_{\\mathrm{MC}} = (b+1)/(B+1)$, where $b$ counts random windows at l"
+   },
+   {
+    "literal": "1",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "ervative Monte Carlo $p$-value, and its floor is $1/(B+1) = \\ablFloor$. It tests whether a "
+   },
+   {
+    "literal": "1",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "ive Monte Carlo $p$-value, and its floor is $1/(B+1) = \\ablFloor$. It tests whether a line "
+   },
+   {
+    "literal": "0.01",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "l upper bound below zero and $p_{\\mathrm{MC}} \\le 0.01/3$ (family-wise $\\alpha = 0.01$, Bonfer"
+   },
+   {
+    "literal": "3",
+    "class": "checked_result",
+    "why": "n_pairs_total of the headline gate -> verified",
+    "context": "er bound below zero and $p_{\\mathrm{MC}} \\le 0.01/3$ (family-wise $\\alpha = 0.01$, Bonferro"
+   },
+   {
+    "literal": "0.01",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "_{\\mathrm{MC}} \\le 0.01/3$ (family-wise $\\alpha = 0.01$, Bonferroni over three pairs). All oth"
+   },
+   {
+    "literal": "0.025",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "emar $p$. For orientation, we mark a zone of $\\pm 0.025$ in $\\dA$; this zone was chosen after t"
+   },
+   {
+    "literal": "21",
+    "class": "checked_result",
+    "why": "Mg b total width -> verified",
+    "context": ", so ``\\Mgb dependence'' means dependence on that 21~\\AA{} region. The \\FeCr set was defined"
+   },
+   {
+    "literal": "5",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "ed model exactly, which fixes the sanity check. A 5-fold StratifiedKFold run on train+val g"
+   },
+   {
+    "literal": "5300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "or variant that measures the distance only to the 5300 and 6000~K boundaries shared by the thr"
+   },
+   {
+    "literal": "6000",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "t that measures the distance only to the 5300 and 6000~K boundaries shared by the three classe"
+   },
+   {
+    "literal": "2026",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "ts and assignments.} The line sets were logged on 2026-04-29, before the test set was first sc"
+   },
+   {
+    "literal": "04",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "d assignments.} The line sets were logged on 2026-04-29, before the test set was first score"
+   },
+   {
+    "literal": "29",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "ssignments.} The line sets were logged on 2026-04-29, before the test set was first scored o"
+   },
+   {
+    "literal": "2026",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "26-04-29, before the test set was first scored on 2026-04-30. That log entry named \\Mgb, \\NaD "
+   },
+   {
+    "literal": "04",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "-29, before the test set was first scored on 2026-04-30. That log entry named \\Mgb, \\NaD and"
+   },
+   {
+    "literal": "30",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": ", before the test set was first scored on 2026-04-30. That log entry named \\Mgb, \\NaD and H "
+   },
+   {
+    "literal": "2026",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": " the (line set, class) assignments were frozen on 2026-04-30, about eight hours after the test"
+   },
+   {
+    "literal": "04",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "(line set, class) assignments were frozen on 2026-04-30, about eight hours after the test se"
+   },
+   {
+    "literal": "30",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "ne set, class) assignments were frozen on 2026-04-30, about eight hours after the test set w"
+   },
+   {
+    "literal": "0.025",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " median. \\item \\emph{Indifference zone.} The $\\pm 0.025$ zone was set on 2026-05-16, after the "
+   },
+   {
+    "literal": "2026",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "difference zone.} The $\\pm 0.025$ zone was set on 2026-05-16, after the ablation results of 20"
+   },
+   {
+    "literal": "05",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "rence zone.} The $\\pm 0.025$ zone was set on 2026-05-16, after the ablation results of 2026-"
+   },
+   {
+    "literal": "16",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "ce zone.} The $\\pm 0.025$ zone was set on 2026-05-16, after the ablation results of 2026-04-"
+   },
+   {
+    "literal": "2026",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": " set on 2026-05-16, after the ablation results of 2026-04-30 and with the (\\Mgb, G) effect in "
+   },
+   {
+    "literal": "04",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "on 2026-05-16, after the ablation results of 2026-04-30 and with the (\\Mgb, G) effect in vie"
+   },
+   {
+    "literal": "30",
+    "class": "structural",
+    "why": "date found in decision log",
+    "context": "2026-05-16, after the ablation results of 2026-04-30 and with the (\\Mgb, G) effect in view. "
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "gainst \\bdFullAcc{} overall ($\\Delta = \\bdDelta$, 95 percent interval [\\bdCiLo, \\bdCiHi]).  "
+   },
+   {
+    "literal": "50",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " either (\\jacPO{} and \\jacSO), partly because its 50~\\AA{} windows are not comparable with b"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "mer lines changes F recall by \\ablPrimHbFDelta{} (95 percent interval [\\ablPrimHbFCiLo, \\abl"
+   },
+   {
+    "literal": "3",
+    "class": "checked_result",
+    "why": "n_pairs_total of the headline gate -> verified",
+    "context": "ate result is \\ablGateStatus: \\ablGatePassed{} of 3 headline pairs satisfy the criterion. T"
+   },
+   {
+    "literal": "6000",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ff is \\focusMgGTeff~K, beside the F/G boundary at 6000~K. The mean change in the probability o"
+   },
+   {
+    "literal": "15",
+    "class": "checked_result",
+    "why": "number of (line set, class) rows -> verified",
+    "context": "ple intervals, flip counts and $p$-values for the 15 pairs under the four configurations are"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "es. $\\dA$ is the change in class recall, with the 95 percent bootstrap interval; ``Flips'' a"
+   },
+   {
+    "literal": "1",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "bability of the true class; $p_{\\mathrm{MC}} = (b+1)/(B+1)$ against the random-window null."
+   },
+   {
+    "literal": "1",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "ty of the true class; $p_{\\mathrm{MC}} = (b+1)/(B+1)$ against the random-window null. The t"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "on continuum, interpolation fill). Error bars are 95 percent bootstrap intervals (\\ablNBoot{"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "nd gains \\ablPrimCaKGained{}. The one-sided exact 95 percent upper bound on the loss rate is"
+   },
+   {
+    "literal": "8",
+    "class": "checked_result",
+    "why": "min total_width_aa over the 15 primary-run rows -> verified",
+    "context": "y respond to any of the five line sets we masked (8 to 80~\\AA{} total width). It is not evi"
+   },
+   {
+    "literal": "80",
+    "class": "checked_result",
+    "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
+    "context": "pond to any of the five line sets we masked (8 to 80~\\AA{} total width). It is not evidence "
+   },
+   {
+    "literal": "2",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "t/gained in brackets) for each line set under the 2 $\\times$ 2 design: production or polyno"
+   },
+   {
+    "literal": "2",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": " brackets) for each line set under the 2 $\\times$ 2 design: production or polynomial\\_n5 co"
+   },
+   {
+    "literal": "5300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ccFarK. Measuring the distance only to the shared 5300 and 6000~K boundaries gives a K median "
+   },
+   {
+    "literal": "6000",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "easuring the distance only to the shared 5300 and 6000~K boundaries gives a K median of \\focus"
+   },
+   {
+    "literal": "0.005",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "er re-normalisation changes macro-F1 by less than 0.005 (\\sdPolyGapMacroF{} against \\sdPolyMacr"
+   },
+   {
+    "literal": "5",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "MacroF. This is within the fold-to-fold spread of 5-fold cross-validation on the production"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "s, \\rtNBoot{} bootstrap resamples). Intervals are 95 percent bootstrap intervals.}  \\footnot"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "G$ & $R_K$ & macro-F1 & G$\\to$K & $\\dA_K$ (\\Mgb) [95\\%] ($p_{\\mathrm{MC}}$) & $\\dA_G$ (\\Mgb)"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "Mgb) [95\\%] ($p_{\\mathrm{MC}}$) & $\\dA_G$ (\\Mgb) [95\\%] ($p_{\\mathrm{MC}}$) \\\\ \\midrule Prod"
+   },
+   {
+    "literal": "3",
+    "class": "checked_result",
+    "why": "n_pairs_total of the headline gate -> verified",
+    "context": "} and the (\\Mgb, K) change is \\uwDelta. Across a $3 \\times 3$ grid of \\texttt{max\\_depth} $"
+   },
+   {
+    "literal": "3",
+    "class": "checked_result",
+    "why": "n_pairs_total of the headline gate -> verified",
+    "context": " (\\Mgb, K) change is \\uwDelta. Across a $3 \\times 3$ grid of \\texttt{max\\_depth} $\\in \\{6, "
+   },
+   {
+    "literal": "8",
+    "class": "checked_result",
+    "why": "min total_width_aa over the 15 primary-run rows -> verified",
+    "context": "3 \\times 3$ grid of \\texttt{max\\_depth} $\\in \\{6, 8, 10\\}$ and \\texttt{num\\_leaves} $\\in \\{"
+   },
+   {
+    "literal": "10",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "times 3$ grid of \\texttt{max\\_depth} $\\in \\{6, 8, 10\\}$ and \\texttt{num\\_leaves} $\\in \\{31, "
+   },
+   {
+    "literal": "1",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "in \\{6, 8, 10\\}$ and \\texttt{num\\_leaves} $\\in \\{31, 63, 127\\}$ (\\gridNCells{} cells) the l"
+   },
+   {
+    "literal": "63",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": "\\{6, 8, 10\\}$ and \\texttt{num\\_leaves} $\\in \\{31, 63, 127\\}$ (\\gridNCells{} cells) the large"
+   },
+   {
+    "literal": "127",
+    "class": "structural",
+    "why": "statistical convention or enumeration in text",
+    "context": " 8, 10\\}$ and \\texttt{num\\_leaves} $\\in \\{31, 63, 127\\}$ (\\gridNCells{} cells) the largest ab"
+   },
+   {
+    "literal": "2000",
+    "class": "checked_result",
+    "why": "R = 1/dlnlambda for dlnlambda = 5e-4 -> verified",
+    "context": "on and blends.} The bins correspond to $R \\approx 2000$, so a line window is a blend (Table~) "
+   },
+   {
+    "literal": "21",
+    "class": "checked_result",
+    "why": "Mg b total width -> verified",
+    "context": " and ``\\Mgb dependence'' means dependence on that 21~\\AA{} region. The window widths differ "
+   },
+   {
+    "literal": "8",
+    "class": "checked_result",
+    "why": "min total_width_aa over the 15 primary-run rows -> verified",
+    "context": "ndow widths differ by a factor of about ten, from 8 to 80~\\AA, which is why the nulls are m"
+   },
+   {
+    "literal": "80",
+    "class": "checked_result",
+    "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
+    "context": "widths differ by a factor of about ten, from 8 to 80~\\AA, which is why the nulls are matched"
+   },
+   {
+    "literal": "80",
+    "class": "checked_result",
+    "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
+    "context": "ier of three \\Teff-bin classes on Gaia-ESO UVES U580 spectra reaches macro-F1 \\testMacroF. U"
+   },
+   {
+    "literal": "188",
+    "class": "structural",
+    "why": "external documentation fact: ESO programme 188.B-3002 (Gaia-ESO Public Spectroscopic Survey)",
+    "context": "ia-ESO Public Spectroscopic Survey, ESO programme 188.B-3002, conducted with the FLAMES instr"
+   },
+   {
+    "literal": "3002",
+    "class": "structural",
+    "why": "external documentation fact: ESO programme 188.B-3002",
+    "context": " Public Spectroscopic Survey, ESO programme 188.B-3002, conducted with the FLAMES instrument a"
+   },
+   {
+    "literal": "17",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "-built index map that was mis-assigned from index 17 onward because the library interleaves "
+   },
+   {
+    "literal": "200",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "sult. The best agreement, \\pkAgreeMfTwo{} for the 200~\\AA{} median-filter normalisation, is b"
+   },
+   {
+    "literal": "4700",
+    "class": "checked_result",
+    "why": "polynomial_n5_window_aa lower edge, rounded to 100 A -> verified",
+    "context": " range), and the additional variant fitted on the 4700 to 6900~\\AA{} window only reaches \\pkAg"
+   },
+   {
+    "literal": "6900",
+    "class": "checked_result",
+    "why": "polynomial_n5_window_aa upper edge, rounded to 100 A -> verified",
+    "context": " and the additional variant fitted on the 4700 to 6900~\\AA{} window only reaches \\pkAgreePolyW"
+   },
+   {
+    "literal": "200",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " & Agreement & Macro-F1 & Super. (\\%) \\\\ \\midrule 200~\\AA{} median filter & \\pkNMfTwo & \\pkAg"
+   },
+   {
+    "literal": "50",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " \\pkAgreeMfTwo & \\pkMacroMfTwo & \\pkSuperMfTwo \\\\ 50~\\AA{} median filter & \\pkNMfFifty & \\pk"
+   },
+   {
+    "literal": "5",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "pkMacroMfFifty & \\pkSuperMfFifty \\\\ Polynomial $n=5$ (sigma-clipped) & \\pkNPolyN & \\pkAgree"
+   },
+   {
+    "literal": "5",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " & \\pkMacroPolyN & \\pkSuperPolyN \\\\ Polynomial $n=5$, 4700--6900~\\AA{} window & \\pkNPolyWin"
+   },
+   {
+    "literal": "4700",
+    "class": "checked_result",
+    "why": "polynomial_n5_window_aa lower edge, rounded to 100 A -> verified",
+    "context": "pkMacroPolyN & \\pkSuperPolyN \\\\ Polynomial $n=5$, 4700--6900~\\AA{} window & \\pkNPolyWin & \\pkA"
+   },
+   {
+    "literal": "6900",
+    "class": "checked_result",
+    "why": "polynomial_n5_window_aa upper edge, rounded to 100 A -> verified",
+    "context": "oPolyN & \\pkSuperPolyN \\\\ Polynomial $n=5$, 4700--6900~\\AA{} window & \\pkNPolyWin & \\pkAgreePo"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ction continuum, linear-interpolation fill), with 95 percent bootstrap intervals; the same q"
+   }
+  ]
+ },
+ "recomputation": {
+  "n_rows_checked": 60,
+  "max_abs_diff": {
+   "baseline_acc": 0.0,
+   "masked_acc_mean": 0.0,
+   "delta_acc_mean": 0.0,
+   "n_flip_lost": 0.0,
+   "n_flip_gained": 0.0,
+   "mcnemar_exact_p": 0.0,
+   "mean_delta_true_prob": 4.902336758760839e-09,
+   "flip_rate_upper95": 0.0,
+   "n_test": 0.0
+  },
+  "mismatches": [],
+  "headline": {
+   "H_balmer,F": {
+    "n_test": 81,
+    "delta_acc_mean": -0.8395061728395061,
+    "n_flip_lost": 68,
+    "n_flip_gained": 0,
+    "mcnemar_exact_p": 6.776263578034403e-21,
+    "mean_delta_true_prob": -0.8012827897579466
+   },
+   "Mg_b,G": {
+    "n_test": 230,
+    "delta_acc_mean": -0.25652173913043474,
+    "n_flip_lost": 59,
+    "n_flip_gained": 0,
+    "mcnemar_exact_p": 3.469446951953614e-18,
+    "mean_delta_true_prob": -0.2609693319334284
+   },
+   "Mg_b,K": {
+    "n_test": 145,
+    "delta_acc_mean": 0.01379310344827589,
+    "n_flip_lost": 1,
+    "n_flip_gained": 3,
+    "mcnemar_exact_p": 0.625,
+    "mean_delta_true_prob": 0.015495403031497422
+   },
+   "Na_D,K": {
+    "n_test": 145,
+    "delta_acc_mean": -0.006896551724137945,
+    "n_flip_lost": 1,
+    "n_flip_gained": 0,
+    "mcnemar_exact_p": 1.0,
+    "mean_delta_true_prob": -0.003289011213928461
+   }
+  },
+  "baseline_confusion_matches_metrics_json": true
+ }
+}

@@ -9,7 +9,7 @@ them. It exists so that nobody has to re-derive the comparison.
 | Folder | Role | Last content change | Size | Git |
 | --- | --- | --- | --- | --- |
 | `GitHub/ges-uves-mk-audit` | **Release target.** Curated public repository: three-class (F/G/K) pipeline, ESO TAP catalogue source, deposited model and feature matrix, 183-test suite. | 2026-05-18 (initial public commit) | 14 MB | single commit `Initial public release` |
-| `GitHub/stellar-mk-audit` | Development repository. Full working tree including raw data (7208 UVES FITS, 131 Pickles FITS, regridded HDF5), `decisions.md`, `release/` bundles (arXiv, Zenodo, reviewer responses). | 2026-05-19 00:12 | 7.9 GB | rewritten history; tags `pre-history-scrub`, `v1.0-submission` |
+| `GitHub/stellar-mk-audit` | Development repository. Full working tree including raw data (7208 UVES FITS, 131 Pickles FITS, regridded HDF5), `decisions.md`, `release/` bundles (arXiv, Zenodo, response letters). | 2026-05-19 00:12 | 7.9 GB | rewritten history; tags `pre-history-scrub`, `v1.0-submission` |
 | `Documents/stellar-mk-audit` | Older clone of the development repository (README still describes the A/F/G/K, VizieR-era pipeline). Contains agent configuration files and personal manuscript drafts (`TJs manuscripts/`). | 2026-05-07 | 7.9 GB | clone of origin/main, 31 reflog entries |
 
 The two `stellar-mk-audit` copies share the same raw data (byte-identical
@@ -62,8 +62,8 @@ after). To make this verifiable by readers, the author should run, from
 git bundle create ges-uves-mk-audit-history.bundle --all
 ```
 
-and deposit the bundle alongside the Zenodo archive (see
-`RELEASE_CHECKLIST.md`). Until then the manuscript cites the dated decision
+and deposit the bundle alongside the Zenodo archive. Until then the manuscript
+cites the dated decision
 log (`docs/decision_log.md`) rather than the hashes.
 
 Note on content: Decision 22 (2026-04-29) named `H_balmer`, `Mg_b`, `Na_D` as

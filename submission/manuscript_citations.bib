@@ -1,7 +1,9 @@
 % BibTeX file for ges-uves-mk-audit.
-% All ADS bibcodes verified via the public ADS UI on 2026-04-30 except where
-% noted with "% TODO verify". No em dashes (U+2014) or en dashes (U+2013)
-% in any field. Authors verified against ADS abstract pages.
+% Every DOI below was resolved through the Crossref API (2026-10-08) and the author list, year,
+% journal, volume and pages compared with the record. Entries whose published pages Crossref does
+% not carry (Leung and Bovy 2019; Janzing et al. 2020; Hooker et al. 2019; Covert et al. 2021)
+% were checked against the publisher or proceedings page. Long collaboration author lists are
+% truncated with "and others". No en dashes (U+2013) or em dashes (U+2014) appear in any field.
 
 % --- Domain: stellar spectral classification and MK system ---
 
@@ -118,7 +120,7 @@
   publisher    = {National Institute of Standards and Technology, Gaithersburg, MD},
   url          = {https://physics.nist.gov/asd},
   doi          = {10.18434/T4W30F},
-  note         = {Source of AIR rest wavelengths used in src/interpret/lines.py},
+  note         = {Source of AIR rest wavelengths used in src/interpret/lines.py. The ASD version history lists version 5.11 (2023) and version 5.12 (2024).},
 }
 
 % --- Domain: machine-learning methodology ---
@@ -164,23 +166,7 @@
   adsnote      = {Imputation and continuum-normalization conventions cited in features pipeline},
 }
 
-@ARTICLE{2019MNRAS.486.2075B,
-  author       = {{Blanco-Cuaresma}, S.},
-  title        = {Modern stellar spectroscopy caveats},
-  journal      = {Monthly Notices of the Royal Astronomical Society},
-  year         = {2019},
-  volume       = {486},
-  number       = {2},
-  pages        = {2075-2101},
-  doi          = {10.1093/mnras/stz549},
-  adsurl       = {https://ui.adsabs.harvard.edu/abs/2019MNRAS.486.2075B},
-  adsnote      = {General caveats on modern stellar spectroscopic analysis; cited for context only (does not define a cross-validation leakage threshold).},
-}
-
 % --- Software: LightGBM and SHAP ---
-% TODO verify: NeurIPS proceedings papers do not have ADS bibcodes; the
-% best-guess key below uses author-year style and points to the official
-% NeurIPS paper landing page.
 
 @INPROCEEDINGS{Ke2017LightGBM,
   author       = {Ke, Guolin and Meng, Qi and Finley, Thomas and Wang, Taifeng and Chen, Wei and Ma, Weidong and Ye, Qiwei and Liu, Tie-Yan},
@@ -218,7 +204,7 @@
   note         = {Cited for the (B+1)-corrected permutation p-value convention used in the masked-line ablation null distribution; floor at one over the number of random controls plus one.},
 }
 
-% --- Added in the 2026-10 revision (all DOIs resolved via Crossref on 2026-10-01) ---
+% --- Methodology references ---
 
 @ARTICLE{Geirhos2020Shortcut,
   author       = {Geirhos, Robert and Jacobsen, J{\"o}rn-Henrik and Michaelis, Claudio and Zemel, Richard and Brendel, Wieland and Bethge, Matthias and Wichmann, Felix A.},
@@ -261,6 +247,8 @@
   title        = {A benchmark for interpretability methods in deep neural networks},
   booktitle    = {Advances in Neural Information Processing Systems 32 (NeurIPS 2019)},
   year         = {2019},
+  volume       = {32},
+  pages        = {9737-9748},
   publisher    = {Curran Associates},
   eprint       = {1806.10758},
   archivePrefix= {arXiv},
@@ -307,7 +295,7 @@
 }
 
 @ARTICLE{2019ApJS..245...34X,
-  author       = {{Xiang}, Maosheng and {Ting}, Yuan-Sen and {Rix}, Hans-Walter and {Sandford}, Nathan and {Buder}, Sven and {Lind}, Karin and {Liu}, Xiao-Wei and {Shen}, Juntai and {Zhang}, Meng},
+  author       = {{Xiang}, Maosheng and {Ting}, Yuan-Sen and {Rix}, Hans-Walter and {Sandford}, Nathan and {Buder}, Sven and {Lind}, Karin and {Liu}, Xiao-Wei and {Shi}, Jian-Rong and {Zhang}, Hua-Wei},
   title        = {Abundance Estimates for 16 Elements in 6 Million Stars from {LAMOST} {DR5} Low-Resolution Spectra},
   journal      = {The Astrophysical Journal Supplement Series},
   year         = {2019},
@@ -372,18 +360,4 @@
   number       = {4},
   pages        = {404-413},
   doi          = {10.1093/biomet/26.4.404},
-}
-
-@ARTICLE{2017A&A...598A...5P,
-  author       = {{Pancino}, E. and {Lardo}, C. and {Altavilla}, G. and {Marinoni}, S. and {Ragaini}, S. and {Cocozza}, G. and others},
-  title        = {The {Gaia}-{ESO} Survey: Calibration strategy},
-  journal      = {Astronomy and Astrophysics},
-  year         = {2017},
-  volume       = {598},
-  pages        = {A5},
-  doi          = {10.1051/0004-6361/201629450},
-  adsurl       = {https://ui.adsabs.harvard.edu/abs/2017A%26A...598A...5P},
-  eprint       = {1610.06480},
-  archivePrefix= {arXiv},
-  note         = {Table~1 gives the UVES U520 and U580 wavelength coverage.},
 }

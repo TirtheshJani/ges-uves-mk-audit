@@ -1,9 +1,9 @@
 {
   "description": "Pickles 1998 UVKLIB template cross-check of the production classifier on the held-out test rows, with template spectral types read from the FITS headers; three template continuum conventions; audit rows used as stored.",
   "inputs": {
-    "features": "artifacts\\features.npz",
-    "model": "artifacts\\lgbm_mk.pkl",
-    "pickles_dir": "C:\\Users\\TJ\\Documents\\GitHub\\stellar-mk-audit\\data\\pickles",
+    "features": "artifacts/features.npz",
+    "model": "artifacts/lgbm_mk.pkl",
+    "pickles_dir": "data/pickles",
     "n_templates": 131,
     "n_test": 456,
     "continuum_methods_deposited": [
