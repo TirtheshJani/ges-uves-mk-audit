@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import numpy as np
-import pytest
 
 from src.interpret.baseline import _correlation_distance, knn_predict, macro_f1
 

@@ -106,7 +106,7 @@ def _augment_npz_with_gap_mask(
     """Re-save the features npz so it carries the new gap_mask key.
 
     ``build_features()`` already wrote ``out_path`` with the legacy 10-key
-    schema. extends the schema to 11 keys; rather than modify
+    schema. This script extends the schema to 11 keys; rather than modify
     the (read-only) library function, we re-save the same payload plus
     ``gap_mask`` here.
     """

@@ -21,7 +21,7 @@ from typing import Final
 
 import numpy as np
 
-from src.interpret.lines import MK_LINES, Line, lines_in_window
+from src.interpret.lines import Line, lines_in_window
 
 logger = logging.getLogger(__name__)
 

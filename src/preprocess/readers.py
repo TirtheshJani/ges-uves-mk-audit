@@ -1,5 +1,4 @@
-import os
-from typing import Dict, Any, Tuple, Optional
+from typing import Dict, Any
 import numpy as np
 from astropy.io import fits
 

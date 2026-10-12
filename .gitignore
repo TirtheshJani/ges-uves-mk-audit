@@ -70,7 +70,6 @@ submission/output.*
 _view_*.png
 *_check.png
 *_smoke.png
-handoff_view.txt
 .pytest_run*.log
 artifacts/metrics.json.bak*
 

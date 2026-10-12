@@ -35,7 +35,6 @@ import numpy as np
 
 from src.interpret.classifier import (
     DEFAULT_EARLY_STOPPING,
-    DEFAULT_HPARAMS,
     train,
 )
 from src.interpret.lines import ALLOWED_MK_CLASSES, LINE_SETS

@@ -1,6 +1,6 @@
 """Smoke tests for scripts/build_manuscript_dossier.py.
 
-The dossier is generated from gate-accepted through artifacts. The smoke test runs the script in-process against the
+The dossier is generated from gate-accepted artifacts. The smoke test runs the script in-process against the
 existing artifacts and asserts both output files materialise with the
 expected key claim_ids.
 """

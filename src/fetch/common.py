@@ -1,7 +1,5 @@
 import os
 import csv
-import time
-import math
 import queue
 import threading
 import subprocess

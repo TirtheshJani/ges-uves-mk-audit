@@ -25,7 +25,6 @@ from src.interpret.baseline import (
     macro_f1,
     pickles_template_predict,
 )
-from src.interpret.lines import ALLOWED_MK_CLASSES
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +72,6 @@ def main(argv: list[str] | None = None) -> int:
     X_test = X[test_idx]
     y_test = y[test_idx]
     class_labels = sorted(np.unique(y_train).tolist())
-    int_to_name = {i + 1: c for i, c in enumerate(ALLOWED_MK_CLASSES[1:])}
     # ALLOWED_MK_CLASSES is ("A","F","G","K"); y uses 1..3 for F,G,K (A=0 was dropped).
     # Convert label int -> letter for readable output.
     label_letter = {1: "F", 2: "G", 3: "K"}

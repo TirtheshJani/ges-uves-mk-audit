@@ -4,7 +4,7 @@ from typing import List, Dict, Tuple
 import pandas as pd
 import requests
 
-from .common import ensure_dir, write_manifest, parallel_download, verify_fits_basic
+from .common import ensure_dir, write_manifest, parallel_download
 
 # ESO TAP endpoint
 ESO_TAP = "https://archive.eso.org/tap_obs/sync"

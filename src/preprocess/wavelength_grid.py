@@ -2,9 +2,8 @@
 Wavelength grid standardization and resampling utilities.
 """
 import numpy as np
-from typing import Optional, Tuple, Dict, List
+from typing import Optional, Tuple, Dict
 from scipy import interpolate
-import warnings
 
 
 def make_log_lambda_grid(wave_min: float = 3500.0, 

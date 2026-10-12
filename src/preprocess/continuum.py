@@ -2,9 +2,8 @@
 Continuum normalization utilities for stellar spectra.
 """
 import numpy as np
-from typing import Optional, Tuple, Union, List, Dict
+from typing import Optional, Tuple, List, Dict
 from scipy import ndimage, interpolate
-from scipy.optimize import curve_fit
 import warnings
 
 

@@ -7,10 +7,10 @@ sibling files:
 
 * ``artifacts/manuscript_numbers.csv`` -- machine-diffable claim ledger
   with stable claim_id, formatted value, precision tag, source artifact
-  and source field. diffs the manuscript prose against
+  and source field. The manuscript prose is diffed against
   this CSV during review.
 * ``artifacts/manuscript_numbers.md`` -- human-friendly rendering of the
-  same claims grouped per phase. TJ pastes these tables next to the
+  same claims grouped per phase. The author pastes these tables next to the
   draft prose so every numeric claim has a clickable provenance trail.
 
 The script is idempotent: rerun it whenever an artifact is regenerated

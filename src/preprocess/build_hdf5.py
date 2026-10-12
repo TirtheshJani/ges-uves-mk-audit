@@ -2,7 +2,7 @@ import os
 import argparse
 import csv
 import time
-from typing import List, Dict, Optional
+from typing import List, Optional
 
 import h5py
 import numpy as np

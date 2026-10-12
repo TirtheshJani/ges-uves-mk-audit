@@ -10,7 +10,7 @@ them. It exists so that nobody has to re-derive the comparison.
 | --- | --- | --- | --- | --- |
 | `GitHub/ges-uves-mk-audit` | **Release target.** Curated public repository: three-class (F/G/K) pipeline, ESO TAP catalogue source, deposited model and feature matrix, 183-test suite. | 2026-05-18 (initial public commit) | 14 MB | single commit `Initial public release` |
 | `GitHub/stellar-mk-audit` | Development repository. Full working tree including raw data (7208 UVES FITS, 131 Pickles FITS, regridded HDF5), `decisions.md`, `release/` bundles (arXiv, Zenodo, response letters). | 2026-05-19 00:12 | 7.9 GB | rewritten history; tags `pre-history-scrub`, `v1.0-submission` |
-| `Documents/stellar-mk-audit` | Older clone of the development repository (README still describes the A/F/G/K, VizieR-era pipeline). Contains agent configuration files and personal manuscript drafts (`TJs manuscripts/`). | 2026-05-07 | 7.9 GB | clone of origin/main, 31 reflog entries |
+| `Documents/stellar-mk-audit` | Older clone of the development repository (README still describes the A/F/G/K, VizieR-era pipeline). Contains tool configuration files and personal manuscript drafts (`TJs manuscripts/`). | 2026-05-07 | 7.9 GB | clone of origin/main, 31 reflog entries |
 
 The two `stellar-mk-audit` copies share the same raw data (byte-identical
 FITS counts and sizes). `GitHub/stellar-mk-audit` is strictly newer than
