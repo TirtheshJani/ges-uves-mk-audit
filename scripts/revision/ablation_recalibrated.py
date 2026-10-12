@@ -220,11 +220,10 @@ def plot_ablation_bars(
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.set_ylabel(r"$\Delta$ recall (masked $-$ baseline)")
-    k_net = [int(round(abs(r["delta_acc_mean"]) * r["n_test"])) for r in ordered if r["mk_class"] == "K"]
-    k_note = (
-        f"K recall changes by at most {max(k_net)} spectra" if k_net else "K rows are not plotted"
-    )
-    ax.set_title(f"Masking Balmer and Mg b lines lowers F and G recall; {k_note}", loc="left")
+    # The finding belongs in the caption, not in the figure: an in-figure sentence
+    # about "at most N spectra" is true only of the pairs plotted (Balmer on K
+    # gains 8 rows in the full table), so the title is a neutral label.
+    ax.set_title("Headline and pivot pairs, primary configuration", loc="left")
     ax.grid(axis="y", color="lightgrey", lw=0.5, alpha=0.6, zorder=-1)
 
     span = max(hi.max(), 0.0) - min(lo.min(), 0.0)

@@ -246,6 +246,46 @@ def irregular(name: str, src: str) -> tuple[Any, str] | None:
         return sum(v["luminosity"]["giant"]["n_flip_lost"] for v in k_pairs.values()), "num"
     if name == "kGiantGained":
         return sum(v["luminosity"]["giant"]["n_flip_gained"] for v in k_pairs.values()), "num"
+    # ---- K-class positive control (artifacts/revision/k_positive_control.json)
+    pc_path = REPO / "artifacts/revision/k_positive_control.json"
+    if name.startswith("pc") and pc_path.exists():
+        pc = load("artifacts/revision/k_positive_control.json")
+        if name == "pcReproPassed":
+            return bool(pc["reproduction_check"]["passed"]), "text"
+        if name == "pcNineSetMaxPDiff":
+            return pc["reproduction_check"]["max_abs_diff_literal_nine_set_assertion"], "num"
+        m = re.match(r"pcShapShare(TopTwenty|TopFifty|TopHundred)$", name)
+        if m:
+            key = {"TopTwenty": "SHAP_K_top20", "TopFifty": "SHAP_K_top50", "TopHundred": "SHAP_K_top100"}[m.group(1)]
+            return 100 * pc["line_sets"][key]["share_of_total_mean_abs_shap"], "num"
+        if name == "pcBinsPctTopHundred":
+            return 100 * pc["line_sets"]["SHAP_K_top100"]["n_bins"] / pc["inputs"]["n_bins"], "num"
+    # ---- field-grouped cross-validation (artifacts/revision/cv_field_groups.json)
+    cv_path = REPO / "artifacts/revision/cv_field_groups.json"
+    if name.startswith("cvFld") and cv_path.exists():
+        cv = load("artifacts/revision/cv_field_groups.json")
+        fg = cv["cv_field_groups"]
+        if name == "cvFldSingRowPct":
+            return 100 * cv["group_statistics"]["trainval"]["singleton_row_fraction"], "num"
+        if name == "cvFldGapPlain":
+            return -cv["comparison"]["field_grouped_minus_plain"], "num"
+        if name == "cvFldFoldMin":
+            return min(fg["per_fold_macro_f1"]), "num"
+        if name == "cvFldFoldMax":
+            return max(fg["per_fold_macro_f1"]), "num"
+        if name == "cvFldFoldRowsMin":
+            return min(c["n_val"] for c in fg["fold_composition"]), "num"
+        if name == "cvFldFoldRowsMax":
+            return max(c["n_val"] for c in fg["fold_composition"]), "num"
+        if name == "cvFldTestZ":
+            return (met["macro_f1"] - fg["macro_f1_mean"]) / fg["macro_f1_sd_population_ddof0"], "num"
+        if name == "cvFldLargestName":
+            return cv["group_statistics"]["trainval"]["largest_groups"][0]["ges_fld"].replace("_", "\\_"), "text"
+    # ---- boundary-distance accuracy at 150 K (artifacts/revision/boundary_filtered.json)
+    bf_path = REPO / "artifacts/revision/boundary_filtered.json"
+    if name == "bdTwoHundredRepro" and bf_path.exists():
+        rep = load("artifacts/revision/boundary_filtered.json")["reproduction_of_deposited_200K"]
+        return bool(rep["accuracy_matches"] and rep["n_matches"]), "text"
     return None
 
 
@@ -253,6 +293,8 @@ def macro_check() -> dict:
     idx = load("artifacts/revision/manuscript_numbers_index.json")
     tex = (REPO / "submission" / "revision_numbers.tex").read_text(encoding="utf-8")
     defs = dict(re.findall(r"\\newcommand\{\\(\w+)\}\{(.*)\}\s*$", tex, re.M))
+    # manuscript_numbers.py appends \xspace to every macro; it is not part of the displayed number.
+    defs = {k: re.sub(r"\\xspace$", "", v) for k, v in defs.items()}
     rows, mism, unresolved, typed = [], [], [], []
     for name, src in idx["macros"].items():
         if name not in defs:
@@ -326,7 +368,7 @@ def macro_check() -> dict:
 def strip_tex(ms: str) -> str:
     s = re.sub(r"(?<!\\)%.*", "", ms)
     s = re.sub(r"\\(cite[a-z]*|ref|label|eqref|input|includegraphics|usepackage|documentclass|bibliography\w*|cref|Cref|autoref|"
-               r"url|href|hypersetup|geometry|setcounter|newcommand|renewcommand|providecommand|pagestyle)\*?(\[[^\]]*\])?(\{[^{}]*\})+", "", s)
+               r"url|href|hypersetup|geometry|setcounter|newcommand|renewcommand|providecommand|pagestyle)\*?(\[[^\]]*\]){0,2}(\{[^{}]*\})+", "", s)
     s = re.sub(r"\\(?:begin|end)\{[^}]*\}(\{[^}]*\})?", "", s)
     return s
 

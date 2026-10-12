@@ -151,11 +151,11 @@ def derive_spatial_groups(
 ) -> np.ndarray:
     """Cluster (ra, dec) into spatial groups for leakage-aware CV.
 
-    amendment to the original ``groups`` array in
-    features.npz was zero-filled, so ``StratifiedGroupKFold`` degenerated
-    to ``StratifiedKFold`` at. This helper derives groups from the
-    on-sky coordinates so can run a second sensitivity check that
-    holds out cluster-mate spectra together (Blanco-Cuaresma 2019,
+    The original ``groups`` array in features.npz was zero-filled, so
+    ``StratifiedGroupKFold`` degenerated to ``StratifiedKFold`` in the first
+    cross-validation pass. This helper derives groups from the on-sky
+    coordinates so that a second pass can hold cluster-mate spectra out
+    together (Blanco-Cuaresma 2019,
     MNRAS 486, 2075; bibcode 2019MNRAS.486.2075B).
 
     Uses ``sklearn.cluster.DBSCAN`` with ``metric='haversine'``. Haversine

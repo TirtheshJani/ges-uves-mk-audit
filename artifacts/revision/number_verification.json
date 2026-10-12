@@ -1,9 +1,9 @@
 {
  "macros": {
-  "n_index": 1699,
-  "n_defined": 1699,
+  "n_index": 2147,
+  "n_defined": 2147,
   "status_counts": {
-   "ok": 1697,
+   "ok": 2145,
    "typed_constant": 2
   },
   "mismatches": [],
@@ -26,22 +26,33 @@
   ]
  },
  "literals": {
-  "n_literals": 135,
+  "n_literals": 150,
   "counts": {
    "structural": 43,
-   "typed_constant": 60,
-   "checked_result": 31,
-   "untraced": 1
+   "typed_constant": 74,
+   "checked_result": 33,
+   "untraced": 0
   },
-  "untraced": [
-   {
-    "literal": "6143",
-    "class": "untraced",
-    "why": "",
-    "context": "tt{safcat.\"GES\\_DR5\\_1\\_V1\"} . The query returned 6143 catalogue rows with non-null \\Teff, $\\l"
-   }
-  ],
+  "untraced": [],
   "all": [
+   {
+    "literal": "0",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "aia-ESO Survey; UVES; LightGBM}, }     \\Urlmuskip=0mu plus 1mu\\relax   \\setlength{\\emergenc"
+   },
+   {
+    "literal": "1",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "urvey; UVES; LightGBM}, }     \\Urlmuskip=0mu plus 1mu\\relax   \\setlength{\\emergencystretch}"
+   },
+   {
+    "literal": "5",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " plus 1mu\\relax   \\setlength{\\emergencystretch}{1.5em}       {Mg\\,\\textsc{b}\\xspace} {Na\\,\\"
+   },
    {
     "literal": "1",
     "class": "structural",
@@ -52,7 +63,7 @@
     "literal": "1",
     "class": "structural",
     "why": "statistical convention or enumeration in text",
-    "context": "i\\thanks{ORCID: ; tirtheshjani@gmail.com}} \\affil[1]{Independent researcher, Barrie, Ontari"
+    "context": "\\thanks{ORCID: ; tirtheshjani@gmail.com}}  \\affil[1]{Independent researcher, Barrie, Ontari"
    },
    {
     "literal": "80",
@@ -71,12 +82,6 @@
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
     "context": "ssigns Gaia-ESO FLAMES-UVES U580 spectra (4800 to 6800~\\AA) to three effective-temperature cla"
-   },
-   {
-    "literal": "95",
-    "class": "typed_constant",
-    "why": "appears in code, config or an artifact",
-    "context": "axLost{} of the \\nClassK{} K test rows (the exact 95 percent upper bound on the loss rate is"
    },
    {
     "literal": "1",
@@ -100,37 +105,37 @@
     "literal": "80",
     "class": "checked_result",
     "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
-    "context": "ution echelle spectrograph at the VLT UT2 . The U580 setup combines a blue-arm chip (4770 to"
+    "context": "; the FLAMES fibres feed its red arm only . The U580 setting is recorded on the two-CCD mosa"
    },
    {
     "literal": "4770",
     "class": "structural",
     "why": "external documentation fact: UVES U580 blue-arm chip start (ESO UVES manual)",
-    "context": "LT UT2 . The U580 setup combines a blue-arm chip (4770 to 5770~\\AA) and a red-arm chip (5832 t"
+    "context": "two-CCD mosaic of that arm: the lower chip covers 4770 to 5770~\\AA{} and the upper chip 5832 t"
    },
    {
     "literal": "5770",
     "class": "structural",
     "why": "external documentation fact: U580 blue-arm chip end",
-    "context": " The U580 setup combines a blue-arm chip (4770 to 5770~\\AA) and a red-arm chip (5832 to 6830~\\"
+    "context": "mosaic of that arm: the lower chip covers 4770 to 5770~\\AA{} and the upper chip 5832 to 6830~\\"
    },
    {
     "literal": "5832",
     "class": "structural",
     "why": "external documentation fact: U580 red-arm chip start",
-    "context": "e-arm chip (4770 to 5770~\\AA) and a red-arm chip (5832 to 6830~\\AA) separated by an inter-chip"
+    "context": "chip covers 4770 to 5770~\\AA{} and the upper chip 5832 to 6830~\\AA, separated by the inter-chi"
    },
    {
     "literal": "6830",
     "class": "structural",
     "why": "external documentation fact: U580 red-arm chip end",
-    "context": "ip (4770 to 5770~\\AA) and a red-arm chip (5832 to 6830~\\AA) separated by an inter-chip gap. We"
+    "context": "ers 4770 to 5770~\\AA{} and the upper chip 5832 to 6830~\\AA, separated by the inter-chip gap. W"
    },
    {
     "literal": "4800",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "ed by an inter-chip gap. We restrict the audit to 4800 to 6800~\\AA, which lies inside U580 cov"
+    "context": "d by the inter-chip gap. We restrict the audit to 4800 to 6800~\\AA, which lies inside U580 cov"
    },
    {
     "literal": "6800",
@@ -212,8 +217,8 @@
    },
    {
     "literal": "6143",
-    "class": "untraced",
-    "why": "",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
     "context": "tt{safcat.\"GES\\_DR5\\_1\\_V1\"} . The query returned 6143 catalogue rows with non-null \\Teff, $\\l"
    },
    {
@@ -235,28 +240,58 @@
     "context": " regridded UVES store (0.5~arcsec primary radius, 2~arcsec ambiguity cutoff) matched \\nMatc"
    },
    {
-    "literal": "6000",
-    "class": "typed_constant",
-    "why": "appears in code, config or an artifact",
-    "context": "bels are \\Teff bins on the dwarf scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is "
-   },
-   {
     "literal": "7300",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "re \\Teff bins on the dwarf scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900,"
+    "context": "spectra. Class labels are \\Teff bins whose edges, 7300, 6000, 5300 and 3900~K, are rounded to "
+   },
+   {
+    "literal": "6000",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "a. Class labels are \\Teff bins whose edges, 7300, 6000, 5300 and 3900~K, are rounded to the ne"
    },
    {
     "literal": "5300",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "n the dwarf scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These"
+    "context": "ss labels are \\Teff bins whose edges, 7300, 6000, 5300 and 3900~K, are rounded to the nearest "
+   },
+   {
+    "literal": "3900",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " are \\Teff bins whose edges, 7300, 6000, 5300 and 3900~K, are rounded to the nearest 100~K fro"
+   },
+   {
+    "literal": "100",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "6000, 5300 and 3900~K, are rounded to the nearest 100~K from the dwarf-sequence scale of : F "
    },
    {
     "literal": "6000",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "dwarf scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These are t"
+    "context": "st 100~K from the dwarf-sequence scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is "
+   },
+   {
+    "literal": "7300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "~K from the dwarf-sequence scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900,"
+   },
+   {
+    "literal": "5300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "rf-sequence scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These"
+   },
+   {
+    "literal": "6000",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "uence scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These are t"
    },
    {
     "literal": "3900",
@@ -274,7 +309,7 @@
     "literal": "20",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "equire a median signal-to-noise ratio of at least 20 per pixel over the window and cap post-"
+    "context": "equire a median signal-to-noise ratio of at least 20 per pixel of the intermediate regridded"
    },
    {
     "literal": "10",
@@ -361,34 +396,16 @@
     "context": "he train+val partition (\\nTrainVal{} rows) we run 5-fold StratifiedKFold and a StratifiedGr"
    },
    {
-    "literal": "10",
-    "class": "typed_constant",
-    "why": "appears in code, config or an artifact",
-    "context": "tion partition we compute permutation importance (10 repeats, accuracy scoring), TreeSHAP  o"
-   },
-   {
     "literal": "1000",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "ng), TreeSHAP  on a stratified subsample of up to 1000 rows (all 454 validation rows are used)"
+    "context": "ce , TreeSHAP  on a stratified subsample of up to 1000 rows (all 454 validation rows are used)"
    },
    {
     "literal": "454",
     "class": "checked_result",
     "why": "n_val -> verified",
     "context": "on a stratified subsample of up to 1000 rows (all 454 validation rows are used), and sliding-"
-   },
-   {
-    "literal": "50",
-    "class": "typed_constant",
-    "why": "appears in code, config or an artifact",
-    "context": "ion rows are used), and sliding-window occlusion (50~\\AA{} window, 25~\\AA{} stride). Top-\\tr"
-   },
-   {
-    "literal": "25",
-    "class": "typed_constant",
-    "why": "appears in code, config or an artifact",
-    "context": "), and sliding-window occlusion (50~\\AA{} window, 25~\\AA{} stride). Top-\\triTopK{} bin sets "
    },
    {
     "literal": "95",
@@ -442,13 +459,25 @@
     "literal": "0.01",
     "class": "structural",
     "why": "statistical convention or enumeration in text",
-    "context": "_{\\mathrm{MC}} \\le 0.01/3$ (family-wise $\\alpha = 0.01$, Bonferroni over three pairs). All oth"
+    "context": "_{\\mathrm{MC}} \\le 0.01/3$ (family-wise $\\alpha = 0.01$, Bonferroni over three pairs; the deci"
+   },
+   {
+    "literal": "0.01",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "he decision log records the per-pair threshold as 0.01 and the division by three was applied i"
    },
    {
     "literal": "0.025",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
     "context": "emar $p$. For orientation, we mark a zone of $\\pm 0.025$ in $\\dA$; this zone was chosen after t"
+   },
+   {
+    "literal": "15",
+    "class": "checked_result",
+    "why": "number of (line set, class) rows -> verified",
+    "context": "ly in it, and only \\pcNineSetNMismatch{} of their 15 Monte Carlo $p$-values move, by at most"
    },
    {
     "literal": "21",
@@ -460,7 +489,7 @@
     "literal": "5",
     "class": "structural",
     "why": "statistical convention or enumeration in text",
-    "context": "ed model exactly, which fixes the sanity check. A 5-fold StratifiedKFold run on train+val g"
+    "context": "y check, and the retraining script reproduces the 5-fold StratifiedKFold estimate of Sectio"
    },
    {
     "literal": "5300",
@@ -571,10 +600,16 @@
     "context": "2026-05-16, after the ablation results of 2026-04-30 and with the (\\Mgb, G) effect in view. "
    },
    {
+    "literal": "0.70",
+    "class": "checked_result",
+    "why": "train fraction -> verified",
+    "context": "on the day of its first run in place of a planned 0.70. It was not met under any continuum con"
+   },
+   {
     "literal": "95",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "gainst \\bdFullAcc{} overall ($\\Delta = \\bdDelta$, 95 percent interval [\\bdCiLo, \\bdCiHi]).  "
+    "context": "gainst \\bdFullAcc{} overall ($\\Delta = \\bdDelta$, 95 percent interval [\\bdCiLo, \\bdCiHi]); a"
    },
    {
     "literal": "50",
@@ -649,6 +684,24 @@
     "context": "pond to any of the five line sets we masked (8 to 80~\\AA{} total width). It is not evidence "
    },
    {
+    "literal": "20",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "e constant fill already moves that probability at 20 and 50 bins (\\pcConstTopTwentyKDp{} and"
+   },
+   {
+    "literal": "50",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ant fill already moves that probability at 20 and 50 bins (\\pcConstTopTwentyKDp{} and \\pcCon"
+   },
+   {
+    "literal": "100",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " runs makes a spectrum look cooler: under the top-100 mask with interpolation, \\pcPrimTopHund"
+   },
+   {
     "literal": "2",
     "class": "structural",
     "why": "statistical convention or enumeration in text",
@@ -659,6 +712,36 @@
     "class": "structural",
     "why": "statistical convention or enumeration in text",
     "context": " brackets) for each line set under the 2 $\\times$ 2 design: production or polynomial\\_n5 co"
+   },
+   {
+    "literal": "20",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " the joint mask of all five line sets and for the 20, 50 and 100 bins with the largest valid"
+   },
+   {
+    "literal": "50",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " joint mask of all five line sets and for the 20, 50 and 100 bins with the largest validatio"
+   },
+   {
+    "literal": "100",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "mask of all five line sets and for the 20, 50 and 100 bins with the largest validation-set me"
+   },
+   {
+    "literal": "95",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "esamples). ``Upper bound'' is the one-sided exact 95 percent Clopper--Pearson bound on the l"
+   },
+   {
+    "literal": "100",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " sets are post hoc; \\pcOverlapTopHundred{} of the 100 bins lie inside the catalogued windows."
    },
    {
     "literal": "5300",
@@ -778,13 +861,13 @@
     "literal": "188",
     "class": "structural",
     "why": "external documentation fact: ESO programme 188.B-3002 (Gaia-ESO Public Spectroscopic Survey)",
-    "context": "ia-ESO Public Spectroscopic Survey, ESO programme 188.B-3002, conducted with the FLAMES instr"
+    "context": "e La Silla Paranal Observatory under programme ID 188.B-3002. These data products have been p"
    },
    {
     "literal": "3002",
     "class": "structural",
     "why": "external documentation fact: ESO programme 188.B-3002",
-    "context": " Public Spectroscopic Survey, ESO programme 188.B-3002, conducted with the FLAMES instrument a"
+    "context": "illa Paranal Observatory under programme ID 188.B-3002. These data products have been processe"
    },
    {
     "literal": "17",
@@ -864,7 +947,7 @@
    "n_flip_gained": 0.0,
    "mcnemar_exact_p": 0.0,
    "mean_delta_true_prob": 4.902336758760839e-09,
-   "flip_rate_upper95": 0.0,
+   "flip_rate_upper95": 1.6653345369377348e-16,
    "n_test": 0.0
   },
   "mismatches": [],

@@ -1,0 +1,42 @@
+{
+  "description": "Held-out test accuracy on rows whose Teff lies more than the cut from the nearest edge of their own class bin, at the 150 K cut of the stratified ablation and the 200 K cut of the deposited classifier report, from the deposited model.",
+  "inputs": {
+    "features": "artifacts/features.npz",
+    "model": "artifacts/lgbm_mk.pkl",
+    "distance_field": "boundary_distance_k (distance to the nearest edge of the row's own bin)",
+    "n_test": 456,
+    "n_bootstrap": 2000,
+    "seed": 42
+  },
+  "full_test_accuracy": 0.9342105263157895,
+  "cuts": {
+    "150K": {
+      "threshold_k": 150.0,
+      "n_filtered": 326,
+      "n_within": 130,
+      "accuracy_filtered": 0.9846625766871165,
+      "accuracy_within": 0.8076923076923077,
+      "delta_acc": 0.05045205037132705,
+      "delta_acc_ci_low": 0.030224994625696947,
+      "delta_acc_ci_high": 0.07280586883876351
+    },
+    "200K": {
+      "threshold_k": 200.0,
+      "n_filtered": 280,
+      "n_within": 176,
+      "accuracy_filtered": 0.9928571428571429,
+      "accuracy_within": 0.8409090909090909,
+      "delta_acc": 0.05864661654135339,
+      "delta_acc_ci_low": 0.037120381446039394,
+      "delta_acc_ci_high": 0.08115458015267166
+    }
+  },
+  "reproduction_of_deposited_200K": {
+    "deposited_accuracy": 0.9928571428571429,
+    "deposited_n_filtered": 280.0,
+    "recomputed_accuracy": 0.9928571428571429,
+    "recomputed_n_filtered": 280,
+    "accuracy_matches": true,
+    "n_matches": true
+  }
+}

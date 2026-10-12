@@ -21,7 +21,7 @@ metal multiplets cited in Section 4.2 of the manuscript:
   Cr i 5206.04 A (RMT 7)
   Cr i 5208.42 A (RMT 7)
   Fe i 5269.54 A (RMT 15)
-  Cr i 5345.80 A (RMT 1)
+  Cr i 5345.80 A (multiplet assignment not verified against Moore's table)
 
 Half-window of +/- 5 A around each gives the line set:
 
@@ -176,7 +176,7 @@ def main(argv: list[str] | None = None) -> int:
         "fe_cr_line_set_aa": FE_CR_LINE_SET,
         "fe_cr_line_set_provenance": (
             "Cr i 5206.04 (RMT 7), Cr i 5208.42 (RMT 7), Fe i 5269.54 "
-            "(RMT 15), Cr i 5345.80 (RMT 1); half-window +/-5 A. "
+            "(RMT 15), Cr i 5345.80 (multiplet not verified); half-window +/-5 A. "
             "Post-hoc diagnostic; not part of pre-specified "
             "headline gate (Section 3.5)."
         ),

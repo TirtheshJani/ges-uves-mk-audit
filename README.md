@@ -64,6 +64,9 @@ python scripts/revision/line_set_table.py             # line_sets.csv, line_sets
 python scripts/revision/ablation_recalibrated.py      # ablation_recalibrated.{json,csv}, per-row .npz, ablation_bars.pdf (about 12 to 17 min, four runs)
 python scripts/revision/ablation_stratified.py        # ablation_stratified.json (needs the per-row .npz above)
 python scripts/revision/benchmark_corrected.py --pickles-dir <dir with pickles_uk_1.fits ... pickles_uk_131.fits>
+python scripts/revision/cv_field_groups.py all           # ges_fld_catalog.csv, ges_fld_groups.csv, cv_field_groups.json (ESO TAP query, about 3 min)
+python scripts/revision/k_positive_control.py           # k_positive_control.{json,log}, per-row .npz (about 45 min: joint and SHAP-ranked K masks)
+python scripts/revision/boundary_filtered.py            # boundary_filtered.json (accuracy beyond 150 K and 200 K from a boundary)
 
 # 3. Manuscript numbers and static checks
 python scripts/revision/manuscript_numbers.py         # submission/revision_numbers.tex and the generated tables
@@ -112,7 +115,7 @@ Random seeds are pinned at 42 across LightGBM, scikit-learn, NumPy and SHAP.
 - **Gaia-ESO Survey recommended parameters**: ESO Science Archive TAP service at
   `https://archive.eso.org/tap_cat`, table `safcat."GES_DR5_1_V1"`, citing Hourihane et al. 2023,
   A&A 676, A129.
-- **Spectra**: UVES U580 setup, blue and red arms stitched, 4800 to 6800 Angstrom in air wavelengths,
+- **Spectra**: UVES U580 setting (FLAMES feeds the UVES red arm only; the two CCDs of its mosaic are stitched), 4800 to 6800 Angstrom in air wavelengths,
   continuum-normalised per the Gaia-ESO pipeline (Sacco et al. 2014, A&A 565, A113). The inter-chip gap
   is preserved and masked downstream (`gap_mask` in `features.npz`). Public through the ESO Science
   Archive Facility under Programme 188.B-3002. This repository does not redistribute raw spectra; fetch

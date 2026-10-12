@@ -1,0 +1,906 @@
+{
+  "description": "Leakage-aware cross-validation of the production LightGBM MK classifier with groups defined by the Gaia-ESO survey field identifier GES_FLD (one open cluster or calibration field per value), run on the 2576 train+val rows with the unmodified src.interpret.classifier.train_cv (StratifiedGroupKFold, n_splits=5, random_state=42, production hyperparameters, early stopping on the held-out fold). GES_FLD is assigned to every feature row by a 0.5 arcsec sky match against safcat.\"GES_DR5_1_V1\" from the ESO TAP service. The deposited plain StratifiedKFold control is re-run through the same function and checked against artifacts/metrics.json. Produced by scripts/revision/cv_field_groups.py; no deposited file was modified.",
+  "script": "scripts/revision/cv_field_groups.py",
+  "generated_utc": "2026-10-08T18:41:06Z",
+  "inputs": {
+    "features": "artifacts/features.npz",
+    "rows_used_for_cv": "train_idx followed by val_idx (tv_idx), exactly as scripts/train_classifier.py builds X_tv/y_tv",
+    "tap_url": "https://archive.eso.org/tap_cat",
+    "table": "safcat.\"GES_DR5_1_V1\"",
+    "adql": "SELECT OBJECT, GES_FLD, GES_TYPE, RA, DECLINATION, TEFF, LOGG, FEH FROM safcat.\"GES_DR5_1_V1\" WHERE REC_SETUP LIKE '%580%' AND TEFF IS NOT NULL AND LOGG IS NOT NULL AND FEH IS NOT NULL",
+    "tap_mode": "asynchronous (TapPlus.launch_job_async)",
+    "match_radius_arcsec": 0.5,
+    "ambiguity_radius_arcsec_reported": 2.0,
+    "seed": 42,
+    "n_splits": 5,
+    "cv_function": "src.interpret.classifier.train_cv (unmodified)",
+    "splitter_field_groups": "sklearn.model_selection.StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42) with groups = integer-encoded GES_FLD",
+    "splitter_control": "StratifiedKFold(n_splits=5, shuffle=True, random_state=42), reached through the train_cv fallback on the zero-filled groups array of features.npz, as in the deposited run",
+    "hyperparameters": {
+      "objective": "multiclass",
+      "class_weight": "balanced",
+      "max_depth": 8,
+      "num_leaves": 63,
+      "learning_rate": 0.05,
+      "n_estimators": 500,
+      "min_child_samples": 20,
+      "subsample": 0.9,
+      "subsample_freq": 1,
+      "colsample_bytree": 0.9,
+      "random_state": 42,
+      "n_jobs": -1,
+      "verbose": -1,
+      "num_class": 3
+    },
+    "early_stopping_rounds": 50,
+    "early_stopping_eval_set": "the held-out fold itself (train_cv convention, unchanged)",
+    "per_fold_timeout_s": 3600.0,
+    "class_labels": [
+      "F",
+      "G",
+      "K"
+    ],
+    "group_encoding": "pandas.factorize over GES_FLD of all 3032 feature rows; one integer per distinct field; rows without a GES_FLD (if any) get unique codes",
+    "dbscan_reference": {
+      "function": "src.interpret.classifier.derive_spatial_groups on all rows",
+      "eps_deg": 0.1,
+      "min_samples": 5
+    },
+    "software": {
+      "python": "3.10.12",
+      "numpy": "2.2.6",
+      "pandas": "2.3.3",
+      "scikit_learn": "1.7.2",
+      "lightgbm": "4.7.0",
+      "astropy": "6.1.7",
+      "astroquery": "0.4.11",
+      "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+      "n_cpu": 2
+    }
+  },
+  "catalogue": {
+    "file": "artifacts/revision/ges_fld_catalog.csv",
+    "fetched_utc": "2026-10-08T18:37:46Z",
+    "tap_mode": "async",
+    "fetch_runtime_s": 2.39,
+    "n_rows": 6143,
+    "n_distinct_ges_fld": 205,
+    "n_rows_null_or_empty_ges_fld": 0,
+    "n_distinct_cname": 6143,
+    "n_rows_with_repeated_cname": 0,
+    "n_distinct_positions": 6143,
+    "n_positions_shared_by_rows_with_different_ges_fld": 0,
+    "n_rows_null_ra_or_dec": 0,
+    "largest_fields": [
+      {
+        "ges_fld": "Bulge",
+        "n_rows": 312
+      },
+      {
+        "ges_fld": "GES_MW_15_16",
+        "n_rows": 272
+      },
+      {
+        "ges_fld": "Kepler2",
+        "n_rows": 252
+      },
+      {
+        "ges_fld": "GES_MW_14_15",
+        "n_rows": 247
+      },
+      {
+        "ges_fld": "GES_MW_23_24",
+        "n_rows": 210
+      }
+    ],
+    "ges_type_counts": {
+      "GE_MW": 3220,
+      "GE_CL": 1392,
+      "AR_SD_GC": 336,
+      "GE_MW_BL": 312,
+      "GE_SD_K2": 252,
+      "AR_CL": 182,
+      "GE_SD_CR": 118,
+      "AR_SD_OC": 112,
+      "GE_SD_GC": 83,
+      "GE_SD_OC": 49,
+      "GE_SD_BM|AR_SD_BM": 29,
+      "GE_SD_RV": 29,
+      "GE_SD_BW": 15,
+      "GE_SD_MC": 5,
+      "AR_CL|GE_CL": 4,
+      "GE_SD_PC": 2,
+      "GE_SD_TL": 1,
+      "AR_SD_GC|GE_SD_GC": 1,
+      "GE_SD_BM|GE_SD_BW": 1
+    }
+  },
+  "matching": {
+    "file": "artifacts/revision/ges_fld_groups.csv",
+    "n_feature_rows": 3032,
+    "n_train": 2122,
+    "n_val": 454,
+    "n_test": 456,
+    "n_exact_float_equal": 0,
+    "n_equal_after_rounding_catalogue_to_6dp": 3032,
+    "n_within_match_radius": 3032,
+    "n_unmatched": 0,
+    "unmatched_row_indices": [],
+    "n_matched_without_ges_fld": 0,
+    "sep_arcsec_max_matched": 0.0020000085528004137,
+    "sep_arcsec_median_matched": 0.0012099995626361113,
+    "n_second_neighbour_within_ambiguity_radius": 0,
+    "n_second_neighbour_within_match_radius": 0,
+    "n_second_neighbour_within_match_radius_different_ges_fld": 0,
+    "n_matched_positions_shared_by_rows_with_different_ges_fld": 0,
+    "n_catalogue_rows_matched_by_multiple_feature_rows": 0,
+    "ges_type_counts_matched_full": {
+      "GE_MW": 2069,
+      "GE_CL": 461,
+      "AR_SD_GC": 167,
+      "AR_SD_OC": 82,
+      "GE_SD_CR": 77,
+      "AR_CL": 73,
+      "GE_SD_GC": 43,
+      "GE_SD_OC": 21,
+      "GE_MW_BL": 19,
+      "GE_SD_K2": 11,
+      "GE_SD_RV": 5,
+      "AR_CL|GE_CL": 2,
+      "GE_SD_BM|AR_SD_BM": 1,
+      "AR_SD_GC|GE_SD_GC": 1
+    },
+    "ges_type_counts_matched_trainval": {
+      "GE_MW": 1756,
+      "GE_CL": 396,
+      "AR_SD_GC": 143,
+      "AR_CL": 66,
+      "AR_SD_OC": 66,
+      "GE_SD_CR": 61,
+      "GE_SD_GC": 37,
+      "GE_SD_OC": 18,
+      "GE_MW_BL": 14,
+      "GE_SD_K2": 10,
+      "GE_SD_RV": 5,
+      "AR_CL|GE_CL": 2,
+      "AR_SD_GC|GE_SD_GC": 1,
+      "GE_SD_BM|AR_SD_BM": 1
+    }
+  },
+  "group_statistics": {
+    "trainval": {
+      "n_rows": 2576,
+      "n_rows_without_ges_fld": 0,
+      "n_groups": 109,
+      "n_singleton_groups": 12,
+      "n_rows_in_singleton_groups": 12,
+      "n_groups_size_ge2": 97,
+      "n_rows_in_groups_size_ge2": 2564,
+      "largest_group_size": 158,
+      "group_size_median": 10.0,
+      "largest_groups": [
+        {
+          "ges_fld": "GES_MW_15_16",
+          "n_rows": 158
+        },
+        {
+          "ges_fld": "GES_MW_14_15",
+          "n_rows": 135
+        },
+        {
+          "ges_fld": "GES_MW_11_12",
+          "n_rows": 122
+        },
+        {
+          "ges_fld": "GES_MW_12_13",
+          "n_rows": 101
+        },
+        {
+          "ges_fld": "GES_MW_10_11",
+          "n_rows": 98
+        }
+      ],
+      "singleton_group_stats": {
+        "n_total_rows": 2576,
+        "n_unique_groups": 109,
+        "n_singleton_groups": 12,
+        "n_rows_in_singleton_groups": 12,
+        "singleton_group_fraction": 0.11009174311926606,
+        "singleton_row_fraction": 0.004658385093167702,
+        "n_dbscan_noise_rows": 0,
+        "n_non_singleton_clusters": 97,
+        "non_singleton_cluster_size_min": 3,
+        "non_singleton_cluster_size_median": 11,
+        "non_singleton_cluster_size_max": 158
+      },
+      "singleton_group_fraction": 0.11009174311926606,
+      "singleton_row_fraction": 0.004658385093167702,
+      "note": "singleton_group_stats is src.interpret.classifier.singleton_group_stats applied to the integer-encoded GES_FLD groups; its n_dbscan_noise_rows key counts negative ids and is 0 by construction here"
+    },
+    "full": {
+      "n_rows": 3032,
+      "n_rows_without_ges_fld": 0,
+      "n_groups": 110,
+      "n_singleton_groups": 12,
+      "n_rows_in_singleton_groups": 12,
+      "n_groups_size_ge2": 98,
+      "n_rows_in_groups_size_ge2": 3020,
+      "largest_group_size": 195,
+      "group_size_median": 11.5,
+      "largest_groups": [
+        {
+          "ges_fld": "GES_MW_15_16",
+          "n_rows": 195
+        },
+        {
+          "ges_fld": "GES_MW_14_15",
+          "n_rows": 146
+        },
+        {
+          "ges_fld": "GES_MW_11_12",
+          "n_rows": 132
+        },
+        {
+          "ges_fld": "GES_MW_12_13",
+          "n_rows": 128
+        },
+        {
+          "ges_fld": "GES_MW_23_24",
+          "n_rows": 116
+        }
+      ],
+      "singleton_group_stats": {
+        "n_total_rows": 3032,
+        "n_unique_groups": 110,
+        "n_singleton_groups": 12,
+        "n_rows_in_singleton_groups": 12,
+        "singleton_group_fraction": 0.10909090909090909,
+        "singleton_row_fraction": 0.00395778364116095,
+        "n_dbscan_noise_rows": 0,
+        "n_non_singleton_clusters": 98,
+        "non_singleton_cluster_size_min": 3,
+        "non_singleton_cluster_size_median": 12,
+        "non_singleton_cluster_size_max": 195
+      },
+      "singleton_group_fraction": 0.10909090909090909,
+      "singleton_row_fraction": 0.00395778364116095,
+      "note": "singleton_group_stats is src.interpret.classifier.singleton_group_stats applied to the integer-encoded GES_FLD groups; its n_dbscan_noise_rows key counts negative ids and is 0 by construction here"
+    }
+  },
+  "dbscan_relation": {
+    "derive_spatial_groups_runtime_s": 0.65,
+    "trainval": {
+      "n_rows": 2576,
+      "n_ges_fld_groups": 109,
+      "n_dbscan_groups": 1926,
+      "n_dbscan_clusters": 81,
+      "n_dbscan_noise_rows": 1845,
+      "n_ges_fld_groups_spanning_gt1_dbscan_group": 56,
+      "n_ges_fld_groups_spanning_gt1_dbscan_cluster": 9,
+      "n_dbscan_clusters_spanning_gt1_ges_fld": 2,
+      "n_dbscan_clusters_within_one_ges_fld": 79,
+      "n_rows_in_ges_fld_groups_size_ge2": 2564,
+      "n_rows_dbscan_noise_with_ges_fld_mates": 1833,
+      "n_ges_fld_groups_entirely_dbscan_noise": 42,
+      "n_ges_fld_groups_size_ge2_entirely_dbscan_noise": 30,
+      "note": "DBSCAN groups are derive_spatial_groups(eps_deg=0.1, min_samples=5) on all 3032 rows, as in scripts/train_classifier.py; noise rows carry unique negative ids and are counted as distinct groups. n_rows_dbscan_noise_with_ges_fld_mates counts rows the deposited spatial pass treated as singletons although another row of the same partition shares their GES_FLD."
+    },
+    "full": {
+      "n_rows": 3032,
+      "n_ges_fld_groups": 110,
+      "n_dbscan_groups": 2264,
+      "n_dbscan_clusters": 81,
+      "n_dbscan_noise_rows": 2183,
+      "n_ges_fld_groups_spanning_gt1_dbscan_group": 59,
+      "n_ges_fld_groups_spanning_gt1_dbscan_cluster": 9,
+      "n_dbscan_clusters_spanning_gt1_ges_fld": 2,
+      "n_dbscan_clusters_within_one_ges_fld": 79,
+      "n_rows_in_ges_fld_groups_size_ge2": 3020,
+      "n_rows_dbscan_noise_with_ges_fld_mates": 2171,
+      "n_ges_fld_groups_entirely_dbscan_noise": 43,
+      "n_ges_fld_groups_size_ge2_entirely_dbscan_noise": 31,
+      "note": "DBSCAN groups are derive_spatial_groups(eps_deg=0.1, min_samples=5) on all 3032 rows, as in scripts/train_classifier.py; noise rows carry unique negative ids and are counted as distinct groups. n_rows_dbscan_noise_with_ges_fld_mates counts rows the deposited spatial pass treated as singletons although another row of the same partition shares their GES_FLD."
+    }
+  },
+  "cv_control": {
+    "how": "src.interpret.classifier.train_cv, all folds in one call",
+    "splitter": "StratifiedKFold",
+    "splitter_check": "StratifiedKFold",
+    "n_splits": 5,
+    "n_folds_completed": 5,
+    "fallback_triggered": false,
+    "fallback_reason": "n_unique_groups=1 < n_splits=5; group-aware CV degenerates to single fold; using StratifiedKFold",
+    "n_rows": 2576,
+    "n_unique_groups": 1,
+    "macro_f1_mean": 0.9126175833076251,
+    "macro_f1_sd_population_ddof0": 0.011825736965888662,
+    "macro_f1_sd_sample_ddof1": 0.01322157586987958,
+    "accuracy_mean": 0.9223556860088807,
+    "accuracy_sd_population_ddof0": 0.010733989399887348,
+    "accuracy_sd_sample_ddof1": 0.01200096498395514,
+    "train_cv_cv_macro_f1_mean": 0.9126175833076251,
+    "train_cv_cv_macro_f1_std": 0.011825736965888662,
+    "per_fold_macro_f1": [
+      0.9264158132355022,
+      0.895526090075386,
+      0.9022490485089211,
+      0.9222681548849386,
+      0.9166288098333778
+    ],
+    "per_fold_accuracy": [
+      0.9341085271317829,
+      0.9048543689320389,
+      0.916504854368932,
+      0.9320388349514563,
+      0.9242718446601942
+    ],
+    "per_fold_best_iteration": [
+      135,
+      107,
+      102,
+      148,
+      137
+    ],
+    "per_class_recall_mean": {
+      "F": 0.8307692307692308,
+      "G": 0.9302298850574713,
+      "K": 0.9608559030375579
+    },
+    "per_fold": [
+      {
+        "fold": 0,
+        "n_train": 2060,
+        "n_val": 516,
+        "macro_f1": 0.9264158132355022,
+        "accuracy": 0.9341085271317829,
+        "per_class_recall": {
+          "F": 0.8901098901098901,
+          "G": 0.9272030651340997,
+          "K": 0.9695121951219512
+        },
+        "confusion_matrix": [
+          [
+            81,
+            9,
+            1
+          ],
+          [
+            11,
+            242,
+            8
+          ],
+          [
+            0,
+            5,
+            159
+          ]
+        ],
+        "runtime_s": 15.007993891998922,
+        "best_iteration": 135
+      },
+      {
+        "fold": 1,
+        "n_train": 2061,
+        "n_val": 515,
+        "macro_f1": 0.895526090075386,
+        "accuracy": 0.9048543689320389,
+        "per_class_recall": {
+          "F": 0.8021978021978022,
+          "G": 0.9003831417624522,
+          "K": 0.9693251533742331
+        },
+        "confusion_matrix": [
+          [
+            73,
+            18,
+            0
+          ],
+          [
+            8,
+            235,
+            18
+          ],
+          [
+            0,
+            5,
+            158
+          ]
+        ],
+        "runtime_s": 12.531731027000205,
+        "best_iteration": 107
+      },
+      {
+        "fold": 2,
+        "n_train": 2061,
+        "n_val": 515,
+        "macro_f1": 0.9022490485089211,
+        "accuracy": 0.916504854368932,
+        "per_class_recall": {
+          "F": 0.7802197802197802,
+          "G": 0.9348659003831418,
+          "K": 0.9631901840490797
+        },
+        "confusion_matrix": [
+          [
+            71,
+            20,
+            0
+          ],
+          [
+            9,
+            244,
+            8
+          ],
+          [
+            0,
+            6,
+            157
+          ]
+        ],
+        "runtime_s": 13.40428067799985,
+        "best_iteration": 102
+      },
+      {
+        "fold": 3,
+        "n_train": 2061,
+        "n_val": 515,
+        "macro_f1": 0.9222681548849386,
+        "accuracy": 0.9320388349514563,
+        "per_class_recall": {
+          "F": 0.8461538461538461,
+          "G": 0.9386973180076629,
+          "K": 0.9693251533742331
+        },
+        "confusion_matrix": [
+          [
+            77,
+            14,
+            0
+          ],
+          [
+            9,
+            245,
+            7
+          ],
+          [
+            0,
+            5,
+            158
+          ]
+        ],
+        "runtime_s": 18.04938176900032,
+        "best_iteration": 148
+      },
+      {
+        "fold": 4,
+        "n_train": 2061,
+        "n_val": 515,
+        "macro_f1": 0.9166288098333778,
+        "accuracy": 0.9242718446601942,
+        "per_class_recall": {
+          "F": 0.8351648351648352,
+          "G": 0.95,
+          "K": 0.9329268292682927
+        },
+        "confusion_matrix": [
+          [
+            76,
+            15,
+            0
+          ],
+          [
+            6,
+            247,
+            7
+          ],
+          [
+            0,
+            11,
+            153
+          ]
+        ],
+        "runtime_s": 16.565952699000263,
+        "best_iteration": 137
+      }
+    ],
+    "fold_composition": [
+      {
+        "fold": 0,
+        "n_train": 2060,
+        "n_val": 516,
+        "n_groups_train": 1,
+        "n_groups_val": 1,
+        "groups_disjoint": false,
+        "val_class_counts": {
+          "F": 91,
+          "G": 261,
+          "K": 164
+        }
+      },
+      {
+        "fold": 1,
+        "n_train": 2061,
+        "n_val": 515,
+        "n_groups_train": 1,
+        "n_groups_val": 1,
+        "groups_disjoint": false,
+        "val_class_counts": {
+          "F": 91,
+          "G": 261,
+          "K": 163
+        }
+      },
+      {
+        "fold": 2,
+        "n_train": 2061,
+        "n_val": 515,
+        "n_groups_train": 1,
+        "n_groups_val": 1,
+        "groups_disjoint": false,
+        "val_class_counts": {
+          "F": 91,
+          "G": 261,
+          "K": 163
+        }
+      },
+      {
+        "fold": 3,
+        "n_train": 2061,
+        "n_val": 515,
+        "n_groups_train": 1,
+        "n_groups_val": 1,
+        "groups_disjoint": false,
+        "val_class_counts": {
+          "F": 91,
+          "G": 261,
+          "K": 163
+        }
+      },
+      {
+        "fold": 4,
+        "n_train": 2061,
+        "n_val": 515,
+        "n_groups_train": 1,
+        "n_groups_val": 1,
+        "groups_disjoint": false,
+        "val_class_counts": {
+          "F": 91,
+          "G": 260,
+          "K": 164
+        }
+      }
+    ],
+    "total_fit_runtime_s": 75.55934006499956,
+    "wall_runtime_s": 75.65429319299983,
+    "finished_utc": "2026-10-08T18:39:25Z",
+    "groups_source": "features.npz groups array (zero-filled in the deposited run)",
+    "reproduction": {
+      "deposited_file": "artifacts/metrics.json",
+      "deposited_cv_macro_f1_mean": 0.9126175833076251,
+      "deposited_cv_macro_f1_std": 0.011825736965888662,
+      "deposited_cv_splitter": "StratifiedKFold",
+      "deposited_cv_fallback_reason": "n_unique_groups=1 < n_splits=5; group-aware CV degenerates to single fold; using StratifiedKFold",
+      "deposited_per_fold_macro_f1": [
+        0.9264158132355022,
+        0.895526090075386,
+        0.9022490485089211,
+        0.9222681548849386,
+        0.9166288098333778
+      ],
+      "deposited_per_fold_accuracy": [
+        0.9341085271317829,
+        0.9048543689320389,
+        0.916504854368932,
+        0.9320388349514563,
+        0.9242718446601942
+      ],
+      "deposited_per_fold_best_iteration": [
+        135,
+        107,
+        102,
+        148,
+        137
+      ],
+      "rerun_cv_macro_f1_mean": 0.9126175833076251,
+      "rerun_cv_macro_f1_std": 0.011825736965888662,
+      "abs_difference_mean": 0.0,
+      "max_abs_difference_per_fold_macro_f1": 0.0,
+      "per_fold_macro_f1_identical": true,
+      "per_fold_accuracy_identical": true,
+      "per_fold_best_iteration_identical": true,
+      "splitter_identical": true,
+      "reproduced_exactly": true,
+      "reproduced_within_1e-6": true
+    }
+  },
+  "cv_field_groups": {
+    "how": "src.interpret.classifier.train_cv, all folds in one call",
+    "splitter": "StratifiedGroupKFold",
+    "splitter_check": "StratifiedGroupKFold",
+    "n_splits": 5,
+    "n_folds_completed": 5,
+    "fallback_triggered": false,
+    "fallback_reason": "",
+    "n_rows": 2576,
+    "n_unique_groups": 109,
+    "macro_f1_mean": 0.9063528941266036,
+    "macro_f1_sd_population_ddof0": 0.018432884194963757,
+    "macro_f1_sd_sample_ddof1": 0.02060859104066022,
+    "accuracy_mean": 0.9159173737770058,
+    "accuracy_sd_population_ddof0": 0.017201438588505296,
+    "accuracy_sd_sample_ddof1": 0.01923179299734294,
+    "train_cv_cv_macro_f1_mean": 0.9063528941266036,
+    "train_cv_cv_macro_f1_std": 0.018432884194963757,
+    "per_fold_macro_f1": [
+      0.9016921281376836,
+      0.8988161478771862,
+      0.8781450576619658,
+      0.928599177439328,
+      0.9245119595168542
+    ],
+    "per_fold_accuracy": [
+      0.9061662198391421,
+      0.9106753812636166,
+      0.8917861799217731,
+      0.9333333333333333,
+      0.937625754527163
+    ],
+    "per_fold_best_iteration": [
+      82,
+      87,
+      113,
+      135,
+      166
+    ],
+    "per_class_recall_mean": {
+      "F": 0.8240110352238974,
+      "G": 0.930223210457324,
+      "K": 0.9425598484274594
+    },
+    "per_fold": [
+      {
+        "fold": 0,
+        "n_train": 2203,
+        "n_val": 373,
+        "macro_f1": 0.9016921281376836,
+        "accuracy": 0.9061662198391421,
+        "per_class_recall": {
+          "F": 0.8524590163934426,
+          "G": 0.9349112426035503,
+          "K": 0.8951048951048951
+        },
+        "confusion_matrix": [
+          [
+            52,
+            8,
+            1
+          ],
+          [
+            5,
+            158,
+            6
+          ],
+          [
+            0,
+            15,
+            128
+          ]
+        ],
+        "runtime_s": 10.918812089999847,
+        "best_iteration": 82
+      },
+      {
+        "fold": 1,
+        "n_train": 2117,
+        "n_val": 459,
+        "macro_f1": 0.8988161478771862,
+        "accuracy": 0.9106753812636166,
+        "per_class_recall": {
+          "F": 0.7721518987341772,
+          "G": 0.919047619047619,
+          "K": 0.9647058823529412
+        },
+        "confusion_matrix": [
+          [
+            61,
+            18,
+            0
+          ],
+          [
+            4,
+            193,
+            13
+          ],
+          [
+            0,
+            6,
+            164
+          ]
+        ],
+        "runtime_s": 10.66843519699978,
+        "best_iteration": 87
+      },
+      {
+        "fold": 2,
+        "n_train": 1809,
+        "n_val": 767,
+        "macro_f1": 0.8781450576619658,
+        "accuracy": 0.8917861799217731,
+        "per_class_recall": {
+          "F": 0.7777777777777778,
+          "G": 0.9244851258581236,
+          "K": 0.9032258064516129
+        },
+        "confusion_matrix": [
+          [
+            112,
+            32,
+            0
+          ],
+          [
+            19,
+            404,
+            14
+          ],
+          [
+            0,
+            18,
+            168
+          ]
+        ],
+        "runtime_s": 11.698581184999057,
+        "best_iteration": 113
+      },
+      {
+        "fold": 3,
+        "n_train": 2096,
+        "n_val": 480,
+        "macro_f1": 0.928599177439328,
+        "accuracy": 0.9333333333333333,
+        "per_class_recall": {
+          "F": 0.8695652173913043,
+          "G": 0.9342105263157895,
+          "K": 0.96875
+        },
+        "confusion_matrix": [
+          [
+            80,
+            12,
+            0
+          ],
+          [
+            6,
+            213,
+            9
+          ],
+          [
+            0,
+            5,
+            155
+          ]
+        ],
+        "runtime_s": 16.805324025001028,
+        "best_iteration": 135
+      },
+      {
+        "fold": 4,
+        "n_train": 2079,
+        "n_val": 497,
+        "macro_f1": 0.9245119595168542,
+        "accuracy": 0.937625754527163,
+        "per_class_recall": {
+          "F": 0.8481012658227848,
+          "G": 0.9384615384615385,
+          "K": 0.9810126582278481
+        },
+        "confusion_matrix": [
+          [
+            67,
+            12,
+            0
+          ],
+          [
+            9,
+            244,
+            7
+          ],
+          [
+            0,
+            3,
+            155
+          ]
+        ],
+        "runtime_s": 16.932048419999774,
+        "best_iteration": 166
+      }
+    ],
+    "fold_composition": [
+      {
+        "fold": 0,
+        "n_train": 2203,
+        "n_val": 373,
+        "n_groups_train": 90,
+        "n_groups_val": 19,
+        "groups_disjoint": true,
+        "val_class_counts": {
+          "F": 61,
+          "G": 169,
+          "K": 143
+        }
+      },
+      {
+        "fold": 1,
+        "n_train": 2117,
+        "n_val": 459,
+        "n_groups_train": 86,
+        "n_groups_val": 23,
+        "groups_disjoint": true,
+        "val_class_counts": {
+          "F": 79,
+          "G": 210,
+          "K": 170
+        }
+      },
+      {
+        "fold": 2,
+        "n_train": 1809,
+        "n_val": 767,
+        "n_groups_train": 83,
+        "n_groups_val": 26,
+        "groups_disjoint": true,
+        "val_class_counts": {
+          "F": 144,
+          "G": 437,
+          "K": 186
+        }
+      },
+      {
+        "fold": 3,
+        "n_train": 2096,
+        "n_val": 480,
+        "n_groups_train": 88,
+        "n_groups_val": 21,
+        "groups_disjoint": true,
+        "val_class_counts": {
+          "F": 92,
+          "G": 228,
+          "K": 160
+        }
+      },
+      {
+        "fold": 4,
+        "n_train": 2079,
+        "n_val": 497,
+        "n_groups_train": 89,
+        "n_groups_val": 20,
+        "groups_disjoint": true,
+        "val_class_counts": {
+          "F": 79,
+          "G": 260,
+          "K": 158
+        }
+      }
+    ],
+    "total_fit_runtime_s": 67.02320091699949,
+    "wall_runtime_s": 67.12251968799865,
+    "finished_utc": "2026-10-08T18:40:44Z",
+    "groups_source": "artifacts/revision/ges_fld_groups.csv",
+    "n_rows_without_ges_fld_trainval": 0
+  },
+  "comparison": {
+    "deposited_plain_cv_macro_f1_mean": 0.9126175833076251,
+    "deposited_plain_cv_macro_f1_std": 0.011825736965888662,
+    "deposited_spatial_cv_macro_f1_mean": 0.9028285873560392,
+    "deposited_spatial_cv_macro_f1_std": 0.015848630135419452,
+    "deposited_spatial_singleton_group_fraction": 0.9579439252336449,
+    "rerun_control_macro_f1_mean": 0.9126175833076251,
+    "control_reproduced_exactly": true,
+    "field_grouped_macro_f1_mean": 0.9063528941266036,
+    "field_grouped_macro_f1_sd_population_ddof0": 0.018432884194963757,
+    "field_grouped_macro_f1_sd_sample_ddof1": 0.02060859104066022,
+    "field_grouped_minus_plain": -0.006264689181021521,
+    "field_grouped_minus_spatial": 0.003524306770564367,
+    "field_singleton_group_fraction_trainval": 0.11009174311926606
+  },
+  "last_updated_utc": "2026-10-08T18:41:06Z"
+}
