@@ -4,7 +4,7 @@
 
 The StratifiedGroupKFold pass produces a 0.010 macro-F1 gap relative to
 plain StratifiedKFold, which the manuscript interprets as bounding the
-residual cluster-leakage contribution (Blanco-Cuaresma 2019). That reading
+residual cluster-leakage contribution (Roberts et al. 2017). That reading
 depends on what fraction of the 1926 spatial groups are singletons and
 what fraction of training rows live in singleton groups: if most rows are
 singletons, the group stratification is partial and the 0.010 gap is a

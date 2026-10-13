@@ -302,7 +302,8 @@ def plot_main_figure(
       * Bottom axis: per-class SHAP trace; top-K markers per class drawn as
         coloured circles at the relevant wavelength bins.
       * Inset panel on the right: ablation delta-acc bars (pulled from
-        ``ablation_rows``).
+        ``ablation_rows``); omitted, with the spectral panels at full width,
+        when ``ablation_rows`` is None or empty.
       * Grey hatched band over each contiguous gap_mask True run
         (UVES inter-chip gap, Sacco et al. 2014).
 
@@ -325,15 +326,21 @@ def plot_main_figure(
             f"len(class_labels) {len(class_labels)}"
         )
 
+    # With no ablation rows the right-hand panel is omitted and the two
+    # spectral panels span the full figure width.
+    has_bars = bool(ablation_rows)
     fig = plt.figure(figsize=(12.5, 6.4))
-    gs = fig.add_gridspec(
-        nrows=2, ncols=2,
-        width_ratios=[3.2, 1.0], height_ratios=[1.0, 1.6],
-        hspace=0.08, wspace=0.22,
-    )
+    if has_bars:
+        gs = fig.add_gridspec(
+            nrows=2, ncols=2,
+            width_ratios=[3.2, 1.0], height_ratios=[1.0, 1.6],
+            hspace=0.08, wspace=0.22,
+        )
+    else:
+        gs = fig.add_gridspec(nrows=2, ncols=1, height_ratios=[1.0, 1.6], hspace=0.08)
     ax_spec = fig.add_subplot(gs[0, 0])
     ax_imp = fig.add_subplot(gs[1, 0], sharex=ax_spec)
-    ax_bars = fig.add_subplot(gs[:, 1])
+    ax_bars = fig.add_subplot(gs[:, 1]) if has_bars else None
 
     wmin, wmax = float(wave_centers.min()), float(wave_centers.max())
     gap_spans = _contiguous_spans(wave_centers, gap_mask)
@@ -407,7 +414,7 @@ def plot_main_figure(
     bar_lows = []
     bar_highs = []
     bar_colors = []
-    for row in ablation_rows:
+    for row in (ablation_rows or []):
         ls = _pretty_line_set(row.get("line_set", "?"))
         cls = row.get("mk_class", "?")
         bar_labels.append(f"{ls}\non {cls}")
@@ -440,7 +447,7 @@ def plot_main_figure(
             ["headline", "pivot"],
             loc="lower right", fontsize=8, framealpha=0.9,
         )
-    else:
+    elif ax_bars is not None:
         ax_bars.set_axis_off()
 
     logger.info("plot_main_figure: writing %s (n_classes=%d, top_k=%d)",

@@ -104,7 +104,6 @@ def kiel_diagram(df: pd.DataFrame, out_paths: list[Path]) -> None:
     ax.set_ylim(5.2, 0.2)
     ax.set_xlabel("effective temperature $T_\\mathrm{eff}$ (K)")
     ax.set_ylabel("surface gravity $\\log g$ (dex)")
-    ax.set_title("K is mostly giants; F and G are dwarfs", loc="left")
     # Direct class labels in free whitespace instead of a legend box.
     ax.text(6700, 1.0, "F", color=CLASS_COLORS["F"], fontsize=FONT_BASE, fontweight="bold", ha="center")
     ax.text(5650, 1.0, "G", color=CLASS_COLORS["G"], fontsize=FONT_BASE, fontweight="bold", ha="center")
@@ -135,7 +134,7 @@ def continuum_medians_figure(per_class_prod: dict, per_class_poly: dict,
     ks_poly = numbers["row_median_distributions"]["polynomial_n5"]["ks_pairwise"]
     n_cls = numbers["row_median_distributions"]["production"]["per_class_n"]
 
-    def _panel(ax, data_dict, med_dict, ks_dict, title, ks_corner="lower"):
+    def _panel(ax, data_dict, med_dict, ks_dict, ks_corner="lower"):
         positions = [1, 2, 3]
         data = [data_dict[c] for c in ("F", "G", "K")]
         bp = ax.boxplot(data, positions=positions, widths=0.55, patch_artist=True,
@@ -148,7 +147,6 @@ def continuum_medians_figure(per_class_prod: dict, per_class_poly: dict,
             patch.set_linewidth(0.7)
         ax.set_xticks(positions)
         ax.set_xticklabels([f"{c}\n(n={n_cls[c]})" for c in ("F", "G", "K")])
-        ax.set_title(title, loc="left")
         ax.axhline(1.0, color="0.5", lw=0.6, ls="--")
         for cls, pos in zip(("F", "G", "K"), positions):
             ax.annotate(f"{med_dict[cls]:.3f}", xy=(pos, med_dict[cls]),
@@ -162,10 +160,8 @@ def continuum_medians_figure(per_class_prod: dict, per_class_poly: dict,
                 fontsize=FONT_SMALL, bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="0.6", lw=0.5))
         ax.set_xlim(0.45, 3.95)
 
-    _panel(ax_prod, per_class_prod, med_prod, ks_prod, "Pipeline normalisation: K sits lowest",
-           ks_corner="lower")
-    _panel(ax_poly, per_class_poly, med_poly, ks_poly, "Polynomial re-derivation: order reverses, span 0.005",
-           ks_corner="upper")
+    _panel(ax_prod, per_class_prod, med_prod, ks_prod, ks_corner="lower")
+    _panel(ax_poly, per_class_poly, med_poly, ks_poly, ks_corner="upper")
     ax_prod.set_ylabel("per-row median of normalised flux")
     ax_prod.set_ylim(0.78, 1.04)
     ax_poly.set_ylim(0.955, 1.045)

@@ -155,8 +155,8 @@ def derive_spatial_groups(
     ``StratifiedGroupKFold`` degenerated to ``StratifiedKFold`` in the first
     cross-validation pass. This helper derives groups from the on-sky
     coordinates so that a second pass can hold cluster-mate spectra out
-    together (Blanco-Cuaresma 2019,
-    MNRAS 486, 2075; bibcode 2019MNRAS.486.2075B).
+    together (Roberts et al. 2017,
+    Ecography 40, 913; doi:10.1111/ecog.02881).
 
     Uses ``sklearn.cluster.DBSCAN`` with ``metric='haversine'``. Haversine
     expects radians and the (latitude, longitude) tuple convention, so we
@@ -304,8 +304,8 @@ def train_cv(
     """Run group-aware stratified k-fold CV and return per-fold metrics.
 
     Uses ``sklearn.model_selection.StratifiedGroupKFold`` so that spatially
-    co-located stars never straddle a fold boundary (Blanco-Cuaresma 2019,
-    MNRAS 486, 2075). When the supplied ``groups``
+    co-located stars never straddle a fold boundary (Roberts et al. 2017,
+    Ecography 40, 913). When the supplied ``groups``
     array carries fewer unique values than ``n_splits``, the splitter cannot
     form valid folds, and the function logs the situation and degrades to
     ``StratifiedKFold`` without re-deriving groups.

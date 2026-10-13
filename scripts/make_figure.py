@@ -13,6 +13,7 @@ Outputs (all 300 DPI PDFs under ``--out-dir``):
 With ``--ablation-recalibrated`` the right-hand panel of importance_main.pdf is drawn from the
 primary run (production continuum, linear-interpolation fill, class-matched bin-matched null) of
 artifacts/revision/ablation_recalibrated.json instead of the deposited gate_eval.json.
+With ``--no-ablation-panel`` that panel is omitted and the two spectral panels span the width.
 
 Legacy overlays (``importance_overlay.pdf``,
 ``importance_overlay_per_class.pdf``) are also rendered for the dossier.
@@ -92,6 +93,9 @@ def main(argv: list[str] | None = None) -> None:
                         "ablation panel of importance_main.pdf uses its primary run")
     p.add_argument("--legacy-bars", action="store_true",
                    help="also write ablation_bars_legacy_gate_eval.pdf from gate_eval.json")
+    p.add_argument("--no-ablation-panel", action="store_true",
+                   help="omit the right-hand ablation panel of importance_main.pdf (the bars are "
+                        "Figure 1, ablation_bars.pdf); the two spectral panels then span the width")
     p.add_argument("--out-dir", required=True, type=Path)
     p.add_argument("--representative-class", default="G")
     p.add_argument("--top-k-per-class", type=int, default=10)
@@ -157,7 +161,7 @@ def main(argv: list[str] | None = None) -> None:
         representative_spectrum=rep_spectrum,
         shap_per_class=mean_abs_per_class,
         class_labels=class_labels,
-        ablation_rows=main_rows,
+        ablation_rows=[] if args.no_ablation_panel else main_rows,
         gap_mask=gap_mask,
         out_path=args.out_dir / "importance_main.pdf",
         top_k_per_class=args.top_k_per_class,

@@ -64,6 +64,7 @@ logs/
 *.out
 *.synctex.gz
 *.toc
+*.spl
 submission/output.*
 
 # Scratch and preview files

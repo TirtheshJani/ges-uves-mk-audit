@@ -71,6 +71,7 @@ python scripts/revision/boundary_filtered.py            # boundary_filtered.json
 # 3. Manuscript numbers and static checks
 python scripts/revision/manuscript_numbers.py         # submission/revision_numbers.tex and the generated tables
 python scripts/revision/check_manuscript.py           # braces, refs, citations, macros, open slots
+python scripts/revision/build_venue_variants.py      # submission/manuscript_elsarticle.tex and manuscript_mnras.tex from the master
 ```
 
 `scripts/revision/manuscript_numbers.py` writes one LaTeX macro per quoted number from the JSON

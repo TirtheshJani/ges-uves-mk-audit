@@ -15,7 +15,7 @@ The 90% coverage threshold accommodates the UVES 580 inter-chip gap at
 floor of 20 follows the GES DR5.1 QC recommendation (Gilmore+ 2022).
 
 Splits are group-stratified on ``group_col`` when available to prevent
-cluster-level leakage across folds (Blanco-Cuaresma 2019).
+cluster-level leakage across folds (Roberts et al. 2017).
 """
 
 from __future__ import annotations

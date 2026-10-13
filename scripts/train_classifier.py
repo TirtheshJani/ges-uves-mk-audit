@@ -122,7 +122,7 @@ def main(argv: list[str] | None = None) -> None:
         # 1b. spatial-group sensitivity CV. Derive spatial
         # groups from ra_deg/dec_deg in features.npz, then run a SECOND
         # StratifiedGroupKFold over those groups so cluster-mate spectra
-        # cannot leak between folds (Blanco-Cuaresma 2019). The original
+        # cannot leak between folds (Roberts et al. 2017). The original
         # cv_results above is retained verbatim for transparency.
         if "ra_deg" not in payload.files or "dec_deg" not in payload.files:
             raise RuntimeError(

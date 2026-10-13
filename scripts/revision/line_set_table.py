@@ -174,7 +174,7 @@ def main(argv: list[str] | None = None) -> int:
                 "blended_other_species_in_window": _fmt_lines(other),
                 "same_species_non_target_in_window": _fmt_lines(same),
                 f"strong_lines_within_{ADJACENT_TOL_AA:.0f}aa_outside": _fmt_lines(adjacent),
-                "_other": other, "_targets": targets,
+                "_other": sorted(other + same, key=lambda e: e[1]), "_targets": targets,
             })
     df = pd.DataFrame(rows)
     totals = df.groupby("line_set", sort=False).agg(
@@ -196,7 +196,7 @@ def main(argv: list[str] | None = None) -> int:
         rf"(R_bin = 1/d ln(lambda) = {1.0 / dln:.0f}); bin width {bin_width.min():.2f}-{bin_width.max():.2f} A.",
         r"\begin{tabular}{@{}llrrrp{5.2cm}@{}}",
         r"\toprule",
-        r"Line set & Window (\AA) & Target lines (\AA) & Width (\AA) & Bins & Other species inside window (\AA) \\",
+        r"Line set & Window (\AA) & Target lines (\AA) & Width (\AA) & Bins & Other lines inside window (\AA) \\",
         r"\midrule",
     ]
     for set_name in sets:

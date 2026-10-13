@@ -143,8 +143,8 @@ class TestGapMask:
     (Sacco et al. 2014, 2014A&A...565A.113S).
 
     extends the schema to 13 keys by adding ``ra_deg`` and
-    ``dec_deg`` for spatial-group CV (Blanco-Cuaresma 2019, MNRAS 486,
-    2075; bibcode 2019MNRAS.486.2075B).
+    ``dec_deg`` for spatial-group CV (Roberts et al. 2017, Ecography 40,
+    913; doi:10.1111/ecog.02881).
     """
 
     def _wave_centers_4800_6800(self, n_bins: int = 400) -> np.ndarray:
