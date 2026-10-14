@@ -329,14 +329,17 @@ def plot_main_figure(
     # With no ablation rows the right-hand panel is omitted and the two
     # spectral panels span the full figure width.
     has_bars = bool(ablation_rows)
-    fig = plt.figure(figsize=(12.5, 6.4))
     if has_bars:
+        fig = plt.figure(figsize=(12.5, 6.4))
         gs = fig.add_gridspec(
             nrows=2, ncols=2,
             width_ratios=[3.2, 1.0], height_ratios=[1.0, 1.6],
             hspace=0.08, wspace=0.22,
         )
     else:
+        # Narrower canvas: the spectral column alone, so the two panels fill
+        # the width rather than leaving the former bar-panel area empty.
+        fig = plt.figure(figsize=(9.5, 6.4))
         gs = fig.add_gridspec(nrows=2, ncols=1, height_ratios=[1.0, 1.6], hspace=0.08)
     ax_spec = fig.add_subplot(gs[0, 0])
     ax_imp = fig.add_subplot(gs[1, 0], sharex=ax_spec)
@@ -386,7 +389,7 @@ def plot_main_figure(
                 ax_imp.scatter(
                     wave_centers[top], _normalise_trace(shap_per_class[c])[top],
                     s=28, color=f"C{c}", edgecolor="black", lw=0.5, zorder=5,
-                    label=f"top-{top_k_per_class} ({label})" if c == 0 else None,
+                    label=f"top-{top_k_per_class} ({label})",
                 )
     ax_imp.set_ylabel("|SHAP| (normalized)")
     ax_imp.set_xlabel("wavelength (Å)")
@@ -404,9 +407,12 @@ def plot_main_figure(
             edgecolor="grey",
         ))
         legend_labels.append("UVES inter-chip gap")
+    # Anchored in the quiet window between the Mg b complex and the inter-chip
+    # gap (about 5350-5730 A), clear of the H-beta, Mg b and H-alpha peaks.
     ax_imp.legend(
         legend_handles, legend_labels,
-        loc="upper right", fontsize=8, framealpha=0.9, ncol=1,
+        loc="upper right", bbox_to_anchor=(0.47, 1.0),
+        fontsize=7, framealpha=0.9, ncol=1,
     )
 
     bar_labels = []

@@ -2,7 +2,8 @@ cff-version: 1.2.0
 title: "ges-uves-mk-audit: masked-line ablation audit of a LightGBM F/G/K temperature-class classifier for Gaia-ESO UVES spectra (code, trained model and feature matrix)"
 message: "If you use this software, please cite both the software archive and the accompanying paper."
 type: software
-version: "1.1.0"
+version: "1.2.0"
+date-released: "2026-10-14"
 authors:
   - family-names: "Jani"
     given-names: "Tirthesh"
@@ -26,7 +27,7 @@ repository-code: "https://github.com/TirtheshJani/ges-uves-mk-audit"
 url: "https://github.com/TirtheshJani/ges-uves-mk-audit"
 identifiers:
   - type: other
-    value: "DOI: to be assigned on Zenodo deposit"
+    value: "DOI: to be minted from the v1.2.0 GitHub release through the Zenodo integration"
     description: "Zenodo DOI of the code and data archive; no DOI has been minted yet. Replace this entry when the deposit is published."
 preferred-citation:
   type: unpublished

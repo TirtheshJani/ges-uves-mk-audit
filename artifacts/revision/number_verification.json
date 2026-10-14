@@ -1,9 +1,9 @@
 {
  "macros": {
-  "n_index": 2147,
-  "n_defined": 2147,
+  "n_index": 2177,
+  "n_defined": 2177,
   "status_counts": {
-   "ok": 2145,
+   "ok": 2175,
    "typed_constant": 2
   },
   "mismatches": [],
@@ -26,10 +26,10 @@
   ]
  },
  "literals": {
-  "n_literals": 158,
+  "n_literals": 161,
   "counts": {
-   "structural": 46,
-   "typed_constant": 78,
+   "structural": 47,
+   "typed_constant": 80,
    "checked_result": 34,
    "untraced": 0
   },
@@ -57,7 +57,7 @@
     "literal": "1",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "\\textsc{i}\\xspace} {$T_{\\mathrm{eff}}$\\xspace}   [1]{\\resizebox{\\ifdim\\width>\\linewidth\\lin"
+    "context": "xtsc{i}\\xspace} {$T_{\\mathrm{eff}}$\\xspace}      [1]{\\resizebox{\\ifdim\\width>\\linewidth\\lin"
    },
    {
     "literal": "1",
@@ -225,19 +225,25 @@
     "literal": "6563",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "CaI features at 6162 and 6439~\\AA, and \\Halpha at 6563~\\AA. Wavelengths are in air, following "
+    "context": "CaI features at 6162 and 6439~\\AA, and \\Halpha at 6563~\\AA. Wavelengths are in air throughout:"
    },
    {
     "literal": "3",
     "class": "checked_result",
     "why": "n_pairs_total of the headline gate -> verified",
-    "context": "able \\texttt{safcat.\"GES\\_DR5\\_1\\_V1\"} (ESO Phase 3 release DR5.1, archive DOI ), as homoge"
+    "context": "able \\texttt{safcat.\"GES\\_DR5\\_1\\_V1\"} (ESO Phase 3 release DR5.1, the public release of th"
    },
    {
     "literal": "1",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "afcat.\"GES\\_DR5\\_1\\_V1\"} (ESO Phase 3 release DR5.1, archive DOI ), as homogenised by ; the"
+    "context": "afcat.\"GES\\_DR5\\_1\\_V1\"} (ESO Phase 3 release DR5.1, the public release of the survey's int"
+   },
+   {
+    "literal": "2026",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "l iDR6, archive collection DOI , queried in April 2026), as homogenised by ; the DR5 analysis "
    },
    {
     "literal": "6143",
@@ -525,7 +531,7 @@
     "literal": "21",
     "class": "checked_result",
     "why": "Mg b total width -> verified",
-    "context": ", so ``\\Mgb dependence'' means dependence on that 21~\\AA{} region. The \\FeCr set was defined"
+    "context": " it; ``\\Mgb dependence'' means dependence on that 21~\\AA{} region. The \\FeCr set was defined"
    },
    {
     "literal": "5",
@@ -658,6 +664,12 @@
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
     "context": " either (\\jacPO{} and \\jacSO), partly because its 50~\\AA{} windows are not comparable with b"
+   },
+   {
+    "literal": "6283.8",
+    "class": "structural",
+    "why": "external documentation fact: central air wavelength of the 6284 diffuse interstellar band (literature value)",
+    "context": " coincident with the diffuse interstellar band at 6283.8~\\AA{} and the telluric O$_2$ band; a no"
    },
    {
     "literal": "95",
@@ -819,7 +831,7 @@
     "literal": "95",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "s, \\rtNBoot{} bootstrap resamples). Intervals are 95 percent bootstrap intervals.}  \\footnot"
+    "context": "~ forbids every catalogued window). Intervals are 95 percent bootstrap intervals.}  \\footnot"
    },
    {
     "literal": "95",
@@ -912,6 +924,12 @@
     "context": "ier of three \\Teff-bin classes on Gaia-ESO UVES U580 spectra reaches macro-F1 \\testMacroF. U"
    },
    {
+    "literal": "2.0",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "deposited at Zenodo (DOI to be minted from the v1.2.0 GitHub release through the Zenodo integ"
+   },
+   {
     "literal": "188",
     "class": "structural",
     "why": "external documentation fact: ESO programme 188.B-3002 (Gaia-ESO Public Spectroscopic Survey)",
@@ -995,7 +1013,7 @@
    "n_flip_gained": 0.0,
    "mcnemar_exact_p": 0.0,
    "mean_delta_true_prob": 4.902336758760839e-09,
-   "flip_rate_upper95": 0.0,
+   "flip_rate_upper95": 5.551115123125783e-17,
    "n_test": 0.0
   },
   "mismatches": [],

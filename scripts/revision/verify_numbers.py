@@ -9,6 +9,11 @@ submission/revision_numbers.tex is compared with it: the displayed number must e
 re-derived value rounded to the displayed number of decimals (scientific notation for
 small p-values is compared on the displayed mantissa precision).
 
+Macros whose source is a plain ``file:path`` (including the ``rows[line_set,class]``
+form used by the ablation, positive-control and DIB-window groups) are resolved
+generically; derived values (percentages, differences, p-value floors) are
+re-derived in :func:`irregular`.
+
 Part 2 (literals). Digits typed directly in manuscript.tex outside the macros are
 extracted and classified as
   * structural       (dates in prose that are checked against the decision log, ordinal
@@ -259,6 +264,11 @@ def irregular(name: str, src: str) -> tuple[Any, str] | None:
             return 100 * pc["line_sets"][key]["share_of_total_mean_abs_shap"], "num"
         if name == "pcBinsPctTopHundred":
             return 100 * pc["line_sets"]["SHAP_K_top100"]["n_bins"] / pc["inputs"]["n_bins"], "num"
+    # ---- DIB 6283 / O2 telluric window ablation (artifacts/revision/dib_6283_ablation.json)
+    dib_path = REPO / "artifacts/revision/dib_6283_ablation.json"
+    if name == "dibFloor" and dib_path.exists():
+        dib = load("artifacts/revision/dib_6283_ablation.json")
+        return 1.0 / (dib["runs"]["production__constant"]["draw_stats"]["DIB_6283"]["succeeded"] + 1), "num"
     # ---- field-grouped cross-validation (artifacts/revision/cv_field_groups.json)
     cv_path = REPO / "artifacts/revision/cv_field_groups.json"
     if name.startswith("cvFld") and cv_path.exists():
@@ -416,6 +426,7 @@ def literal_check() -> dict:
         "7200": "F0V Teff, Pecaut & Mamajek (2013) dwarf scale (rounded)",
         "5900": "G0V Teff, Pecaut & Mamajek (2013) dwarf scale (rounded)",
         "3850": "M0V Teff, Pecaut & Mamajek (2013) dwarf scale",
+        "6283.8": "central air wavelength of the 6284 diffuse interstellar band (literature value)",
     }
     checked["0.70"] = ("train fraction", abs(ratio[0] / tot - 0.70) < 0.005)
     checked["0.15"] = ("val and test fractions", abs(ratio[1] / tot - 0.15) < 0.005 and abs(ratio[2] / tot - 0.15) < 0.005)

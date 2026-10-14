@@ -1,9 +1,9 @@
 # ges-uves-mk-audit
 
-Masked-line ablation audit of a LightGBM F/G/K (Morgan-Keenan letter) classifier trained on
-Gaia-ESO Survey FLAMES-UVES U580 spectra. Version 1.1.0.
+Masked-line ablation audit of a LightGBM F/G/K temperature-class classifier (classes named with
+Morgan-Keenan letters) trained on Gaia-ESO Survey FLAMES-UVES U580 spectra. Version 1.2.0.
 
-Zenodo archive: DOI: to be assigned on Zenodo deposit.
+Zenodo archive: DOI: to be minted from the v1.2.0 GitHub release through the Zenodo integration.
 
 ## Abstract
 
@@ -46,7 +46,8 @@ before this revision is kept as `docs/manuscript_pre_revision_2026-10-01.tex`.
 pip install -e ".[dev]"
 ```
 
-Python 3.10 or newer is required.
+Python 3.10 or newer is required. The deposited model `artifacts/lgbm_mk.pkl` was written with
+scikit-learn 1.8.0 (recorded in the pickle), and the test suite was verified on Python 3.12 and 3.13.
 
 ## Quick start
 
@@ -65,7 +66,8 @@ python scripts/revision/ablation_recalibrated.py      # ablation_recalibrated.{j
 python scripts/revision/ablation_stratified.py        # ablation_stratified.json (needs the per-row .npz above)
 python scripts/revision/benchmark_corrected.py --pickles-dir <dir with pickles_uk_1.fits ... pickles_uk_131.fits>
 python scripts/revision/cv_field_groups.py all           # ges_fld_catalog.csv, ges_fld_groups.csv, cv_field_groups.json (ESO TAP query, about 3 min)
-python scripts/revision/k_positive_control.py           # k_positive_control.{json,log}, per-row .npz (about 45 min: joint and SHAP-ranked K masks)
+python scripts/revision/k_positive_control.py           # k_positive_control.json, per-row .npz (about 45 min: joint and SHAP-ranked K masks)
+python scripts/revision/dib_6283_ablation.py            # dib_6283_ablation.json (6270 to 6295 A window as a sixth line set, both fills; about 11 to 15 min)
 python scripts/revision/boundary_filtered.py            # boundary_filtered.json (accuracy beyond 150 K and 200 K from a boundary)
 
 # 3. Manuscript numbers and static checks
@@ -73,6 +75,10 @@ python scripts/revision/manuscript_numbers.py         # submission/revision_numb
 python scripts/revision/check_manuscript.py           # braces, refs, citations, macros, open slots
 python scripts/revision/build_venue_variants.py      # submission/manuscript_elsarticle.tex and manuscript_mnras.tex from the master
 ```
+
+`cv_field_groups.py` also writes `artifacts/revision/cv_field_groups.log` and `k_positive_control.py`
+logs its progress to the console; these logs are produced locally when the scripts run and are not
+deposited (`*.log` is git-ignored).
 
 `scripts/revision/manuscript_numbers.py` writes one LaTeX macro per quoted number from the JSON
 artifacts and `artifacts/revision/manuscript_numbers_index.json` maps every macro to its source file
@@ -85,7 +91,9 @@ expected run times for each step are in `docs/reproducibility_appendix.md`.
 
 The deposited model and feature matrix were produced by the scripts below. They are listed for
 completeness; the revision analyses above start from the deposited `artifacts/features.npz` and
-`artifacts/lgbm_mk.pkl`.
+`artifacts/lgbm_mk.pkl`. The fetch and preprocess stages (`src/fetch/`, `src/preprocess/`,
+`scripts/fetch_ges_parallel.py`, `scripts/fetch_ges_blue.py` and `scripts/build_hdf5_phase3.py`) need
+the raw ESO archive spectra and are not needed to reproduce the paper from the deposited artifacts.
 
 1. `scripts/build_labels.py` resolves Gaia-ESO recommended parameters through the ESO TAP service and
    builds the F/G/K label set.
@@ -125,8 +133,10 @@ Random seeds are pinned at 42 across LightGBM, scikit-learn, NumPy and SHAP.
 - **Labels**: effective-temperature bins on the dwarf scale of Pecaut and Mamajek (2013), named with MK
   letters. They are not spectroscopic MK types and carry no luminosity class.
 - **Benchmark templates**: Pickles 1998 UVKLIB library (PASP 110, 863), 131 spectra, from the STScI HLSP
-  reference-atlases mirror. The spectral type of each template is read from the FITS header
-  (`COMMENT1`). The library is not redistributed here.
+  reference-atlases mirror (`pickles_atlas`, the `pickles_uk_*.fits` files under
+  https://archive.stsci.edu/hlsps/reference-atlases/cdbs/grid/pickles/dat_uvk/). The spectral type of
+  each template is read from the FITS header (`COMMENT1`). This repository does not redistribute the
+  templates.
 - **Atomic line rest wavelengths**: NIST Atomic Spectra Database, air wavelengths.
 
 ## Repository layout
@@ -156,5 +166,5 @@ MIT. See `LICENSE`.
 ## Citation
 
 If you use this software or the deposited artifacts, please cite both the Zenodo archive
-(`CITATION.cff`; DOI: to be assigned on Zenodo deposit) and the accompanying paper, whose reference
-will be added to `CITATION.cff` after submission.
+(`CITATION.cff`; DOI: to be minted from the v1.2.0 GitHub release through the Zenodo integration) and
+the accompanying paper, whose reference will be added to `CITATION.cff` after submission.
