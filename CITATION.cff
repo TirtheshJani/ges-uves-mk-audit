@@ -8,7 +8,7 @@ authors:
     given-names: "Tirthesh"
     orcid: "https://orcid.org/0009-0005-5965-4409"
     email: "tirtheshjani@gmail.com"
-    affiliation: "Independent researcher, Barrie, Ontario, Canada"
+    affiliation: "Lakehead University, Barrie, Ontario, Canada"
 abstract: "Code, trained LightGBM model, feature matrix and analysis artifacts for a methods note on masked-line ablation of a three-class (F/G/K) effective-temperature-bin classifier of Gaia-ESO FLAMES-UVES U580 spectra: which dependencies survive a controlled ablation, the luminosity-class composition of the classes, and a train-test scale mismatch that explains the collapse under polynomial re-normalisation."
 keywords:
   - "stellar classification"

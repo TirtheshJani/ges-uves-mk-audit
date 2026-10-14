@@ -70,6 +70,11 @@ def _keywords(text: str) -> list[str]:
     return [k.strip() for k in line.split(";") if k.strip()]
 
 
+def _strip_float_placement(text: str) -> str:
+    """Drop [ht]-style placement options; the mnras class prints them as text."""
+    return re.sub(r"\\begin\{(table|figure)(\*?)\}\[[a-zA-Z!]*\]", r"\\begin{\1\2}", text)
+
+
 def _write(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8", newline="\n")
     print(f"wrote {path.relative_to(REPO)}")
@@ -176,14 +181,15 @@ $^{{1}}${AFFIL}
 {kw}
 \\end{{keywords}}
 
-{_slice(master, "BODY")}
+{_strip_float_placement(_slice(master, "BODY"))}
 
 \\bibliographystyle{{mnras}}
 \\bibliography{{manuscript_citations}}
 
 \\appendix
-{_slice(master, "APPENDIX")}
+{_strip_float_placement(_slice(master, "APPENDIX"))}
 
+\\clearpage
 \\bsp
 \\label{{lastpage}}
 \\end{{document}}

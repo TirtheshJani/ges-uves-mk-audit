@@ -26,11 +26,11 @@
   ]
  },
  "literals": {
-  "n_literals": 150,
+  "n_literals": 158,
   "counts": {
-   "structural": 43,
-   "typed_constant": 74,
-   "checked_result": 33,
+   "structural": 46,
+   "typed_constant": 78,
+   "checked_result": 34,
    "untraced": 0
   },
   "untraced": [],
@@ -39,19 +39,31 @@
     "literal": "0",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "aia-ESO Survey; UVES; LightGBM}, }     \\Urlmuskip=0mu plus 1mu\\relax   \\setlength{\\emergenc"
+    "context": "erpretability; Gaia-ESO Survey}, }     \\Urlmuskip=0mu plus 1mu\\relax   \\setlength{\\emergenc"
    },
    {
     "literal": "1",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "urvey; UVES; LightGBM}, }     \\Urlmuskip=0mu plus 1mu\\relax   \\setlength{\\emergencystretch}"
+    "context": "lity; Gaia-ESO Survey}, }     \\Urlmuskip=0mu plus 1mu\\relax   \\setlength{\\emergencystretch}"
    },
    {
     "literal": "5",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
     "context": " plus 1mu\\relax   \\setlength{\\emergencystretch}{1.5em}       {Mg\\,\\textsc{b}\\xspace} {Na\\,\\"
+   },
+   {
+    "literal": "1",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "\\textsc{i}\\xspace} {$T_{\\mathrm{eff}}$\\xspace}   [1]{\\resizebox{\\ifdim\\width>\\linewidth\\lin"
+   },
+   {
+    "literal": "1",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "dim\\width>\\linewidth\\linewidth\\else\\width\\fi}{!}{#1}}    \\title{A masked-line ablation audi"
    },
    {
     "literal": "1",
@@ -63,7 +75,7 @@
     "literal": "1",
     "class": "structural",
     "why": "statistical convention or enumeration in text",
-    "context": "\\thanks{ORCID: ; tirtheshjani@gmail.com}}  \\affil[1]{Independent researcher, Barrie, Ontari"
+    "context": "i\\thanks{ORCID: ; tirtheshjani@gmail.com}} \\affil[1]{Lakehead University, Barrie, Ontario, "
    },
    {
     "literal": "80",
@@ -216,10 +228,22 @@
     "context": "CaI features at 6162 and 6439~\\AA, and \\Halpha at 6563~\\AA. Wavelengths are in air, following "
    },
    {
+    "literal": "3",
+    "class": "checked_result",
+    "why": "n_pairs_total of the headline gate -> verified",
+    "context": "able \\texttt{safcat.\"GES\\_DR5\\_1\\_V1\"} (ESO Phase 3 release DR5.1, archive DOI ), as homoge"
+   },
+   {
+    "literal": "1",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "afcat.\"GES\\_DR5\\_1\\_V1\"} (ESO Phase 3 release DR5.1, archive DOI ), as homogenised by ; the"
+   },
+   {
     "literal": "6143",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "tt{safcat.\"GES\\_DR5\\_1\\_V1\"} . The query returned 6143 catalogue rows with non-null \\Teff, $\\l"
+    "context": "ameters is described by  and . The query returned 6143 catalogue rows with non-null \\Teff, $\\l"
    },
    {
     "literal": "580",
@@ -243,55 +267,73 @@
     "literal": "7300",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "spectra. Class labels are \\Teff bins whose edges, 7300, 6000, 5300 and 3900~K, are rounded to "
+    "context": "pectra. Class labels are \\Teff bins with edges at 7300, 6000, 5300 and 3900~K, conventional ro"
    },
    {
     "literal": "6000",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "a. Class labels are \\Teff bins whose edges, 7300, 6000, 5300 and 3900~K, are rounded to the ne"
+    "context": ". Class labels are \\Teff bins with edges at 7300, 6000, 5300 and 3900~K, conventional round va"
    },
    {
     "literal": "5300",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "ss labels are \\Teff bins whose edges, 7300, 6000, 5300 and 3900~K, are rounded to the nearest "
+    "context": "s labels are \\Teff bins with edges at 7300, 6000, 5300 and 3900~K, conventional round values c"
    },
    {
     "literal": "3900",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": " are \\Teff bins whose edges, 7300, 6000, 5300 and 3900~K, are rounded to the nearest 100~K fro"
+    "context": "are \\Teff bins with edges at 7300, 6000, 5300 and 3900~K, conventional round values close to t"
    },
    {
-    "literal": "100",
-    "class": "typed_constant",
-    "why": "appears in code, config or an artifact",
-    "context": "6000, 5300 and 3900~K, are rounded to the nearest 100~K from the dwarf-sequence scale of : F "
+    "literal": "7200",
+    "class": "structural",
+    "why": "external documentation fact: F0V Teff, Pecaut & Mamajek (2013) dwarf scale (rounded)",
+    "context": "emperatures of the main-sequence scale of  (about 7200, 5900, 5300 and 3850~K): F is [6000, 73"
    },
    {
-    "literal": "6000",
-    "class": "typed_constant",
-    "why": "appears in code, config or an artifact",
-    "context": "st 100~K from the dwarf-sequence scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is "
-   },
-   {
-    "literal": "7300",
-    "class": "typed_constant",
-    "why": "appears in code, config or an artifact",
-    "context": "~K from the dwarf-sequence scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900,"
+    "literal": "5900",
+    "class": "structural",
+    "why": "external documentation fact: G0V Teff, Pecaut & Mamajek (2013) dwarf scale (rounded)",
+    "context": "tures of the main-sequence scale of  (about 7200, 5900, 5300 and 3850~K): F is [6000, 7300)~K,"
    },
    {
     "literal": "5300",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "rf-sequence scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These"
+    "context": "of the main-sequence scale of  (about 7200, 5900, 5300 and 3850~K): F is [6000, 7300)~K, G is "
+   },
+   {
+    "literal": "3850",
+    "class": "structural",
+    "why": "external documentation fact: M0V Teff, Pecaut & Mamajek (2013) dwarf scale",
+    "context": "in-sequence scale of  (about 7200, 5900, 5300 and 3850~K): F is [6000, 7300)~K, G is [5300, 60"
    },
    {
     "literal": "6000",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "uence scale of : F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These are t"
+    "context": "le of  (about 7200, 5900, 5300 and 3850~K): F is [6000, 7300)~K, G is [5300, 6000)~K and K is "
+   },
+   {
+    "literal": "7300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": " (about 7200, 5900, 5300 and 3850~K): F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900,"
+   },
+   {
+    "literal": "5300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "900, 5300 and 3850~K): F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These"
+   },
+   {
+    "literal": "6000",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "300 and 3850~K): F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These are t"
    },
    {
     "literal": "3900",
@@ -702,6 +744,12 @@
     "context": " runs makes a spectrum look cooler: under the top-100 mask with interpolation, \\pcPrimTopHund"
    },
    {
+    "literal": "5300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "row leaves, because the K giants sit far from the 5300~K boundary. K is the sink for the first"
+   },
+   {
     "literal": "2",
     "class": "structural",
     "why": "statistical convention or enumeration in text",
@@ -828,6 +876,12 @@
     "context": " 8, 10\\}$ and \\texttt{num\\_leaves} $\\in \\{31, 63, 127\\}$ (\\gridNCells{} cells) the largest ab"
    },
    {
+    "literal": "5300",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "e (\\Mgb) moves almost no K row across the distant 5300~K boundary (Section~). The K statement "
+   },
+   {
     "literal": "2000",
     "class": "checked_result",
     "why": "R = 1/dlnlambda for dlnlambda = 5e-4 -> verified",
@@ -861,37 +915,37 @@
     "literal": "188",
     "class": "structural",
     "why": "external documentation fact: ESO programme 188.B-3002 (Gaia-ESO Public Spectroscopic Survey)",
-    "context": "e La Silla Paranal Observatory under programme ID 188.B-3002. These data products have been p"
+    "context": "e La Silla Paranal Observatory under programme ID 188.B-3002. Based on data obtained from the"
    },
    {
     "literal": "3002",
     "class": "structural",
     "why": "external documentation fact: ESO programme 188.B-3002",
-    "context": "illa Paranal Observatory under programme ID 188.B-3002. These data products have been processe"
+    "context": "illa Paranal Observatory under programme ID 188.B-3002. Based on data obtained from the ESO Sc"
    },
    {
     "literal": "17",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "-built index map that was mis-assigned from index 17 onward because the library interleaves "
+    "context": " hand-built index map was mis-assigned from index 17 onward and its results are withdrawn. T"
    },
    {
     "literal": "200",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "sult. The best agreement, \\pkAgreeMfTwo{} for the 200~\\AA{} median-filter normalisation, is b"
+    "context": "sult: the best agreement, \\pkAgreeMfTwo{} for the 200~\\AA{} median-filter normalisation, is b"
    },
    {
     "literal": "4700",
     "class": "checked_result",
     "why": "polynomial_n5_window_aa lower edge, rounded to 100 A -> verified",
-    "context": " range), and the additional variant fitted on the 4700 to 6900~\\AA{} window only reaches \\pkAg"
+    "context": "K template matches, and the variant fitted on the 4700 to 6900~\\AA{} window reaches only \\pkAg"
    },
    {
     "literal": "6900",
     "class": "checked_result",
     "why": "polynomial_n5_window_aa upper edge, rounded to 100 A -> verified",
-    "context": " and the additional variant fitted on the 4700 to 6900~\\AA{} window only reaches \\pkAgreePolyW"
+    "context": "te matches, and the variant fitted on the 4700 to 6900~\\AA{} window reaches only \\pkAgreePolyW"
    },
    {
     "literal": "200",
@@ -928,12 +982,6 @@
     "class": "checked_result",
     "why": "polynomial_n5_window_aa upper edge, rounded to 100 A -> verified",
     "context": "oPolyN & \\pkSuperPolyN \\\\ Polynomial $n=5$, 4700--6900~\\AA{} window & \\pkNPolyWin & \\pkAgreePo"
-   },
-   {
-    "literal": "95",
-    "class": "typed_constant",
-    "why": "appears in code, config or an artifact",
-    "context": "ction continuum, linear-interpolation fill), with 95 percent bootstrap intervals; the same q"
    }
   ]
  },
@@ -947,7 +995,7 @@
    "n_flip_gained": 0.0,
    "mcnemar_exact_p": 0.0,
    "mean_delta_true_prob": 4.902336758760839e-09,
-   "flip_rate_upper95": 1.6653345369377348e-16,
+   "flip_rate_upper95": 0.0,
    "n_test": 0.0
   },
   "mismatches": [],

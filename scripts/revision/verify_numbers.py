@@ -413,6 +413,9 @@ def literal_check() -> dict:
         "4770": "UVES U580 blue-arm chip start (ESO UVES manual)", "5770": "U580 blue-arm chip end",
         "5832": "U580 red-arm chip start", "6830": "U580 red-arm chip end",
         "188": "ESO programme 188.B-3002 (Gaia-ESO Public Spectroscopic Survey)", "3002": "ESO programme 188.B-3002",
+        "7200": "F0V Teff, Pecaut & Mamajek (2013) dwarf scale (rounded)",
+        "5900": "G0V Teff, Pecaut & Mamajek (2013) dwarf scale (rounded)",
+        "3850": "M0V Teff, Pecaut & Mamajek (2013) dwarf scale",
     }
     checked["0.70"] = ("train fraction", abs(ratio[0] / tot - 0.70) < 0.005)
     checked["0.15"] = ("val and test fractions", abs(ratio[1] / tot - 0.15) < 0.005 and abs(ratio[2] / tot - 0.15) < 0.005)

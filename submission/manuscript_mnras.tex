@@ -74,7 +74,7 @@ The audit uses FLAMES-UVES U580 spectra from the Gaia-ESO Survey \citep{2022A&A.
 \subsection{Labels}
 \label{subsec:labels}
 
-Recommended stellar parameters come from the ESO Science Archive TAP service, table \texttt{safcat."GES\_DR5\_1\_V1"} (ESO Phase 3 release DR5.1, archive DOI \href{https://doi.org/10.18727/archive/25}{10.18727/archive/25}), as homogenised by \citet{2023A&A...676A.129H}; the DR5 analysis of the UVES FGK spectra behind those parameters is described by \citet{2014A&A...570A.122S} and \citet{Worley2024GESDR5}. The query returned 6143 catalogue rows with non-null \Teff, $\log g$ and [Fe/H] under a \texttt{REC\_SETUP LIKE '\%580\%'} filter; cross-matching against the regridded UVES store (0.5~arcsec primary radius, 2~arcsec ambiguity cutoff) matched \nMatched{} spectra. Class labels are \Teff bins whose edges, 7300, 6000, 5300 and 3900~K, are rounded to the nearest 100~K from the dwarf-sequence scale of \citet{2013ApJS..208....9P}: F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These are therefore effective-temperature-bin classes named with MK letters. Two properties follow. First, the bins are applied to giants as well as dwarfs, so luminosity class is a hidden variable (Section~\ref{subsec:lum}). Second, the GES parameters are derived by a model-atmosphere analysis of these same spectra \citep{2014A&A...570A.122S}, so the audit asks how well a classifier reproduces a spectroscopic \Teff bin and which input regions it uses, not how it performs against an independent classification. The single A-type spectrum was dropped at label construction; UVES targets are FGK by design.
+Recommended stellar parameters come from the ESO Science Archive TAP service, table \texttt{safcat."GES\_DR5\_1\_V1"} (ESO Phase 3 release DR5.1, archive DOI \href{https://doi.org/10.18727/archive/25}{10.18727/archive/25}), as homogenised by \citet{2023A&A...676A.129H}; the DR5 analysis of the UVES FGK spectra behind those parameters is described by \citet{2014A&A...570A.122S} and \citet{Worley2024GESDR5}. The query returned 6143 catalogue rows with non-null \Teff, $\log g$ and [Fe/H] under a \texttt{REC\_SETUP LIKE '\%580\%'} filter; cross-matching against the regridded UVES store (0.5~arcsec primary radius, 2~arcsec ambiguity cutoff) matched \nMatched{} spectra. Class labels are \Teff bins with edges at 7300, 6000, 5300 and 3900~K, conventional round values close to the F0, G0, K0 and M0 dwarf temperatures of the main-sequence scale of \citet{2013ApJS..208....9P} (about 7200, 5900, 5300 and 3850~K): F is [6000, 7300)~K, G is [5300, 6000)~K and K is [3900, 5300)~K. These are therefore effective-temperature-bin classes named with MK letters. Two properties follow. First, the bins are applied to giants as well as dwarfs, so luminosity class is a hidden variable (Section~\ref{subsec:lum}). Second, the GES parameters are derived by a model-atmosphere analysis of these same spectra \citep{2014A&A...570A.122S}, so the audit asks how well a classifier reproduces a spectroscopic \Teff bin and which input regions it uses, not how it performs against an independent classification. The single A-type spectrum was dropped at label construction; UVES targets are FGK by design.
 
 \subsection{Quality cuts and sample}
 
@@ -122,7 +122,7 @@ As a positive control for the K-class result, one further run masks all five lin
 
 Equivalent widths of the \Mgb triplet (Section~\ref{subsec:kclass}) are measured against a local continuum within $\pm\ewContHW$~\AA{} of each line with a line half-width of $\pm\ewLineHW$~\AA.
 
-\begin{table*}[ht]
+\begin{table*}
 \centering
 \caption{Line sets used in the ablation: air wavelength windows, total mask width, number of feature bins covered, and the other catalogued lines inside each window (other species and same-species lines that are not targets). The \Mgb window also holds \FeI lines, so ``\Mgb dependence'' means dependence on that 21~\AA{} region. The \FeCr set was defined after the SHAP analysis and is post hoc. Bin widths vary with wavelength because the grid is log-uniform.}
 \label{tab:linesets}
@@ -164,7 +164,7 @@ On the \nTest{} test spectra the classifier reaches macro-F1 \testMacroF{} and a
 
 The permutation--SHAP Jaccard index is \jacPS, and occlusion agrees poorly with either (\jacPO{} and \jacSO), partly because its 50~\AA{} windows are not comparable with bin-level rankings. The \triNThree{} bins in all three top sets lie between \triWlMin{} and \triWlMax~\AA, in the \Halpha region. These rankings (Appendix~\ref{app:figures}, Figure~\ref{fig:importance}) indicate which windows may matter; they do not show that the model depends on them.
 
-\begin{table}[ht]
+\begin{table}
 \centering
 \caption{Held-out test performance. Macro values average F, G and K without weights. Rows of the confusion matrix are the true class, columns the prediction, in F--G--K order: F = (\confFF, \confFG, \confFK), G = (\confGF, \confGG, \confGK), K = (\confKF, \confKG, \confKK).}
 \label{tab:test-perf}
@@ -194,7 +194,7 @@ Table~\ref{tab:ablation} gives the primary configuration (production continuum, 
 
 \emph{Polynomial continuum.} Under polynomial\_n5 the fixed model has baseline accuracy \ablBaseAccPoly{} (G recall \ablBaseRecGPoly), against \ablBaseAccPrim{} on the production features, so the ablation deltas there describe an already degraded model. They are smaller but still resolved for G: \Mgb gives \ablPolyMgGDelta{} with interpolation and \ablPolyConstMgGDelta{} with the constant fill (McNemar $p = \ablPolyMgGMcn$ and $\ablPolyConstMgGMcn$), and the Balmer lines give \ablPolyHbFDelta{} on F. All \ablNBoot-resample intervals, flip counts and $p$-values for the 15 pairs under the four configurations are in \texttt{artifacts/revision/ablation\_recalibrated.csv}.
 
-\begin{table*}[ht]
+\begin{table*}
 \centering
 \caption{Masked-line ablation of the fixed production classifier on the \nTest{} test spectra. Production continuum, linear-interpolation fill, class-matched null of \ablNControls{} bin-matched random windows, \ablNBoot{} bootstrap resamples. $\dA$ is the change in class recall, with the 95 percent bootstrap interval; ``Flips'' are rows lost and gained; $p_{\mathrm{McN}}$ is the exact McNemar $p$; $\Delta\bar{P}_{\mathrm{true}}$ is the mean change in the probability of the true class; $p_{\mathrm{MC}} = (b+1)/(B+1)$ against the random-window null. The three headline pairs are (H Balmer, F), (\Mgb, G) and (\Mgb, K); (\NaD, K) and (\CaI, K) are pivot pairs, and all other rows are descriptive. The \FeCr set is post hoc.}
 \label{tab:ablation}
@@ -202,7 +202,7 @@ Table~\ref{tab:ablation} gives the primary configuration (production continuum, 
 \resizebox{\textwidth}{!}{\input{ablation_table.tex}}
 \end{table*}
 
-\begin{figure*}[ht]
+\begin{figure*}
 \centering
 \includegraphics[width=0.85\linewidth]{ablation_bars.pdf}
 \caption{Change in class recall $\dA_k^{(\mathcal{L})}$ for the headline (solid) and pivot (hatched) pairs in the primary configuration (production continuum, interpolation fill). Error bars are 95 percent bootstrap intervals (\ablNBoot{} resamples); each bar is annotated with $\dA$ and the Monte Carlo $p$-value against \ablNControls{} class-matched, bin-matched random windows (floor \ablFloor). The K bars are small but not exactly zero in rows (Section~\ref{subsec:kclass}); the values match Table~\ref{tab:ablation}.}
@@ -223,7 +223,7 @@ The \Mgb equivalent width on K spectra is not small: the median is \ewMedK~\AA{}
 \emph{Positive control.} Narrow windows are not the only masks we tried (Table~\ref{tab:kcontrol}). Masking all five line sets jointly (\pcBinsJoint{} bins) leaves K recall unchanged or higher under both fills (\pcPrimJointKDelta{} with interpolation, \pcConstJointKDelta{} with the constant fill). Masking the \pcBinsTopHundred{} bins with the largest validation-set mean $|$SHAP$|$ for K (\pcBinsPctTopHundred{} percent of the spectrum in \pcWindowsTopHundred{} runs, carrying \pcShapShareTopHundred{} percent of the total K attribution) raises K recall by \pcPrimTopHundredKDelta{} with interpolation (\pcPrimTopHundredKGained{} rows gained, \pcPrimTopHundredKLost{} lost) but lowers it by \pcConstTopHundredKDelta{} with the constant fill (\pcConstTopHundredKLost{} of \nClassK{} rows lost, all to G, \pcConstTopHundredKGained{} gained; McNemar $p = \pcConstTopHundredKMcn$; upper bound on the loss rate \pcConstTopHundredKUpper), and the mean probability of the true class changes by \pcConstTopHundredKDp. The constant fill already moves that probability at 20 and 50 bins (\pcConstTopTwentyKDp{} and \pcConstTopFiftyKDp) before any row changes class. The two fills disagree because interpolating across the Balmer cores and the other K-ranked runs makes a spectrum look cooler: under the top-100 mask with interpolation, \pcPrimTopHundredFToK{} of the \pcPrimTopHundredFLost{} lost F rows and all \pcPrimTopHundredGLost{} lost G rows are relabelled K. Two conclusions follow. The ablation can register a K dependence when enough K-relevant bins are removed with a constant fill, so the null results for the five line sets are not an artefact of a readout that cannot see K. And with the interpolation fill no mask we tried lowers K recall, so ``K recall does not respond'' must be read as ``does not fall''. Interpolation does not push every spectrum toward the cooler class: under the \Mgb mask most lost G rows move to F, the hotter class (Section~\ref{subsec:results-ablation}). What holds for every mask we tried is narrower. Interpolating across the Balmer cores and the SHAP-ranked runs removes features that are stronger in hotter stars, so rows move toward K; interpolating across \Mgb removes a feature that is stronger in cooler stars, so rows move away from K, but only \ablPrimMgKLost{} K row leaves, because the K giants sit far from the 5300~K boundary. K is the sink for the first kind of mask and is insulated by boundary distance from the second.
 
 
-\begin{table*}[ht]
+\begin{table*}
 \centering
 \caption{K-class $\dA_K$ (rows lost/gained in brackets) for each line set under the 2 $\times$ 2 design: production or polynomial\_n5 continuum, each with interpolation (primary) or constant fill. The constant fill is the median of the training matrix outside the gap under the same continuum (\ablFillTrainProd{} for production, \ablFillTrainPoly{} for polynomial\_n5).}
 \label{tab:ablation-k}
@@ -231,7 +231,7 @@ The \Mgb equivalent width on K spectra is not small: the median is \ewMedK~\AA{}
 \resizebox{\textwidth}{!}{\input{ablation_k_table.tex}}
 \end{table*}
 
-\begin{table*}[ht]
+\begin{table*}
 \centering
 \caption{K-class positive control: $\dA_K$ for the joint mask of all five line sets and for the 20, 50 and 100 bins with the largest validation-set mean $|$SHAP$|$ for class K, under the interpolation and constant fills (production continuum, class-matched null of \pcNControls{} bin-matched windows, \pcNBoot{} bootstrap resamples). ``Upper bound'' is the one-sided exact 95 percent Clopper--Pearson bound on the loss rate. The SHAP-ranked sets are post hoc; \pcOverlapTopHundred{} of the 100 bins lie inside the catalogued windows.}
 \label{tab:kcontrol}
@@ -248,7 +248,7 @@ K rows also lie far from the class boundaries: the median distance to the neares
 
 Table~\ref{tab:strata} (Appendix~\ref{app:figures}) splits the principal pairs by luminosity class and by boundary distance. For F and G the luminosity split is uninformative, since only three F rows and one G row are giants. Under \Mgb masking, \focusMgGDwarf{} of the \focusMgGLost{} lost G rows are dwarfs, and the loss is concentrated near the boundaries: $\dA_G = \strMgGNearDelta$ for the \strMgGNearN{} G rows within \bdCut~K of an edge of their bin against \strMgGFarDelta{} beyond it, and \focusMgGNear{} of the lost rows lie within that distance. For K, every row that changes class is a dwarf: across the five line sets \kLostDistinct{} distinct K rows are lost, \kLostDwarf{} of them dwarfs and \kLostNear{} within \bdCut~K of an edge, while K giants ($n = \lumAccNKGiant$) lose \kGiantLost{} and gain \kGiantGained{} rows. The K gains under Balmer masking are also dwarfs (\strHbKDwarfGained{} rows, $\dA_K = \strHbKDwarfDelta$ among the \strHbKDwarfN{} K dwarfs). The apparent insensitivity of the K class is therefore largely the insensitivity of its giants, which never change class under any mask.
 
-\begin{table*}[ht]
+\begin{table*}
 \centering
 \caption{Composition and test accuracy by luminosity class. Dwarfs have $\log g > \lumLoggCut$. Fractions are over the full labelled sample; accuracies are on the held-out test rows (counts in brackets).}
 \label{tab:lum}
@@ -265,7 +265,7 @@ K & \lumNK & \lumDwarfPctK & \lumLoggK & \lumTeffK & \lumAccKDwarf{} (\lumAccNKD
 \end{tabular}}
 \end{table*}
 
-\begin{figure}[ht]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth]{kiel_diagram.pdf}
 \caption{Kiel diagram of the labelled sample coloured by class. The F and G classes lie on the dwarf branch and the K class is dominated by giants; the dwarf cut is $\log g = \lumLoggCut$.}
@@ -285,7 +285,7 @@ Re-deriving the continuum of the test rows with a sigma-clipped polynomial lower
 \end{itemize}
 The level itself holds weak class information. A one-feature logistic regression on the per-row off-gap median reaches accuracy \oneAcc{} (balanced accuracy \oneBal) on the test set, with ROC AUC \oneAucGK{} for G against K and \oneAucFG{} for F against G. The per-class median of the row medians is \medProdF{} (F), \medProdG{} (G) and \medProdK{} (K) under the production normalisation, a spread of \spreadProd{} percentage points before rounding, with KS $p$ of \ksProdFG{} (F--G), \ksProdGK{} (G--K) and \ksProdFK{} (F--K). After the polynomial fit the medians are \medPolyF, \medPolyG{} and \medPolyK{} (a spread of \spreadPoly{} points, with the order reversed), and the KS $p$ are \ksPolyFG, \ksPolyGK{} and \ksPolyFK. The level carries real but weak class information, but a model that read only the level could not reach G recall of \sdProdRecG, and after re-normalisation all three class medians lie above the production F median, so a model that read the level would be expected to move G toward F rather than K. We conclude that the polynomial collapse is a train--test scale mismatch: the model has not seen the scale of the re-normalised inputs. This is brittleness to a normalisation convention, which is a failure to transfer to a shifted condition. We do not identify a specific unintended feature the model relies on, and we therefore do not call it shortcut learning.
 
-\begin{table*}[ht]
+\begin{table*}
 \centering
 \caption{The fixed production model scored on transformed test spectra. Recall per class, macro-F1 and the number of G rows predicted K, with the median row level in the last column. ``Spread removed'' rescales each row to the common test median; ``G/K swap'' exchanges the two class median levels.}
 \label{tab:scale}
@@ -305,7 +305,7 @@ G/K swap & \sdSwapRecF & \sdSwapRecG & \sdSwapRecK & \sdSwapMacroF & \sdSwapGtoK
 \end{tabular}}
 \end{table*}
 
-\begin{figure*}[ht]
+\begin{figure*}
 \centering
 \includegraphics[width=0.92\linewidth]{continuum_medians.pdf}
 \caption{Per-row median of normalised flux outside the inter-chip gap by class on the test set, under the production normalisation (left) and after the polynomial re-normalisation (right). Class medians are given in Section~\ref{subsec:scale}; the numbers come from the same artifact as Table~\ref{tab:scale}.}
@@ -317,7 +317,7 @@ G/K swap & \sdSwapRecF & \sdSwapRecG & \sdSwapRecK & \sdSwapMacroF & \sdSwapGtoK
 
 We ran the retraining experiment that tests whether the K result depends on the continuum convention (Table~\ref{tab:retrain}). The production retrain reproduces the deposited model exactly (macro-F1 difference \rtReproDiff, identical confusion matrix, best iteration \rtProdIter). Retrained on polynomial\_n5 features the model reaches macro-F1 \rtPolyMacroF{} and on row-median-normalised features \rtRowMedMacroF, a loss of \rtDeltaMacroPoly{} and \rtDeltaMacroRow{} against the production \rtProdMacroF. This is within the fold-to-fold spread of 5-fold cross-validation on the production matrix (\cvMean{} with population standard deviation \cvSd; Section~\ref{subsec:cv}). The classifier loses about a hundredth of macro-F1 without the level, so the level is not what carries performance. In every retrained model the (\Mgb, K) change is null or slightly positive (\rtProdMgKDelta, \rtPolyMgKDelta, \rtPolyGapMgKDelta, \rtRowMedMgKDelta{} for the four matrices), while (\Mgb, G) is clearly negative (\rtProdMgGDelta, \rtPolyMgGDelta, \rtPolyGapMgGDelta, \rtRowMedMgGDelta). The change in K recall seen when the fixed model scores polynomial-normalised inputs (\ablPolyMgKDelta{} with interpolation and \ablPolyConstMgKDelta{} with the constant fill; Table~\ref{tab:ablation-k}) is therefore a response of a model scored far from its training conditions (baseline accuracy \ablBaseAccPoly), not a property of the K class. The retraining was first planned as future work; because the same rows train, validate and test, it does not invalidate the split. The \Mgb results do not depend on the normalisation convention; Section~\ref{subsec:robustness} varies the training choices instead.
 
-\begin{table*}[ht]
+\begin{table*}
 \centering
 \caption{LightGBM retrained with the production hyperparameters on each feature matrix (same train/validation/test rows). Recall per class, macro-F1, G rows predicted K, and the \Mgb ablation on K and G (constant fill at the test-matrix median, the deposited convention of this experiment, whereas Tables~\ref{tab:ablation} and~\ref{tab:ablation-k} use the training median; class-matched null, \rtNControls{} windows, \rtNBoot{} bootstrap resamples). Intervals are 95 percent bootstrap intervals.}
 \label{tab:retrain}
@@ -388,7 +388,7 @@ This work uses data from the Gaia-ESO Public Spectroscopic Survey \citep{2022A&A
 
 No continuum convention reached the pre-specified agreement gate, so the cross-check is reported as a failed external check, not as corroboration. We compared each test spectrum with the \pkNTemplates{} spectra of the Pickles UVKLIB library \citep{1998PASP..110..863P} by minimising a unit-variance chi-squared over bins finite in both spectra, and compared the spectral type of the best template (read from the \texttt{COMMENT1} card of its FITS header, which agrees with the embedded map for \pkEmbedAgree{} of \pkNTemplates{} templates) with the classifier's prediction; an earlier hand-built index map was mis-assigned from index 17 onward and its results are withdrawn. The gate was agreement of at least \pkGate{} on at least \pkGateMinN{} compared rows. Table~\ref{tab:pickles} gives the result: the best agreement, \pkAgreeMfTwo{} for the 200~\AA{} median-filter normalisation, is below the gate, and for that normalisation \pkSuperMfTwo{} percent of best-matching templates are supergiants, a luminosity class essentially absent from the test sample. The polynomial\_n5 convention yields no F, G or K template matches, and the variant fitted on the 4700 to 6900~\AA{} window reaches only \pkAgreePolyWin. A template library without luminosity or metallicity matching to the sample cannot test a three-class \Teff classifier at this resolution, and we have not tried to repair it.
 
-\begin{table}[ht]
+\begin{table}
 \centering
 \caption{Agreement between the classifier and the spectral type of the best-matching Pickles template under four continuum conventions (gate: agreement $\ge \pkGate$ and at least \pkGateMinN{} compared rows). ``Super.'' is the fraction of best-matching templates that are supergiants. The polynomial\_n5 convention gives no F, G or K matches. The last row is an additional variant fitted on a restricted window and is not part of the pre-specified set.}
 \label{tab:pickles}
@@ -407,7 +407,7 @@ Polynomial $n=5$, 4700--6900~\AA{} window & \pkNPolyWin & \pkAgreePolyWin & \pkM
 \section{Supplementary table and figures}
 \label{app:figures}
 
-\begin{table*}[ht]
+\begin{table*}
 \centering
 \caption{Ablation of the principal pairs by luminosity class and by distance to the nearest edge of the row's own \Teff bin (primary configuration). A dash marks an empty stratum.}
 \label{tab:strata}
@@ -415,20 +415,21 @@ Polynomial $n=5$, 4700--6900~\AA{} window & \pkNPolyWin & \pkAgreePolyWin & \pkM
 \resizebox{\textwidth}{!}{\input{ablation_strata_table.tex}}
 \end{table*}
 
-\begin{figure*}[ht]
+\begin{figure*}
 \centering
 \includegraphics[width=0.92\linewidth]{importance_main.pdf}
-\caption{Top: per-bin median normalised spectrum of the G class with the diagnostic-line positions marked and the inter-chip gap shaded. Bottom: normalised mean $|\mathrm{SHAP}|$ per class (F blue, G orange, K green) with the ten largest bins of each class marked. The ablation bars that an earlier version of this figure carried are Figure~\ref{fig:ablation}.}
+\caption{Top: per-bin median normalised spectrum of the G class with the diagnostic-line positions marked and the inter-chip gap shaded. Bottom: normalised mean $|\mathrm{SHAP}|$ per class (F blue, G orange, K green) with the ten largest bins of each class marked. The masked-line ablation results are in Figure~\ref{fig:ablation}.}
 \label{fig:importance}
 \end{figure*}
 
-\begin{figure}[ht]
+\begin{figure}
 \centering
 \includegraphics[width=0.55\linewidth]{confusion_matrix_test.pdf}
 \caption{Held-out test confusion matrix. Rows are the true class and columns the predicted class, in F--G--K order.}
 \label{fig:confusion}
 \end{figure}
 
+\clearpage
 \bsp
 \label{lastpage}
 \end{document}
