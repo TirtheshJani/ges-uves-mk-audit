@@ -3,7 +3,7 @@
 %
 % Master source (article class; this is the arXiv and Open Journal of Astrophysics build).
 % The journal builds manuscript_elsarticle.tex (Astronomy and Computing) and
-% manuscript_mnras.tex (RAS Techniques and Instruments) are derived from this file by
+% rasti_overleaf/main.tex (RAS Techniques and Instruments) are derived from this file by
 %     python scripts/revision/build_venue_variants.py
 % which slices the text between the %% ABSTRACT and %% BODY markers below. Edit this
 % file only, then re-run that script.
@@ -32,7 +32,7 @@
     pdftitle={A masked-line ablation audit of a LightGBM F/G/K temperature-class classifier for Gaia-ESO UVES spectra: what survives, and a train-test scale mismatch},
     pdfauthor={Tirthesh Jani},
     pdfsubject={Stellar classification, machine learning interpretability},
-    pdfkeywords={Machine Learning; Data Methods; stars: fundamental parameters; techniques: spectroscopic; model interpretability; Gaia-ESO Survey},
+    pdfkeywords={Machine Learning; Data methods; stars: fundamental parameters; techniques: spectroscopic; model interpretability; Gaia-ESO Survey},
 }
 \usepackage{geometry}
 \geometry{margin=1in}
@@ -52,6 +52,8 @@
 \newcommand{\FeCr}{Fe\,\textsc{i}/Cr\,\textsc{i}\xspace}
 \newcommand{\Teff}{$T_{\mathrm{eff}}$\xspace}
 \newcommand{\dA}{\Delta A}
+% Figure alt text, set directly under each caption as RAS Techniques and Instruments requires.
+\newcommand{\alttext}[1]{\par\smallskip{\footnotesize\noindent Alt text: #1\par}}
 \newcommand{\appendixbreak}{\clearpage}  % page break before the supplementary appendix; the two-column build overrides it
 % Shrink a tabular to the line width only when it is wider than the line width.
 \newcommand{\fittable}[1]{\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{#1}}
@@ -61,7 +63,7 @@
 \title{A masked-line ablation audit of a LightGBM F/G/K temperature-class classifier for Gaia-ESO UVES spectra: what survives, and a train--test scale mismatch}
 
 \author[1]{Tirthesh Jani\thanks{ORCID: \href{https://orcid.org/0009-0005-5965-4409}{0009-0005-5965-4409}; tirtheshjani@gmail.com}}
-\affil[1]{Lakehead University, Barrie, Ontario, Canada}
+\affil[1]{Department of Computer Science, Lakehead University, 5 Ross Street, Barrie, ON L4M 3A5, Canada}
 
 \date{}  % no compile date on the submitted version; the journal sets the dates
 
@@ -75,7 +77,7 @@
 \end{abstract}
 
 %% KEYWORDS-START
-\noindent \textbf{Keywords:} Machine Learning; Data Methods; stars: fundamental parameters; techniques: spectroscopic; model interpretability; Gaia-ESO Survey
+\noindent \textbf{Keywords:} Machine Learning; Data methods; stars: fundamental parameters; techniques: spectroscopic; model interpretability; Gaia-ESO Survey
 %% KEYWORDS-END
 
 %% BODY-START
@@ -233,6 +235,7 @@ Table~\ref{tab:ablation} gives the primary configuration (production continuum, 
 \includegraphics[width=0.85\linewidth]{ablation_bars.pdf}
 \caption{Change in class recall $\dA_k^{(\mathcal{L})}$ for the headline (solid) and pivot (hatched) pairs in the primary configuration (production continuum, interpolation fill). Error bars are 95 percent bootstrap intervals (\ablNBoot{} resamples); each bar is annotated with $\dA$ and the Monte Carlo $p$-value against \ablNControls{} class-matched, bin-matched random windows (floor \ablFloor). The K bars are small but not exactly zero in rows (Section~\ref{subsec:kclass}); the values match Table~\ref{tab:ablation}.}
 \label{fig:ablation}
+\alttext{Bar chart of the change in class recall for five line-set and class pairs. Masking the Balmer windows drops F recall to zero and masking Mg b lowers G recall by about a quarter; the three pairs involving the K class are close to zero. Error bars show bootstrap intervals; headline pairs are solid bars and pivot pairs hatched.}
 \end{figure*}
 
 \subsection{The K class responds to no narrow window}
@@ -296,6 +299,7 @@ K & \lumNK & \lumDwarfPctK & \lumLoggK & \lumTeffK & \lumAccKDwarf{} (\lumAccNKD
 \includegraphics[width=0.8\linewidth]{kiel_diagram.pdf}
 \caption{Kiel diagram of the labelled sample coloured by class. The F and G classes lie on the dwarf branch and the K class is dominated by giants; the dwarf cut is $\log g = \lumLoggCut$.}
 \label{fig:kiel}
+\alttext{Scatter plot of surface gravity against effective temperature for the labelled sample, coloured by class. F and G stars lie on the high-gravity dwarf branch at the hotter temperatures; most K stars lie on the low-gravity giant branch at cooler temperatures, with a smaller group of K dwarfs. A horizontal line marks the dwarf cut.}
 \end{figure}
 
 \subsection{Scale mismatch under polynomial re-normalisation}
@@ -336,6 +340,7 @@ G/K swap & \sdSwapRecF & \sdSwapRecG & \sdSwapRecK & \sdSwapMacroF & \sdSwapGtoK
 \includegraphics[width=0.92\linewidth]{continuum_medians.pdf}
 \caption{Per-row median of normalised flux outside the inter-chip gap by class on the test set, under the production normalisation (left) and after the polynomial re-normalisation (right). Class medians are given in Section~\ref{subsec:scale}; the numbers come from the same artifact as Table~\ref{tab:scale}. The two panels use different vertical ranges.}
 \label{fig:continuum_medians}
+\alttext{Two box-plot panels of the per-row median normalised flux for the F, G and K test spectra. Under the pipeline normalisation (left) the class medians fall from F to G to K, all below unity. After polynomial re-normalisation (right) all three medians sit just above unity, in the reverse order and with a much smaller spread.}
 \end{figure*}
 
 \subsection{Retraining on re-normalised spectra}
@@ -406,13 +411,13 @@ Code is available at \url{https://github.com/TirtheshJani/ges-uves-mk-audit} und
 This work uses data from the Gaia-ESO Public Spectroscopic Survey \citep{2022A&A...666A.120G,2022A&A...666A.121R,2014A&A...565A.113S}. Based on data products from observations made with ESO Telescopes at the La Silla Paranal Observatory under programme ID 188.B-3002. Based on data obtained from the ESO Science Archive Facility with DOI: \url{https://doi.org/10.18727/archive/25}. These data products have been processed by the Cambridge Astronomy Survey Unit (CASU) at the Institute of Astronomy, University of Cambridge, and by the FLAMES/UVES reduction team at INAF/Osservatorio Astrofisico di Arcetri. Stellar parameters used for the labels are from \citet{2023A&A...676A.129H}. Atomic line rest wavelengths are from the NIST Atomic Spectra Database \citep{NIST_ASD_2023}. The Pickles library was retrieved from the STScI HLSP reference-atlases mirror. Software includes LightGBM \citep{Ke2017LightGBM}, SHAP \citep{LundbergLee2017SHAP,Lundberg2020TreeSHAP}, scikit-learn \citep{Pedregosa2011sklearn}, NumPy \citep{Harris2020numpy}, SciPy \citep{Virtanen2020scipy}, Astropy \citep{Astropy2022}, astroquery \citep{Ginsburg2019astroquery} and Matplotlib \citep{Hunter2007matplotlib}.
 
 %% DECLARATIONS-START
-\section*{Competing interests}
+\section*{Conflict of interest}
 
-The author declares no competing interests.
+The author declares no conflict of interest.
 
 \section*{Funding}
 
-No specific funding was received for this work.
+The author declares no funding.
 
 \section*{Author contributions}
 
@@ -470,6 +475,7 @@ Table~\ref{tab:strata} gives the stratified ablation referenced in Section~\ref{
 \includegraphics[width=0.92\linewidth]{importance_main.pdf}
 \caption{Top: per-bin median normalised spectrum of the G class with the diagnostic-line positions marked and the inter-chip gap shaded. Bottom: normalised mean $|\mathrm{SHAP}|$ per class (F blue, G orange, K green) with the ten largest bins of each class marked. The masked-line ablation results are in Figure~\ref{fig:ablation}.}
 \label{fig:importance}
+\alttext{Two stacked panels sharing a wavelength axis. The top panel shows the median normalised G-class spectrum with vertical lines at the diagnostic lines and a shaded inter-chip gap. The bottom panel shows the normalised mean absolute SHAP value per class, with sharp peaks at H beta, the Mg b triplet and H alpha, and markers on the ten largest bins of each class.}
 \end{figure*}
 
 \begin{figure}[ht]
@@ -477,6 +483,7 @@ Table~\ref{tab:strata} gives the stratified ablation referenced in Section~\ref{
 \includegraphics[width=0.55\linewidth]{confusion_matrix_test.pdf}
 \caption{Held-out test confusion matrix. Rows are the true class and columns the predicted class, in F--G--K order.}
 \label{fig:confusion}
+\alttext{Three-by-three confusion matrix of true against predicted class for the held-out test set. Most counts lie on the diagonal; the off-diagonal counts are small and fall between adjacent classes, with almost no confusion between F and K.}
 \end{figure}
 %% APPENDIX-END
 

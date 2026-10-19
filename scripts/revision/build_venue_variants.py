@@ -14,25 +14,25 @@ Inside the BODY region, right after the Acknowledgements, an optional pair
 
     %% DECLARATIONS-START ... %% DECLARATIONS-END
 
-brackets the \\section*{} declarations (competing interests, funding, CRediT, generative
+brackets the \\section*{} declarations (conflict of interest, funding, CRediT, generative
 AI). Elsevier wants them directly above the references, so the elsarticle build moves
-the block there. RAS style puts Data availability last, so the mnras build emits
-Acknowledgements, then the declarations, then Data availability. A missing pair is an
-empty block.
+the block there. The RASTI build follows the journal's section 6.1 order
+(Acknowledgements with the AI-use disclosure, Data availability, Conflict of interest,
+Funding) and sets running text in RAS style ('per cent', single quotes). A missing pair
+is an empty block.
 
 This script slices those parts out and wraps them in venue front matter:
 
     submission/manuscript_elsarticle.tex   Astronomy and Computing (Elsevier, elsarticle)
-    submission/manuscript_mnras.tex        RAS Techniques and Instruments (mnras class;
-                                           RASTI accepts non-RASTI class files at
-                                           submission, and its own class is an mnras
-                                           derivative, so swapping the class name is
-                                           the only change if the RASTI file is used)
+    submission/rasti_overleaf/main.tex     RAS Techniques and Instruments (rasti.cls), with
+                                           every file it needs copied beside it, so the
+                                           folder can be zipped and uploaded to Overleaf
 
 Run after every edit of manuscript.tex:
 
     python scripts/revision/build_venue_variants.py
-    cd submission && latexmk -pdf manuscript_elsarticle.tex && latexmk -pdf manuscript_mnras.tex
+    cd submission && latexmk -pdf manuscript_elsarticle.tex
+    cd submission/rasti_overleaf && latexmk -pdf main.tex
 
 The convenience macros and \\input{revision_numbers.tex} are copied verbatim from the
 master, so the journal builds quote exactly the same generated numbers.
@@ -40,11 +40,13 @@ master, so the journal builds quote exactly the same generated numbers.
 from __future__ import annotations
 
 import re
+import shutil
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 SUB = REPO / "submission"
 MASTER = SUB / "manuscript.tex"
+RASTI = SUB / "rasti_overleaf"
 
 TITLE = (
     "A masked-line ablation audit of a LightGBM F/G/K temperature-class classifier for "
@@ -54,7 +56,7 @@ SHORT_TITLE = "Masked-line ablation audit of a Gaia-ESO UVES classifier"
 AUTHOR = "Tirthesh Jani"
 ORCID = "0009-0005-5965-4409"
 EMAIL = "tirtheshjani@gmail.com"
-AFFIL = "Lakehead University, Barrie, Ontario, Canada"
+AFFIL = "Department of Computer Science, Lakehead University, 5 Ross Street, Barrie, ON L4M 3A5, Canada"
 
 
 def _slice(text: str, name: str) -> str:
@@ -111,7 +113,7 @@ def _keywords(text: str) -> list[str]:
 
 
 def _strip_float_placement(text: str) -> str:
-    """Drop [ht]-style placement options; the mnras class prints them as text."""
+    """Drop [ht]-style placement options; the RAS class prints them as text."""
     return re.sub(r"\\begin\{(table|figure)(\*?)\}\[[a-zA-Z!]*\]", r"\\begin{\1\2}", text)
 
 
@@ -158,7 +160,7 @@ def build_elsarticle(master: str) -> str:
 \\author[lu]{{{AUTHOR}\\corref{{cor1}}}}
 \\ead{{{EMAIL}}}
 \\cortext[cor1]{{Corresponding author. ORCID: \\href{{https://orcid.org/{ORCID}}}{{{ORCID}}}}}
-\\affiliation[lu]{{organization={{Lakehead University}}, city={{Barrie}}, state={{Ontario}}, country={{Canada}}}}
+\\affiliation[lu]{{organization={{Department of Computer Science, Lakehead University}}, addressline={{5 Ross Street}}, city={{Barrie}}, postcode={{L4M 3A5}}, state={{ON}}, country={{Canada}}}}
 
 \\begin{{abstract}}
 {abstract}
@@ -182,42 +184,86 @@ def build_elsarticle(master: str) -> str:
 """
 
 
-def build_mnras(master: str) -> str:
+def _declarations(decl: str) -> dict[str, str]:
+    """Split the DECLARATIONS block into {heading: paragraph text}."""
+    parts = re.split(r"\\section\*\{([^}]*)\}\n", decl)
+    return {head.strip(): text.strip() for head, text in zip(parts[1::2], parts[2::2])}
+
+
+def _ras_style(text: str) -> str:
+    """RASTI house style for running text: 'per cent', single quotes."""
+    text = re.sub(r"\bpercent\b", "per cent", text)
+    return text.replace("``", "`").replace("''", "'")
+
+
+def _dependencies(text: str) -> list[str]:
+    """revision_numbers.tex plus every \\input{} and \\includegraphics{} target."""
+    inputs = re.findall(r"\\input\{([^}]+)\}", text)
+    figures = re.findall(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", text)
+    names = ["revision_numbers.tex", "manuscript_citations.bib"]
+    for name in inputs + figures:
+        if "." not in Path(name).name:
+            name += ".tex"
+        if name not in names:
+            names.append(name)
+    return names
+
+
+def build_rasti(master: str) -> str:
     keywords = _keywords(master)
     kw = " -- ".join(keywords)
     abstract = _abstract(master)
     main, data, ack, decl = _end_matter(_slice(master, "BODY"))
-    # RAS style: Acknowledgements, declarations, then Data availability last.
-    body = _strip_float_placement(_join(main, ack, decl, data))
+    d = _declarations(decl)
+    ai = d.get("Declaration of generative AI and AI-assisted technologies in the writing process", "")
+    # RASTI section 6.1: Acknowledgements, Data availability, Conflict of interest, then
+    # References. AI use goes in the Acknowledgements (section 1.3), funding at the end
+    # (section 6.6); a single-author contribution statement is optional and omitted.
+    end_matter = _join(
+        _join(ack, ai),
+        data,
+        "\\section*{Conflict of interest}\n\n" + d["Conflict of interest"] if "Conflict of interest" in d else "",
+        "\\section*{Funding}\n\n" + d["Funding"] if "Funding" in d else "",
+    )
+    body = _ras_style(_strip_float_placement(_join(main, end_matter)))
+    appendix = _ras_style(_strip_float_placement(_slice(master, "APPENDIX")))
     return f"""% RAS Techniques and Instruments build. GENERATED by scripts/revision/build_venue_variants.py
-% from submission/manuscript.tex; do not edit by hand.
-% RASTI accepts non-RASTI class files at submission. Its own class is an mnras derivative;
-% if the rasti class file is available, replace {{mnras}} below with {{rasti}}.
-\\documentclass[fleqn,usenatbib]{{mnras}}
+% from submission/manuscript.tex; do not edit by hand. Uses the RASTI class files
+% (rasti.cls, rasti.bst, bundle of 28 September 2026) kept in this folder.
+\\documentclass[fleqn,usenatbib]{{rasti}}
 
-\\usepackage[utf8]{{inputenc}}
+\\usepackage{{newtxtext,newtxmath}}
 \\usepackage[T1]{{fontenc}}
-\\usepackage{{amsmath,amssymb}}
+\\DeclareRobustCommand{{\\VAN}}[3]{{#2}}
+\\let\\VANthebibliography\\thebibliography
+\\def\\thebibliography{{\\DeclareRobustCommand{{\\VAN}}[3]{{##3}}\\VANthebibliography}}
+
 \\usepackage{{graphicx}}
+\\usepackage{{amsmath}}
 \\usepackage{{booktabs}}
 \\usepackage{{xspace}}
-\\hypersetup{{hidelinks}}  % mnras loads hyperref itself
+\\hypersetup{{hidelinks}}  % rasti.cls loads hyperref itself
 {_pdf_metadata(keywords)}
 \\usepackage{{xurl}}
 \\setcounter{{secnumdepth}}{{3}}  % keep \\paragraph headings unnumbered
-\\date{{Accepted XXX. Received YYY; in original form ZZZ}}
 \\Urlmuskip=0mu plus 1mu\\relax
 \\setlength{{\\emergencystretch}}{{1.5em}}
 
 {_macros(master)}
 \\renewcommand{{\\appendixbreak}}{{\\relax}}  % floats flow in two columns; no forced break before the appendix figures
+% Printed alt text under each caption (RASTI section 2.4), also passed to the class's \\Description.
+\\renewcommand{{\\alttext}}[1]{{\\par\\smallskip{{\\footnotesize\\noindent Alt text: #1\\par}}\\Description{{#1}}}}
 
 \\title[{SHORT_TITLE}]{{{TITLE}}}
 
-\\author[T. Jani]{{{AUTHOR}$^{{1}}$\\thanks{{E-mail: {EMAIL}; ORCID: {ORCID}}}
+\\author[T. Jani]{{
+{AUTHOR}$^{{1}}$\\thanks{{E-mail: {EMAIL}; ORCID: {ORCID}}}
 \\\\
 $^{{1}}${AFFIL}
 }}
+
+\\date{{Accepted XXX. Received YYY; in original form ZZZ}}
+\\pubyear{{\\the\\year{{}}}}
 
 \\begin{{document}}
 \\label{{firstpage}}
@@ -225,7 +271,7 @@ $^{{1}}${AFFIL}
 \\maketitle
 
 \\begin{{abstract}}
-{abstract}
+{_ras_style(abstract)}
 \\end{{abstract}}
 
 \\begin{{keywords}}
@@ -234,11 +280,11 @@ $^{{1}}${AFFIL}
 
 {body}
 
-\\bibliographystyle{{mnras}}
+\\bibliographystyle{{rasti}}
 \\bibliography{{manuscript_citations}}
 
 \\appendix
-{_strip_float_placement(_slice(master, "APPENDIX"))}
+{appendix}
 
 \\clearpage
 \\bsp
@@ -250,7 +296,11 @@ $^{{1}}${AFFIL}
 def main() -> None:
     master = MASTER.read_text(encoding="utf-8")
     _write(SUB / "manuscript_elsarticle.tex", build_elsarticle(master))
-    _write(SUB / "manuscript_mnras.tex", build_mnras(master))
+    RASTI.mkdir(exist_ok=True)
+    _write(RASTI / "main.tex", build_rasti(master))
+    for name in _dependencies(master):
+        shutil.copy(SUB / name, RASTI / name)
+    print(f"copied {len(_dependencies(master))} support files into {RASTI.relative_to(REPO)}/")
 
 
 if __name__ == "__main__":

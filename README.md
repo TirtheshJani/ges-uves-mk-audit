@@ -73,7 +73,7 @@ python scripts/revision/boundary_filtered.py            # boundary_filtered.json
 # 3. Manuscript numbers and static checks
 python scripts/revision/manuscript_numbers.py         # submission/revision_numbers.tex and the generated tables
 python scripts/revision/check_manuscript.py           # braces, refs, citations, macros, open slots
-python scripts/revision/build_venue_variants.py      # submission/manuscript_elsarticle.tex and manuscript_mnras.tex from the master
+python scripts/revision/build_venue_variants.py      # submission/manuscript_elsarticle.tex and submission/rasti_overleaf/ from the master
 ```
 
 `cv_field_groups.py` also writes `artifacts/revision/cv_field_groups.log` and `k_positive_control.py`

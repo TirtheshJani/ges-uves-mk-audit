@@ -26,10 +26,10 @@
   ]
  },
  "literals": {
-  "n_literals": 161,
+  "n_literals": 163,
   "counts": {
    "structural": 47,
-   "typed_constant": 80,
+   "typed_constant": 82,
    "checked_result": 34,
    "untraced": 0
   },
@@ -57,7 +57,19 @@
     "literal": "1",
     "class": "typed_constant",
     "why": "appears in code, config or an artifact",
-    "context": "xtsc{i}\\xspace} {$T_{\\mathrm{eff}}$\\xspace}      [1]{\\resizebox{\\ifdim\\width>\\linewidth\\lin"
+    "context": "\\textsc{i}\\xspace} {$T_{\\mathrm{eff}}$\\xspace}   [1]{\\par\\smallskip{\\footnotesize\\noindent "
+   },
+   {
+    "literal": "1",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "{\\par\\smallskip{\\footnotesize\\noindent Alt text: #1\\par}}     [1]{\\resizebox{\\ifdim\\width>\\"
+   },
+   {
+    "literal": "1",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "ip{\\footnotesize\\noindent Alt text: #1\\par}}     [1]{\\resizebox{\\ifdim\\width>\\linewidth\\lin"
    },
    {
     "literal": "1",
