@@ -2,14 +2,14 @@ cff-version: 1.2.0
 title: "ges-uves-mk-audit: masked-line ablation audit of a LightGBM F/G/K temperature-class classifier for Gaia-ESO UVES spectra (code, trained model and feature matrix)"
 message: "If you use this software, please cite both the software archive and the accompanying paper."
 type: software
-version: "1.2.0"
-date-released: "2026-10-14"
+version: "1.2.1"
+date-released: "2026-10-22"
 authors:
   - family-names: "Jani"
     given-names: "Tirthesh"
     orcid: "https://orcid.org/0009-0005-5965-4409"
     email: "tirtheshjani@gmail.com"
-    affiliation: "Lakehead University, Barrie, Ontario, Canada"
+    affiliation: "Department of Computer Science, Lakehead University, 5 Ross Street, Barrie, ON L4M 3A5, Canada"
 abstract: "Code, trained LightGBM model, feature matrix and analysis artifacts for a methods note on masked-line ablation of a three-class (F/G/K) effective-temperature-bin classifier of Gaia-ESO FLAMES-UVES U580 spectra: which dependencies survive a controlled ablation, the luminosity-class composition of the classes, and a train-test scale mismatch that explains the collapse under polynomial re-normalisation."
 keywords:
   - "masked-line ablation"
@@ -26,9 +26,9 @@ license: MIT
 repository-code: "https://github.com/TirtheshJani/ges-uves-mk-audit"
 url: "https://github.com/TirtheshJani/ges-uves-mk-audit"
 identifiers:
-  - type: other
-    value: "DOI: to be minted from the v1.2.0 GitHub release through the Zenodo integration"
-    description: "Zenodo DOI of the code and data archive; no DOI has been minted yet. Replace this entry when the deposit is published."
+  - type: doi
+    value: "10.5281/zenodo.23482244"
+    description: "Zenodo concept DOI of the code and data archive (resolves to the latest version)"
 preferred-citation:
   type: unpublished
   title: "A masked-line ablation audit of a LightGBM F/G/K temperature-class classifier for Gaia-ESO UVES spectra: what survives, and a train-test scale mismatch"
@@ -37,4 +37,4 @@ preferred-citation:
       given-names: "Tirthesh"
       orcid: "https://orcid.org/0009-0005-5965-4409"
   year: 2026
-  notes: "Manuscript in preparation. Journal reference and arXiv identifier to be added after submission."
+  notes: "Submitted to RAS Techniques and Instruments, October 2026. Journal reference and arXiv identifier to be added when available."

@@ -26,11 +26,11 @@
   ]
  },
  "literals": {
-  "n_literals": 163,
+  "n_literals": 164,
   "counts": {
    "structural": 47,
    "typed_constant": 82,
-   "checked_result": 34,
+   "checked_result": 35,
    "untraced": 0
   },
   "untraced": [],
@@ -87,7 +87,19 @@
     "literal": "1",
     "class": "structural",
     "why": "statistical convention or enumeration in text",
-    "context": "i\\thanks{ORCID: ; tirtheshjani@gmail.com}} \\affil[1]{Lakehead University, Barrie, Ontario, "
+    "context": "i\\thanks{ORCID: ; tirtheshjani@gmail.com}} \\affil[1]{Department of Computer Science, Lakehe"
+   },
+   {
+    "literal": "5",
+    "class": "typed_constant",
+    "why": "appears in code, config or an artifact",
+    "context": "artment of Computer Science, Lakehead University, 5 Ross Street, Barrie, ON L4M 3A5, Canada"
+   },
+   {
+    "literal": "3",
+    "class": "checked_result",
+    "why": "n_pairs_total of the headline gate -> verified",
+    "context": "akehead University, 5 Ross Street, Barrie, ON L4M 3A5, Canada}  \\date{}     \\maketitle    \\"
    },
    {
     "literal": "80",
@@ -934,12 +946,6 @@
     "class": "checked_result",
     "why": "max total_width_aa over the 15 primary-run rows (also U580 setup name) -> verified",
     "context": "ier of three \\Teff-bin classes on Gaia-ESO UVES U580 spectra reaches macro-F1 \\testMacroF. U"
-   },
-   {
-    "literal": "2.0",
-    "class": "typed_constant",
-    "why": "appears in code, config or an artifact",
-    "context": "deposited at Zenodo (DOI to be minted from the v1.2.0 GitHub release through the Zenodo integ"
    },
    {
     "literal": "188",

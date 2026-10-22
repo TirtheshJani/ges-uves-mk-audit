@@ -1,11 +1,11 @@
 {
   "title": "ges-uves-mk-audit: masked-line ablation audit of a LightGBM F/G/K temperature-class classifier for Gaia-ESO UVES spectra (code, trained model and feature matrix)",
   "upload_type": "software",
-  "description": "<p>This archive accompanies a paper on masked-line ablation of a three-class (F/G/K) effective-temperature-bin classifier of Gaia-ESO FLAMES-UVES U580 spectra (4800 to 6800 Angstrom), trained with LightGBM. It contains: (1) the trained classifier (lgbm_mk.pkl); (2) the engineered feature matrix and labels (features.npz); (3) the analysis scripts and library code, including the per-class masked-line ablation with a class-matched, bin-matched random-window null, row-level flip counts and an exact McNemar test; (4) the revision analyses under artifacts/revision/ (scale-versus-spread decomposition of the polynomial re-normalisation effect, retraining under alternative continuum normalisations, luminosity-class composition and a Kiel diagram, line-set geometry, and a corrected Pickles template cross-check that did not reach its agreement gate); (5) the dated decision log (docs/decision_log.md) and the folder provenance note; and (6) the LaTeX source of the manuscript with a script that writes every quoted number from the JSON artifacts.</p><p>Underlying spectra are public through the ESO Science Archive Facility (Gaia-ESO Programme 188.B-3002). Recommended stellar parameters are from Hourihane et al. 2023 (A&amp;A 676, A129). This deposit redistributes only the feature matrix derived from the Gaia-ESO spectra, not the raw spectra, and does not redistribute the Pickles library. Please cite the Gaia-ESO Survey (Gilmore et al. 2022, A&amp;A 666, A120; Sacco et al. 2014, A&amp;A 565, A113) when using the feature matrix.</p>",
+  "description": "<p>This archive accompanies a paper on masked-line ablation of a three-class (F/G/K) effective-temperature-bin classifier of Gaia-ESO FLAMES-UVES U580 spectra (4800 to 6800 Angstrom), trained with LightGBM. It contains: (1) the trained classifier (lgbm_mk.pkl); (2) the engineered feature matrix and labels (features.npz); (3) the analysis scripts and library code, including the per-class masked-line ablation with a class-matched, bin-matched random-window null, row-level flip counts and an exact McNemar test; (4) the revision analyses under artifacts/revision/ (scale-versus-spread decomposition of the polynomial re-normalisation effect, retraining under alternative continuum normalisations, luminosity-class composition and a Kiel diagram, line-set geometry, a corrected Pickles template cross-check that did not reach its agreement gate, field-grouped cross-validation, a K-class positive control, and the 6283 Angstrom diffuse-band window as a sixth line set); (5) the dated decision log (docs/decision_log.md) and the folder provenance note; and (6) the LaTeX source of the manuscript with a script that writes every quoted number from the JSON artifacts.</p><p>Underlying spectra are public through the ESO Science Archive Facility (Gaia-ESO Programme 188.B-3002). Recommended stellar parameters are from Hourihane et al. 2023 (A&amp;A 676, A129). This deposit redistributes only the feature matrix derived from the Gaia-ESO spectra, not the raw spectra, and does not redistribute the Pickles library. Please cite the Gaia-ESO Survey (Gilmore et al. 2022, A&amp;A 666, A120; Sacco et al. 2014, A&amp;A 565, A113) when using the feature matrix.</p>",
   "creators": [
     {
       "name": "Jani, Tirthesh",
-      "affiliation": "Lakehead University, Barrie, Ontario, Canada",
+      "affiliation": "Department of Computer Science, Lakehead University, 5 Ross Street, Barrie, ON L4M 3A5, Canada",
       "orcid": "0009-0005-5965-4409"
     }
   ],
@@ -23,7 +23,7 @@
   ],
   "license": "mit",
   "access_right": "open",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "related_identifiers": [
     {
       "identifier": "10.18727/archive/25",
